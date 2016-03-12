@@ -12,6 +12,7 @@
 		790E78E21C93ECDA0055403B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 790E78E11C93ECDA0055403B /* Assets.xcassets */; };
 		790E78E51C93ECDA0055403B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 790E78E31C93ECDA0055403B /* LaunchScreen.storyboard */; };
 		790E78F01C93ECDA0055403B /* PaketeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E78EF1C93ECDA0055403B /* PaketeTests.swift */; };
+		790E78FF1C93F04F0055403B /* PackagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E78FE1C93F04F0055403B /* PackagesViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +35,7 @@
 		790E78EB1C93ECDA0055403B /* PaketeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PaketeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		790E78EF1C93ECDA0055403B /* PaketeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaketeTests.swift; sourceTree = "<group>"; };
 		790E78F11C93ECDA0055403B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		790E78FE1C93F04F0055403B /* PackagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PackagesViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +116,7 @@
 		790E78FC1C93EFDB0055403B /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				790E79001C93F0580055403B /* Packages */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -123,6 +126,14 @@
 			children = (
 			);
 			name = "View Models";
+			sourceTree = "<group>";
+		};
+		790E79001C93F0580055403B /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				790E78FE1C93F04F0055403B /* PackagesViewController.swift */,
+			);
+			name = Packages;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -226,6 +237,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				790E78DD1C93ECDA0055403B /* ViewController.swift in Sources */,
+				790E78FF1C93F04F0055403B /* PackagesViewController.swift in Sources */,
 				790E78DB1C93ECDA0055403B /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
