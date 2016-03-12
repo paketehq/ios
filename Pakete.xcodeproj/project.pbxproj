@@ -76,6 +76,10 @@
 			isa = PBXGroup;
 			children = (
 				790E78DA1C93ECDA0055403B /* AppDelegate.swift */,
+				790E78FC1C93EFDB0055403B /* Controllers */,
+				790E78FB1C93EFD70055403B /* Views */,
+				790E78FD1C93EFE00055403B /* View Models */,
+				790E78FA1C93EFD00055403B /* Models */,
 				790E78DC1C93ECDA0055403B /* ViewController.swift */,
 				790E78E11C93ECDA0055403B /* Assets.xcassets */,
 				790E78E31C93ECDA0055403B /* LaunchScreen.storyboard */,
@@ -91,6 +95,34 @@
 				790E78F11C93ECDA0055403B /* Info.plist */,
 			);
 			path = PaketeTests;
+			sourceTree = "<group>";
+		};
+		790E78FA1C93EFD00055403B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		790E78FB1C93EFD70055403B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		790E78FC1C93EFDB0055403B /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		790E78FD1C93EFE00055403B /* View Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "View Models";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
