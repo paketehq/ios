@@ -19,6 +19,9 @@ class PackagesViewController: UIViewController {
         
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         self.tableView.dataSource = self
+        self.tableView.registerClass(PackageTableViewCell.self, forCellReuseIdentifier: PackageTableViewCell.reuseIdentifier)
+        self.tableView.rowHeight = UITableViewAutomaticDimension
+        self.tableView.estimatedRowHeight = 44.0
         self.view.addSubview(self.tableView)
         NSLayoutConstraint.activateConstraints([
             NSLayoutConstraint(item: self.tableView, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Top, multiplier: 1.0, constant: 0.0),
@@ -38,10 +41,14 @@ class PackagesViewController: UIViewController {
 // MARK: UITableViewDataSource
 extension PackagesViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return 5
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        let cell = tableView.dequeueReusableCellWithIdentifier(PackageTableViewCell.reuseIdentifier, forIndexPath: indexPath)
+        cell.setNeedsUpdateConstraints()
+        cell.updateConstraintsIfNeeded()
+        
+        return cell
     }
 }
