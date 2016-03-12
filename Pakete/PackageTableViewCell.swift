@@ -26,6 +26,8 @@ class PackageTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        self.accessoryType = .DisclosureIndicator
+        
         self.dateLabel.translatesAutoresizingMaskIntoConstraints = false
         self.dateLabel.text = "05/10/16"
         self.dateLabel.font = UIFont.systemFontOfSize(14.0)
