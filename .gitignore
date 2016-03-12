@@ -1,0 +1,32 @@
+.DS_Store
+
+# XCode (and ancestors) per-user config (very noisy, and not relevant)
+*.mode1
+*.mode1v3
+*.mode2v3
+*.perspective
+*.perspectivev3
+*.pbxuser
+
+# Xcode 4
+xcuserdata/
+#project.xcworkspace/
+DerivedData/
+
+# build products
+build/
+
+# automatic backup files
+*~.nib
+*.swp
+*~
+*.lock
+*.moved-aside
+!Podfile.lock
+
+# CocoaPods
+Pods/
+
+## Obj-C/Swift specific
+*.hmap
+*.ipa
