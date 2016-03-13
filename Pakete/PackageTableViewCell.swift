@@ -30,7 +30,7 @@ class PackageTableViewCell: UITableViewCell {
         
         self.dateLabel.translatesAutoresizingMaskIntoConstraints = false
         self.dateLabel.text = "05/10/16"
-        self.dateLabel.font = UIFont.systemFontOfSize(14.0)
+        self.dateLabel.font = UIFont.systemFontOfSize(12.0)
         self.dateLabel.textAlignment = .Right
         self.dateLabel.textColor = .grayColor()
         self.contentView.addSubview(self.dateLabel)
