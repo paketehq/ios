@@ -1,5 +1,5 @@
 //
-//  PackagesViewController.swift
+//  PackageViewController.swift
 //  Pakete
 //
 //  Created by Royce Albert Dy on 12/03/2016.
@@ -8,21 +8,18 @@
 
 import UIKit
 
-class PackagesViewController: UIViewController {
+class PackageViewController: UIViewController {
     
-    private let tableView = UITableView()
+    let tableView = UITableView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        self.title = "Packages"
-        // remove back button title
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
-
+        self.title = "iPhone 6S"
+        
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         self.tableView.dataSource = self
-        self.tableView.delegate = self
-        self.tableView.registerClass(PackageTableViewCell.self, forCellReuseIdentifier: PackageTableViewCell.reuseIdentifier)
+        self.tableView.registerClass(PackageTrackHistoryTableViewCell.self, forCellReuseIdentifier: PackageTrackHistoryTableViewCell.reuseIdentifier)
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 44.0
         self.tableView.tableFooterView = UIView()
@@ -39,30 +36,20 @@ class PackagesViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
 }
 
-// MARK: - UITableViewDataSource
-extension PackagesViewController: UITableViewDataSource {
+// MARK: UITableViewDataSource
+extension PackageViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 5
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(PackageTableViewCell.reuseIdentifier, forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCellWithIdentifier(PackageTrackHistoryTableViewCell.reuseIdentifier, forIndexPath: indexPath)
         cell.setNeedsUpdateConstraints()
         cell.updateConstraintsIfNeeded()
         
         return cell
-    }
-}
-
-// MARK: - UITableViewDelegate
-extension PackagesViewController: UITableViewDelegate {
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        
-        let packageViewController = PackageViewController()
-        self.navigationController?.pushViewController(packageViewController, animated: true)
     }
 }

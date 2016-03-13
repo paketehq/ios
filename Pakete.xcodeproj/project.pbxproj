@@ -14,6 +14,8 @@
 		790E78F01C93ECDA0055403B /* PaketeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E78EF1C93ECDA0055403B /* PaketeTests.swift */; };
 		790E78FF1C93F04F0055403B /* PackagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E78FE1C93F04F0055403B /* PackagesViewController.swift */; };
 		790E79021C93F2850055403B /* PackageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E79011C93F2850055403B /* PackageTableViewCell.swift */; };
+		790E79051C9413490055403B /* PackageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E79041C9413490055403B /* PackageViewController.swift */; };
+		790E79071C9507750055403B /* PackageTrackHistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E79061C9507740055403B /* PackageTrackHistoryTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +40,8 @@
 		790E78F11C93ECDA0055403B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		790E78FE1C93F04F0055403B /* PackagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PackagesViewController.swift; sourceTree = "<group>"; };
 		790E79011C93F2850055403B /* PackageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PackageTableViewCell.swift; sourceTree = "<group>"; };
+		790E79041C9413490055403B /* PackageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PackageViewController.swift; sourceTree = "<group>"; };
+		790E79061C9507740055403B /* PackageTrackHistoryTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PackageTrackHistoryTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				790E79011C93F2850055403B /* PackageTableViewCell.swift */,
+				790E79061C9507740055403B /* PackageTrackHistoryTableViewCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -135,8 +140,17 @@
 			isa = PBXGroup;
 			children = (
 				790E78FE1C93F04F0055403B /* PackagesViewController.swift */,
+				790E79031C9413370055403B /* Package */,
 			);
 			name = Packages;
+			sourceTree = "<group>";
+		};
+		790E79031C9413370055403B /* Package */ = {
+			isa = PBXGroup;
+			children = (
+				790E79041C9413490055403B /* PackageViewController.swift */,
+			);
+			name = Package;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -240,7 +254,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				790E79021C93F2850055403B /* PackageTableViewCell.swift in Sources */,
+				790E79071C9507750055403B /* PackageTrackHistoryTableViewCell.swift in Sources */,
 				790E78DD1C93ECDA0055403B /* ViewController.swift in Sources */,
+				790E79051C9413490055403B /* PackageViewController.swift in Sources */,
 				790E78FF1C93F04F0055403B /* PackagesViewController.swift in Sources */,
 				790E78DB1C93ECDA0055403B /* AppDelegate.swift in Sources */,
 			);
