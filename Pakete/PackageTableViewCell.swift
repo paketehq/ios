@@ -16,7 +16,7 @@ class PackageTableViewCell: UITableViewCell {
     let statusLabel = UILabel()
     let dateLabel = UILabel()
     
-    var didSetupConstraints = false
+    private var didSetupConstraints = false
 
     override func awakeFromNib() {
         super.awakeFromNib()
