@@ -16,7 +16,9 @@ class PackagesViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         self.title = "Packages"
-        
+        // remove back button title
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
+
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         self.tableView.dataSource = self
         self.tableView.registerClass(PackageTableViewCell.self, forCellReuseIdentifier: PackageTableViewCell.reuseIdentifier)
