@@ -25,15 +25,16 @@ class PackageTrackHistoryTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .None
-        
+        self.backgroundColor = UIColor(red:0.97, green:0.97, blue:0.97, alpha:1)
+        self.layer.rasterizationScale = UIScreen.mainScreen().scale
+        self.layer.shouldRasterize = true
+
         self.dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.dateLabel.text = "January 1, 2016"
         self.dateLabel.font = UIFont.systemFontOfSize(12.0)
         self.dateLabel.textColor = .grayColor()
         self.contentView.addSubview(self.dateLabel)
                 
         self.statusLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.statusLabel.text = "Shipment is held at Air21 CEBU station."
         self.statusLabel.font = UIFont.systemFontOfSize(14.0)
         self.statusLabel.numberOfLines = 0
         self.contentView.addSubview(self.statusLabel)
@@ -65,6 +66,14 @@ class PackageTrackHistoryTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    func configure(withViewModel viewModel: PackageTrackHistoryViewModel) {
+        self.statusLabel.text = viewModel.status()
+        self.dateLabel.text = viewModel.lastUpdateDateString()
+        
+        self.setNeedsUpdateConstraints()
+        self.updateConstraintsIfNeeded()
     }
 
 }

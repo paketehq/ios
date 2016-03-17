@@ -16,6 +16,7 @@ class PackageTableViewCell: UITableViewCell {
     let statusLabel = UILabel()
     let dateLabel = UILabel()
     
+    private var activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
     private var didSetupConstraints = false
 
     override func awakeFromNib() {
@@ -27,21 +28,20 @@ class PackageTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         self.accessoryType = .DisclosureIndicator
+        self.layer.rasterizationScale = UIScreen.mainScreen().scale
+        self.layer.shouldRasterize = true
         
         self.dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.dateLabel.text = "05/10/16"
         self.dateLabel.font = UIFont.systemFontOfSize(12.0)
         self.dateLabel.textAlignment = .Right
         self.dateLabel.textColor = .grayColor()
         self.contentView.addSubview(self.dateLabel)
         
         self.nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.nameLabel.text = "Retina Macbook Pro"
         self.nameLabel.font = UIFont.systemFontOfSize(16.0)
         self.contentView.addSubview(self.nameLabel)
         
         self.statusLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.statusLabel.text = "Shipment is held at Air21 CEBU station."
         self.statusLabel.font = UIFont.systemFontOfSize(14.0)
         self.statusLabel.textColor = .grayColor()
         self.statusLabel.numberOfLines = 0
@@ -60,13 +60,19 @@ class PackageTableViewCell: UITableViewCell {
                 
                 NSLayoutConstraint(item: self.statusLabel, attribute: .Top, relatedBy: .Equal, toItem: self.nameLabel, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
                 NSLayoutConstraint(item: self.statusLabel, attribute: .Leading, relatedBy: .Equal, toItem: self.contentView, attribute: .Leading, multiplier: 1.0, constant: 15.0),
-                NSLayoutConstraint(item: self.statusLabel, attribute: .Trailing, relatedBy: .Equal, toItem: self.contentView, attribute: .Trailing, multiplier: 1.0, constant: -10.0),
+                NSLayoutConstraint(item: self.statusLabel, attribute: .Trailing, relatedBy: .Equal, toItem: self.contentView, attribute: .Trailing, multiplier: 1.0, constant: 0.0),
                 NSLayoutConstraint(item: self.statusLabel, attribute: .Bottom, relatedBy: .Equal, toItem: self.contentView, attribute: .Bottom, multiplier: 1.0, constant: -10.0)
             ])
             self.didSetupConstraints = true
         }        
         
         super.updateConstraints()
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.activityIndicatorView.stopAnimating()
+        self.accessoryType = .DisclosureIndicator
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -77,6 +83,24 @@ class PackageTableViewCell: UITableViewCell {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    func configure(withViewModel viewModel: PackageViewModel) {
+        self.nameLabel.text = viewModel.name()
+        self.statusLabel.text = viewModel.status()
+        self.dateLabel.text = viewModel.lastUpdateDateString()
+        
+        if viewModel.updating() {
+            self.activityIndicatorView.startAnimating()
+            self.accessoryView = self.activityIndicatorView
+        } else {
+            self.activityIndicatorView.stopAnimating()
+            self.accessoryView = nil
+            self.accessoryType = .DisclosureIndicator
+        }
+        
+        self.setNeedsUpdateConstraints()
+        self.updateConstraintsIfNeeded()
     }
 
 }
