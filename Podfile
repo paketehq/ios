@@ -20,6 +20,7 @@ target 'Pakete' do
  pod 'BigBrother'
  pod 'VTAcknowledgementsViewController'
  pod 'Google-Mobile-Ads-SDK'
+ pod 'NSDate+TimeAgo'
 end
 
 target 'PaketeTests' do
