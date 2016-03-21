@@ -34,7 +34,7 @@ struct PackageViewModel: PackageViewModelType {
     
     func status() -> String {
         guard let latestTrackHistory = self.package.value.latestTrackHistory() else { return "" }
-        return latestTrackHistory.status.capitalizedString
+        return latestTrackHistory.status.toUppercaseAtSentenceBoundary()
     }
     
     func lastUpdateDateString() -> String {
@@ -78,7 +78,7 @@ struct PackageTrackHistoryViewModel: PackageViewModelType {
     }
     
     func status() -> String {
-        return self.packageTrackHistory.status.capitalizedString
+        return self.packageTrackHistory.status.toUppercaseAtSentenceBoundary()
     }
     
     func lastUpdateDateString() -> String {
