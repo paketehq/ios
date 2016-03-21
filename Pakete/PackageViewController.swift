@@ -52,8 +52,6 @@ class PackageViewController: UIViewController {
         ])
         // setup table header view
         self.setupTableHeaderView()
-        // ad banner
-        self.setupBottomAdBannerView()
         
         // bindings
         self.viewModel.package.asObservable()
@@ -61,6 +59,12 @@ class PackageViewController: UIViewController {
                 self.tableView.reloadData()
             }
             .addDisposableTo(self.rx_disposeBag)
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        // ad banner
+        self.setupBottomAdBannerView()
     }
 
     override func didReceiveMemoryWarning() {
