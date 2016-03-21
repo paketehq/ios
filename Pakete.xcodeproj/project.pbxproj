@@ -27,6 +27,7 @@
 		795B3F551C9A473100CC5C3A /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795B3F541C9A473100CC5C3A /* SettingsViewController.swift */; };
 		795B3F571C9A680F00CC5C3A /* Pods-acknowledgements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 795B3F561C9A680F00CC5C3A /* Pods-acknowledgements.plist */; };
 		796D18201C968C700009CF0F /* CouriersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796D181F1C968C700009CF0F /* CouriersViewController.swift */; };
+		79B8C4761C9FA5F8005ED570 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B8C4751C9FA5F8005ED570 /* StringExtensions.swift */; };
 		79E5DEB21C9793C9006152B4 /* PackageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E5DEB11C9793C9006152B4 /* PackageViewModel.swift */; };
 		9560B5F8C6023398FEA89FDE /* Pods_Pakete.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91D28494AA3215BFE121713D /* Pods_Pakete.framework */; };
 /* End PBXBuildFile section */
@@ -67,6 +68,7 @@
 		795B3F541C9A473100CC5C3A /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		795B3F561C9A680F00CC5C3A /* Pods-acknowledgements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Pods-acknowledgements.plist"; sourceTree = "<group>"; };
 		796D181F1C968C700009CF0F /* CouriersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CouriersViewController.swift; sourceTree = "<group>"; };
+		79B8C4751C9FA5F8005ED570 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		79E5DEB11C9793C9006152B4 /* PackageViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PackageViewModel.swift; sourceTree = "<group>"; };
 		91D28494AA3215BFE121713D /* Pods_Pakete.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pakete.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DCD5D9AFA51847379F65D830 /* Pods-Pakete.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pakete.release.xcconfig"; path = "Pods/Target Support Files/Pods-Pakete/Pods-Pakete.release.xcconfig"; sourceTree = "<group>"; };
@@ -216,6 +218,7 @@
 			isa = PBXGroup;
 			children = (
 				790E79181C95174E0055403B /* RLMExtensions.swift */,
+				79B8C4751C9FA5F8005ED570 /* StringExtensions.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -433,6 +436,7 @@
 				79E5DEB21C9793C9006152B4 /* PackageViewModel.swift in Sources */,
 				790E791E1C96701E0055403B /* TextFieldTableViewCell.swift in Sources */,
 				790E79191C95174E0055403B /* RLMExtensions.swift in Sources */,
+				79B8C4761C9FA5F8005ED570 /* StringExtensions.swift in Sources */,
 				795B3F551C9A473100CC5C3A /* SettingsViewController.swift in Sources */,
 				790E79121C9514980055403B /* Package.swift in Sources */,
 				790E78DB1C93ECDA0055403B /* AppDelegate.swift in Sources */,
