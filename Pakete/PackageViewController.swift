@@ -125,7 +125,7 @@ extension PackageViewController {
         adBannerView.loadRequest(request)
         
         // add bottom offset for ad banner view
-        self.tableView.contentInset.bottom = 50.0
+        self.tableView.contentInset.bottom = 20.0
         self.tableView.scrollIndicatorInsets.bottom = 50.0
     }
 }
