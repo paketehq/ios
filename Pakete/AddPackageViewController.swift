@@ -17,12 +17,14 @@ class AddPackageViewController: UIViewController {
     private let tableView = UITableView(frame: CGRect.zero, style: .Grouped)
     // static cells
     private let trackingNumberCell = TextFieldTableViewCell()
+    private var extraFieldCell: TextFieldTableViewCell?
     private let nameCell = TextFieldTableViewCell()
     private let addButton = UIButton()
     
     private var trackingNumber = Variable<String>("")
     private var name = Variable<String>("")
-    
+    private var extraField = Variable<String>("")
+
     private let courier: Courier
     private let viewModel: PackagesViewModel
     
@@ -73,6 +75,18 @@ class AddPackageViewController: UIViewController {
         self.trackingNumberCell.textField.keyboardType = .NamePhonePad
         self.nameCell.textField.placeholder = "Name"
         
+        // if JRS we have extra field!
+        // TODO: shouldn't be harcoded :(
+        if self.courier.code == "jrs" {
+            self.extraFieldCell = TextFieldTableViewCell()
+            self.extraFieldCell?.textField.placeholder = "BC"
+            self.extraFieldCell?.textField.keyboardType = .NumberPad
+            
+            self.extraFieldCell?.textField.rx_text
+                .bindTo(self.extraField)
+                .addDisposableTo(self.rx_disposeBag)
+        }
+        
         // bindings
         self.trackingNumberCell.textField.rx_text
             .bindTo(self.trackingNumber)
@@ -88,8 +102,11 @@ class AddPackageViewController: UIViewController {
         let nameIsValid = self.name.asObservable()
             .map(isNotEmptyString)
         
+        let extraFieldIsValid = self.extraFieldCell == nil ? Variable(true).asObservable() : self.extraField.asObservable()
+            .map(isNotEmptyString)
+        
         // observe if form is valid
-        let formIsValid = Observable.combineLatest(trackingNumberIsValid, nameIsValid) { $0 && $1 }
+        let formIsValid = Observable.combineLatest(trackingNumberIsValid, nameIsValid, extraFieldIsValid) { $0 && $1 && $2 }
         formIsValid.map({ $0 ? 1.0 : 0.0 })
             .bindTo(self.addButton.rx_alpha)
             .addDisposableTo(self.rx_disposeBag)
@@ -113,7 +130,8 @@ class AddPackageViewController: UIViewController {
 // MARK: - Methods
 extension AddPackageViewController {
     func didTapAddButton() {
-        if let existingPackage = self.viewModel.packageWithTrackingNumber(self.trackingNumber.value, courier: self.courier) {
+        let trackingNumber = self.extraFieldCell == nil ? self.trackingNumber.value : self.trackingNumber.value + "-" + self.extraField.value
+        if let existingPackage = self.viewModel.packageWithTrackingNumber(trackingNumber, courier: self.courier) {
             // package already exists!
             // check if already archived
             if existingPackage.archived {
@@ -139,7 +157,7 @@ extension AddPackageViewController {
         self.view.endEditing(true)
         SVProgressHUD.showWithMaskType(.Black)
         
-        self.viewModel.addPackage(self.trackingNumber.value, courier: self.courier, name: self.name.value)
+        self.viewModel.addPackage(trackingNumber, courier: self.courier, name: self.name.value)
             .subscribe({ (event) -> Void in
                 SVProgressHUD.dismiss()
                 switch event {
@@ -164,13 +182,14 @@ extension AddPackageViewController {
 // MARK: - UITableViewDataSource
 extension AddPackageViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return self.extraFieldCell == nil ? 2 : 3
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         switch indexPath.row {
         case 0: return self.trackingNumberCell
-        case 1: return self.nameCell
+        case 1: return self.extraFieldCell ?? self.nameCell
+        case 2: return self.nameCell
         default: ()
             fatalError("invalid indexpath")
         }
