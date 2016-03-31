@@ -15,7 +15,6 @@ import Keys
 class PackageViewController: UIViewController {
     
     private let tableView = UITableView(frame: CGRect.zero, style: .Grouped)
-    private let dateFormatter = NSDateFormatter()
     private let viewModel: PackageViewModel
     
     init(viewModel: PackageViewModel) {
@@ -31,10 +30,6 @@ class PackageViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         self.title = self.viewModel.name()
-        // setup date formatter
-        self.dateFormatter.locale = NSLocale.currentLocale()
-        self.dateFormatter.doesRelativeDateFormatting = true
-        self.dateFormatter.dateStyle = .MediumStyle
         
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         self.tableView.backgroundColor = UIColor(red:0.97, green:0.97, blue:0.97, alpha:1)

@@ -8,24 +8,19 @@
 
 import Foundation
 import RxSwift
+import NSDate_TimeAgo
 
 protocol PackageViewModelType {
-    var dateFormatter: NSDateFormatter { get }
     func status() -> String
     func lastUpdateDateString() -> String
 }
 
 struct PackageViewModel: PackageViewModelType {
     
-    var dateFormatter: NSDateFormatter
     var package: Variable<Package>
     
     init(package: Variable<Package>) {
         self.package = package
-        self.dateFormatter = NSDateFormatter()
-        self.dateFormatter.locale = NSLocale.currentLocale()
-        self.dateFormatter.doesRelativeDateFormatting = true
-        self.dateFormatter.dateStyle = .ShortStyle
     }
     
     func name() -> String {
@@ -39,7 +34,7 @@ struct PackageViewModel: PackageViewModelType {
     
     func lastUpdateDateString() -> String {
         guard let latestTrackHistory = self.package.value.latestTrackHistory() else { return "" }
-        return self.dateFormatter.stringFromDate(latestTrackHistory.date)
+        return latestTrackHistory.date.timeAgoSimple()
     }
     
     func trackingNumber() -> String {
@@ -66,15 +61,10 @@ struct PackageViewModel: PackageViewModelType {
 
 struct PackageTrackHistoryViewModel: PackageViewModelType {
     
-    var dateFormatter: NSDateFormatter
     private let packageTrackHistory: PackageTrackHistory
 
     init(packageTrackHistory: PackageTrackHistory) {
         self.packageTrackHistory = packageTrackHistory
-        self.dateFormatter = NSDateFormatter()
-        self.dateFormatter.locale = NSLocale.currentLocale()
-        self.dateFormatter.doesRelativeDateFormatting = true
-        self.dateFormatter.dateStyle = .MediumStyle
     }
     
     func status() -> String {
@@ -82,6 +72,6 @@ struct PackageTrackHistoryViewModel: PackageViewModelType {
     }
     
     func lastUpdateDateString() -> String {
-        return self.dateFormatter.stringFromDate(self.packageTrackHistory.date)
+        return self.packageTrackHistory.date.timeAgo()
     }
 }
