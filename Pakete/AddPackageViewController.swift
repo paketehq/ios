@@ -60,7 +60,7 @@ class AddPackageViewController: UIViewController {
         self.addButton.translatesAutoresizingMaskIntoConstraints = false
         self.addButton.setTitle("Add Package", forState: .Normal)
         self.addButton.setTitleColor(UIColor(red:0, green:0.46, blue:1, alpha:1), forState: .Normal)
-        self.addButton.addTarget(self, action: "didTapAddButton", forControlEvents: .TouchUpInside)
+        self.addButton.addTarget(self, action: #selector(didTapAddButton), forControlEvents: .TouchUpInside)
         tableFooterView.addSubview(self.addButton)
         NSLayoutConstraint.activateConstraints([
             NSLayoutConstraint(item: self.addButton, attribute: .Top, relatedBy: .Equal, toItem: tableFooterView, attribute: .Top, multiplier: 1.0, constant: 0.0),

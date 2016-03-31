@@ -20,7 +20,7 @@ class SettingsViewController: UIViewController {
         // remove back button title
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
         // add done bar button item
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "didTapDoneButton")
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(didTapDoneButton))
 
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "Cell")
