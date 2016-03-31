@@ -58,14 +58,6 @@ class PackagesViewController: UIViewController {
             }
             .addDisposableTo(self.rx_disposeBag)
         
-        self.viewModel.reloadPackage.asObservable()
-            .subscribeNext { (package) -> Void in
-                if let index = self.viewModel.packages.value.indexOf({ $0.value == package }) {
-                    let indexPath = NSIndexPath(forRow: index, inSection: 0)
-                    self.tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-                }
-            }
-            .addDisposableTo(self.rx_disposeBag)
     }
     
     override func viewWillAppear(animated: Bool) {
