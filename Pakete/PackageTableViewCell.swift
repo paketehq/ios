@@ -18,6 +18,7 @@ class PackageTableViewCell: UITableViewCell {
     
     private var activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
     private var didSetupConstraints = false
+    private var viewModel: PackageViewModel!
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -86,11 +87,23 @@ class PackageTableViewCell: UITableViewCell {
     }
     
     func configure(withViewModel viewModel: PackageViewModel) {
-        self.nameLabel.text = viewModel.name()
-        self.statusLabel.text = viewModel.status()
-        self.dateLabel.text = viewModel.lastUpdateDateString()
+        self.viewModel = viewModel
+        self.viewModel.package.asObservable()
+            .subscribeNext({ (_) in
+                self.reloadData()
+            })
+            .addDisposableTo(rx_disposeBag)
+    }
+
+}
+
+extension PackageTableViewCell {
+    private func reloadData() {
+        self.nameLabel.text = self.viewModel.name()
+        self.statusLabel.text = self.viewModel.status()
+        self.dateLabel.text = self.viewModel.lastUpdateDateString()
         
-        if viewModel.updating() {
+        if self.viewModel.updating() {
             self.activityIndicatorView.startAnimating()
             self.accessoryView = self.activityIndicatorView
         } else {
@@ -102,5 +115,4 @@ class PackageTableViewCell: UITableViewCell {
         self.setNeedsUpdateConstraints()
         self.updateConstraintsIfNeeded()
     }
-
 }
