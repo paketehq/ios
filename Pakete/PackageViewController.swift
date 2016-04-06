@@ -9,7 +9,6 @@
 import UIKit
 import RxSwift
 import RxCocoa
-import GoogleMobileAds
 import Keys
 
 class PackageViewController: UIViewController {
@@ -32,11 +31,12 @@ class PackageViewController: UIViewController {
         self.title = self.viewModel.name()
         
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
-        self.tableView.backgroundColor = UIColor(red:0.97, green:0.97, blue:0.97, alpha:1)
+        self.tableView.backgroundColor = ColorPalette.BlackHaze
         self.tableView.dataSource = self
         self.tableView.registerClass(PackageTrackHistoryTableViewCell.self, forCellReuseIdentifier: PackageTrackHistoryTableViewCell.reuseIdentifier)
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 44.0
+        self.tableView.separatorStyle = .None
         self.tableView.tableFooterView = UIView()
         self.view.addSubview(self.tableView)
         NSLayoutConstraint.activateConstraints([
@@ -58,8 +58,6 @@ class PackageViewController: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        // ad banner
-        self.setupBottomAdBannerView()
     }
 
     override func didReceiveMemoryWarning() {
@@ -99,30 +97,7 @@ extension PackageViewController {
         ])
         
         self.tableView.tableHeaderView = tableHeaderView
-    }
-    
-    private func setupBottomAdBannerView() {
-        let adBannerView = GADBannerView()
-        adBannerView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(adBannerView)
-        NSLayoutConstraint.activateConstraints([
-            NSLayoutConstraint(item: adBannerView, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: adBannerView, attribute: .Leading, relatedBy: .Equal, toItem: self.view, attribute: .Leading, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: adBannerView, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: adBannerView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 50.0)
-        ])
-        
-        let keys = PaketeKeys()
-        adBannerView.adUnitID = keys.adMobAdUnitIDKey()
-        adBannerView.rootViewController = self
-        let request = GADRequest()
-        request.testDevices = [kGADSimulatorID]
-        adBannerView.loadRequest(request)
-        
-        // add bottom offset for ad banner view
-        self.tableView.contentInset.bottom = 20.0
-        self.tableView.scrollIndicatorInsets.bottom = 50.0
-    }
+    }    
 }
 
 

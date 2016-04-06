@@ -59,7 +59,8 @@ class AddPackageViewController: UIViewController {
         let tableFooterView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 44.0))
         self.addButton.translatesAutoresizingMaskIntoConstraints = false
         self.addButton.setTitle("Add Package", forState: .Normal)
-        self.addButton.setTitleColor(UIColor(red:0, green:0.46, blue:1, alpha:1), forState: .Normal)
+        self.addButton.backgroundColor = ColorPalette.Matisse
+        self.addButton.setTitleColor(.whiteColor(), forState: .Normal)
         self.addButton.addTarget(self, action: #selector(didTapAddButton), forControlEvents: .TouchUpInside)
         tableFooterView.addSubview(self.addButton)
         NSLayoutConstraint.activateConstraints([
@@ -102,12 +103,17 @@ class AddPackageViewController: UIViewController {
         let nameIsValid = self.name.asObservable()
             .map(isNotEmptyString)
         
-        let extraFieldIsValid = self.extraFieldCell == nil ? Variable(true).asObservable() : self.extraField.asObservable()
-            .map(isNotEmptyString)
+        var formValidations = [trackingNumberIsValid, nameIsValid]
+        if self.extraFieldCell != nil {
+            let extraFieldIsValid = self.extraField.asObservable().map(isNotEmptyString)
+            formValidations.append(extraFieldIsValid)
+        }
         
         // observe if form is valid
-        let formIsValid = Observable.combineLatest(trackingNumberIsValid, nameIsValid, extraFieldIsValid) { $0 && $1 && $2 }
-        formIsValid.map({ $0 ? 1.0 : 0.0 })
+        let formIsValid = formValidations.combineLatestAnd()
+        formIsValid.bindTo(self.addButton.rx_enabled)
+            .addDisposableTo(rx_disposeBag)
+        formIsValid.map({ $0 ? 1.0 : 0.5 })
             .bindTo(self.addButton.rx_alpha)
             .addDisposableTo(self.rx_disposeBag)
     }
@@ -144,10 +150,12 @@ extension AddPackageViewController {
                 }))
                 alertController.addAction(UIAlertAction(title: "No", style: .Cancel, handler: nil))
                 self.presentViewController(alertController, animated: true, completion: nil)
+                alertController.view.tintColor = ColorPalette.Matisse
             } else {
                 let alertController = UIAlertController(title: "Hey!", message: "This package already exists!", preferredStyle: .Alert)
                 alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
                 self.presentViewController(alertController, animated: true, completion: nil)
+                alertController.view.tintColor = ColorPalette.Matisse
             }
 
             return
@@ -172,6 +180,7 @@ extension AddPackageViewController {
                     let alertController = UIAlertController(title: "Sorry!", message: error.localizedFailureReason, preferredStyle: .Alert)
                     alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
                     self.presentViewController(alertController, animated: true, completion: nil)
+                    alertController.view.tintColor = ColorPalette.Matisse
                 default: ()
                 }
             })

@@ -16,6 +16,8 @@ class PackagesViewController: UIViewController {
     
     private let tableView = UITableView()
     private let viewModel = PackagesViewModel()
+    private let refreshControl = UIRefreshControl()
+    private var emptyStateLabel: UILabel?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,12 +28,12 @@ class PackagesViewController: UIViewController {
         // add + bar button item
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(didTapAddButton))
         // add settings bar button item
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Settings", style: .Plain, target: self, action: #selector(didTapSettingsButton))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "barButtonItemSettings"), style: .Plain, target: self, action: #selector(didTapSettingsButton))
                 
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         self.tableView.registerClass(PackageTableViewCell.self, forCellReuseIdentifier: PackageTableViewCell.reuseIdentifier)
         self.tableView.rowHeight = UITableViewAutomaticDimension
-        self.tableView.estimatedRowHeight = 44.0
+        self.tableView.estimatedRowHeight = 54.0
         self.tableView.tableFooterView = UIView()
         self.tableView.dataSource = self
         self.tableView.delegate = self
@@ -42,13 +44,18 @@ class PackagesViewController: UIViewController {
             NSLayoutConstraint(item: self.tableView, attribute: .Leading, relatedBy: .Equal, toItem: self.view, attribute: .Leading, multiplier: 1.0, constant: 0.0),
             NSLayoutConstraint(item: self.tableView, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0)
         ])
+        // refresh control
+        self.refreshControl.addTarget(self, action: #selector(didPullToRefresh), forControlEvents: .ValueChanged)
+        self.tableView.insertSubview(self.refreshControl, atIndex: 0)
+        
         // ad banner
         self.setupBottomAdBannerView()
         
         // bindings
         self.viewModel.packages.asObservable()
-            .subscribeNext { (_) -> Void in
+            .subscribeNext { (packages) -> Void in
                 self.tableView.reloadData()
+                if packages.count == 0 { self.showEmptyStateLabel() } else { self.hideEmptyStateLabel() }
             }
             .addDisposableTo(self.rx_disposeBag)
         
@@ -57,9 +64,8 @@ class PackagesViewController: UIViewController {
                 self.showPackageDetails(Variable(package))
             }
             .addDisposableTo(self.rx_disposeBag)
-        
     }
-    
+        
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
@@ -69,13 +75,14 @@ class PackagesViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
 }
 
 // MARK: - Methods
 extension PackagesViewController {
     private func setupBottomAdBannerView() {
         let adBannerView = GADBannerView()
+        adBannerView.autoloadEnabled = true
         adBannerView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(adBannerView)
         NSLayoutConstraint.activateConstraints([
@@ -88,13 +95,15 @@ extension PackagesViewController {
         let keys = PaketeKeys()
         adBannerView.adUnitID = keys.adMobAdUnitIDKey()
         adBannerView.rootViewController = self
-        let request = GADRequest()
-        request.testDevices = [kGADSimulatorID]
-        adBannerView.loadRequest(request)
         
         // add bottom offset for ad banner view
         self.tableView.contentInset.bottom = 50.0
         self.tableView.scrollIndicatorInsets.bottom = 50.0
+    }
+    
+    func didPullToRefresh() {
+        self.viewModel.refreshPackages()
+        self.refreshControl.endRefreshing()
     }
     
     func didTapAddButton() {
@@ -113,6 +122,31 @@ extension PackagesViewController {
         let viewModel = PackageViewModel(package: package)
         let packageViewController = PackageViewController(viewModel: viewModel)
         self.navigationController?.pushViewController(packageViewController, animated: true)
+    }
+    
+    func showEmptyStateLabel() {
+        if self.emptyStateLabel == nil {
+            self.emptyStateLabel = UILabel()
+            self.emptyStateLabel?.translatesAutoresizingMaskIntoConstraints = false
+            self.emptyStateLabel?.text = "You have no packages to track yet.\nTap the \"+\" button to track a package."
+            self.emptyStateLabel?.numberOfLines = 0
+            self.emptyStateLabel?.font = UIFont.systemFontOfSize(14.0)
+            self.emptyStateLabel?.textAlignment = .Center
+            self.emptyStateLabel?.backgroundColor = .whiteColor()
+            self.view.addSubview(self.emptyStateLabel!)
+            NSLayoutConstraint.activateConstraints([
+                NSLayoutConstraint(item: self.emptyStateLabel!, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Top, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: self.emptyStateLabel!, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: self.emptyStateLabel!, attribute: .Width, relatedBy: .Equal, toItem: self.view, attribute: .Width, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: self.emptyStateLabel!, attribute: .Height, relatedBy: .Equal, toItem: self.view, attribute: .Height, multiplier: 1.0, constant: 0.0),
+            ])
+        } else {
+            self.emptyStateLabel?.hidden = false
+        }
+    }
+    
+    func hideEmptyStateLabel() {
+        self.emptyStateLabel?.hidden = true
     }
 }
 
@@ -138,6 +172,7 @@ extension PackagesViewController: UITableViewDataSource {
             }))
             actionSheetController.addAction(UIAlertAction(title: "No", style: .Cancel, handler: nil))
             self.presentViewController(actionSheetController, animated: true, completion: nil)
+            actionSheetController.view.tintColor = ColorPalette.Matisse
         }
     }
 }

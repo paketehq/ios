@@ -48,41 +48,37 @@ class PackagesViewModel {
     }
     
     func refreshPackages() {
-        let pendingPackages = self.packages.value.filter({ $0.value.completed == false })
+        let pendingPackages = self.packages.value.filter({ $0.value.completed == false && $0.value.updating == false })
         pendingPackages.forEach { (package) -> () in
             // mark as updating
             package.value.updating = true
 
+            // TO DO HANDLE ERROR!
             self.trackPackage(package)
-                .subscribeNext({ (package) -> Void in
-                    // check for the package index first
-                    if let index = self.packages.value.indexOf({ $0.value == package.value }) {
-                        self.packages.value[index].value = package.value
-                    }
-                })
-                .addDisposableTo(self.disposeBag)
+//            self.trackPackage(package)
+//                .subscribeNext({ (package) -> Void in
+//                    // check for the package index first
+//                    if let index = self.packages.value.indexOf({ $0.value == package.value }) {
+//                        self.packages.value[index].value = package.value
+//                    }
+//                })
+//                .addDisposableTo(self.disposeBag)
         }
     }
     
     // TODO: - Refactor because redundant function
-    func trackPackage(package: ObservablePackage) -> Observable<ObservablePackage> {
-        return Observable.create({ (observer) -> Disposable in
-            let endpoint = Pakete.Router.TrackPackage(package.value.courier.code, package.value.trackingNumber)
-            let request = Alamofire.request(endpoint).responseSwiftyJSON { (request, response, json, error) -> Void in
-                if let error = error {
-                    observer.onError(error)
-                } else {
-                    let package = Package(name: package.value.name, courier: package.value.courier!, json: json)
-                    self.savePackage(package)
-                    observer.onNext(Variable(package))
-                    observer.onCompleted()
-                }
+    func trackPackage(package: ObservablePackage) {
+        let endpoint = Pakete.Router.TrackPackage(package.value.courier.code, package.value.trackingNumber)
+        defaultManager.request(endpoint).responseSwiftyJSON { (request, response, json, error) -> Void in
+            if error == nil {
+                let package = Package(name: package.value.name, courier: package.value.courier!, json: json)
+                self.savePackage(package)
             }
-            
-            return AnonymousDisposable {
-                request.cancel()
-            }
-        })
+            // this should trigger to update the package
+            let updatedPackage = package.value
+            updatedPackage.updating = false
+            package.value = updatedPackage
+        }
     }
     
     func addPackage(trackingNumber: String, courier: Courier, name: String) -> Observable<ObservablePackage> {

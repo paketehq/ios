@@ -10,10 +10,24 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
+let defaultManager: Alamofire.Manager = {
+    let serverTrustPolicies: [String: ServerTrustPolicy] = [
+        "localhost:5000": .DisableEvaluation
+    ]
+    
+    let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
+    configuration.HTTPAdditionalHeaders = Alamofire.Manager.defaultHTTPHeaders
+    
+    return Alamofire.Manager(
+        configuration: configuration,
+        serverTrustPolicyManager: ServerTrustPolicyManager(policies: serverTrustPolicies)
+    )
+}()
+
 struct Pakete {
     enum Router: URLRequestConvertible {
-        static let baseURLString = "https://agile-forest-88999.herokuapp.com/v1"
-//        static let baseURLString = "http://localhost:5000/v1"
+//        static let baseURLString = "https://agile-forest-88999.herokuapp.com/v1"
+        static let baseURLString = "http://192.168.0.115:5000/v1"
 
         case TrackPackage(String, String)
         case Couriers
@@ -48,6 +62,7 @@ struct Pakete {
             URLRequest.HTTPMethod = method.rawValue
             URLRequest.setValue("compress, gzip", forHTTPHeaderField: "Accept-Encoding")
             URLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            URLRequest.setValue(Token().tokenString(), forHTTPHeaderField: "Authorization")
             let encoding = Alamofire.ParameterEncoding.URL
             
             return encoding.encode(URLRequest, parameters: parameters).0

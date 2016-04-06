@@ -49,6 +49,10 @@ struct PackageViewModel: PackageViewModelType {
         return self.package.value.trackHistory.count
     }
     
+    func completed() -> Bool {
+        return self.package.value.completed
+    }
+    
     func updating() -> Bool {
         return self.package.value.updating
     }

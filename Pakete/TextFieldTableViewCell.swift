@@ -27,6 +27,7 @@ class TextFieldTableViewCell: UITableViewCell {
         self.textField.placeholder = "Placeholder"
         self.textField.clearButtonMode = .WhileEditing
         self.textField.font = UIFont.systemFontOfSize(16.0)
+        self.textField.tintColor = ColorPalette.Matisse
         self.contentView.addSubview(self.textField)
         NSLayoutConstraint.activateConstraints([
             NSLayoutConstraint(item: self.textField, attribute: .Top, relatedBy: .Equal, toItem: self.contentView, attribute: .Top, multiplier: 1.0, constant: 0.0),

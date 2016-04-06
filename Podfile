@@ -21,6 +21,8 @@ target 'Pakete' do
  pod 'VTAcknowledgementsViewController'
  pod 'Google-Mobile-Ads-SDK'
  pod 'NSDate+TimeAgo'
+ pod 'Smooch'
+ pod 'CryptoSwift'
 end
 
 target 'PaketeTests' do

@@ -10,7 +10,6 @@
 		790E78DB1C93ECDA0055403B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E78DA1C93ECDA0055403B /* AppDelegate.swift */; };
 		790E78DD1C93ECDA0055403B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E78DC1C93ECDA0055403B /* ViewController.swift */; };
 		790E78E21C93ECDA0055403B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 790E78E11C93ECDA0055403B /* Assets.xcassets */; };
-		790E78E51C93ECDA0055403B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 790E78E31C93ECDA0055403B /* LaunchScreen.storyboard */; };
 		790E78F01C93ECDA0055403B /* PaketeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E78EF1C93ECDA0055403B /* PaketeTests.swift */; };
 		790E78FF1C93F04F0055403B /* PackagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E78FE1C93F04F0055403B /* PackagesViewController.swift */; };
 		790E79021C93F2850055403B /* PackageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E79011C93F2850055403B /* PackageTableViewCell.swift */; };
@@ -22,11 +21,15 @@
 		790E79141C9514C30055403B /* Courier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E79131C9514C30055403B /* Courier.swift */; };
 		790E79161C9516C00055403B /* PackagesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E79151C9516C00055403B /* PackagesViewModel.swift */; };
 		790E79191C95174E0055403B /* RLMExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E79181C95174E0055403B /* RLMExtensions.swift */; };
-		790E791C1C9522080055403B /* HelperFuntions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E791B1C9522080055403B /* HelperFuntions.swift */; };
+		790E791C1C9522080055403B /* HelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E791B1C9522080055403B /* HelperFunctions.swift */; };
 		790E791E1C96701E0055403B /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E791D1C96701E0055403B /* TextFieldTableViewCell.swift */; };
+		792253E31CAD429F00B4BCC1 /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792253E21CAD429F00B4BCC1 /* UIImageExtensions.swift */; };
+		792253E51CAD55EF00B4BCC1 /* Observable+Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792253E41CAD55EF00B4BCC1 /* Observable+Operators.swift */; };
+		792253E71CAD5FEE00B4BCC1 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792253E61CAD5FEE00B4BCC1 /* ColorPalette.swift */; };
 		795B3F551C9A473100CC5C3A /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795B3F541C9A473100CC5C3A /* SettingsViewController.swift */; };
 		795B3F571C9A680F00CC5C3A /* Pods-acknowledgements.plist in Resources */ = {isa = PBXBuildFile; fileRef = 795B3F561C9A680F00CC5C3A /* Pods-acknowledgements.plist */; };
 		796D18201C968C700009CF0F /* CouriersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796D181F1C968C700009CF0F /* CouriersViewController.swift */; };
+		79A839791CB4ACE900794889 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A839781CB4ACE900794889 /* Token.swift */; };
 		79B8C4761C9FA5F8005ED570 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B8C4751C9FA5F8005ED570 /* StringExtensions.swift */; };
 		79E5DEB21C9793C9006152B4 /* PackageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E5DEB11C9793C9006152B4 /* PackageViewModel.swift */; };
 		9560B5F8C6023398FEA89FDE /* Pods_Pakete.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 91D28494AA3215BFE121713D /* Pods_Pakete.framework */; };
@@ -42,13 +45,25 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		79A839871CB4B4F000794889 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		061AFD9BEA715DEE554DA10C /* Pods-Pakete.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pakete.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Pakete/Pods-Pakete.debug.xcconfig"; sourceTree = "<group>"; };
 		790E78D71C93ECDA0055403B /* Pakete.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pakete.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		790E78DA1C93ECDA0055403B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		790E78DC1C93ECDA0055403B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		790E78E11C93ECDA0055403B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		790E78E41C93ECDA0055403B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		790E78E61C93ECDA0055403B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		790E78EB1C93ECDA0055403B /* PaketeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PaketeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		790E78EF1C93ECDA0055403B /* PaketeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaketeTests.swift; sourceTree = "<group>"; };
@@ -63,11 +78,15 @@
 		790E79131C9514C30055403B /* Courier.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Courier.swift; sourceTree = "<group>"; };
 		790E79151C9516C00055403B /* PackagesViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PackagesViewModel.swift; sourceTree = "<group>"; };
 		790E79181C95174E0055403B /* RLMExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RLMExtensions.swift; sourceTree = "<group>"; };
-		790E791B1C9522080055403B /* HelperFuntions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperFuntions.swift; sourceTree = "<group>"; };
+		790E791B1C9522080055403B /* HelperFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperFunctions.swift; sourceTree = "<group>"; };
 		790E791D1C96701E0055403B /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
+		792253E21CAD429F00B4BCC1 /* UIImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtensions.swift; sourceTree = "<group>"; };
+		792253E41CAD55EF00B4BCC1 /* Observable+Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Operators.swift"; sourceTree = "<group>"; };
+		792253E61CAD5FEE00B4BCC1 /* ColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		795B3F541C9A473100CC5C3A /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		795B3F561C9A680F00CC5C3A /* Pods-acknowledgements.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Pods-acknowledgements.plist"; sourceTree = "<group>"; };
 		796D181F1C968C700009CF0F /* CouriersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CouriersViewController.swift; sourceTree = "<group>"; };
+		79A839781CB4ACE900794889 /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		79B8C4751C9FA5F8005ED570 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		79E5DEB11C9793C9006152B4 /* PackageViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PackageViewModel.swift; sourceTree = "<group>"; };
 		91D28494AA3215BFE121713D /* Pods_Pakete.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pakete.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -133,7 +152,6 @@
 				790E791A1C9521F50055403B /* Helpers */,
 				790E78DC1C93ECDA0055403B /* ViewController.swift */,
 				790E78E11C93ECDA0055403B /* Assets.xcassets */,
-				790E78E31C93ECDA0055403B /* LaunchScreen.storyboard */,
 				790E78E61C93ECDA0055403B /* Info.plist */,
 				795B3F561C9A680F00CC5C3A /* Pods-acknowledgements.plist */,
 			);
@@ -155,6 +173,7 @@
 				790E790F1C950FE20055403B /* API.swift */,
 				790E79111C9514980055403B /* Package.swift */,
 				790E79131C9514C30055403B /* Courier.swift */,
+				79A839781CB4ACE900794889 /* Token.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -219,6 +238,7 @@
 			children = (
 				790E79181C95174E0055403B /* RLMExtensions.swift */,
 				79B8C4751C9FA5F8005ED570 /* StringExtensions.swift */,
+				792253E21CAD429F00B4BCC1 /* UIImageExtensions.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -227,7 +247,8 @@
 			isa = PBXGroup;
 			children = (
 				790E791F1C96768F0055403B /* RxSwift Extensions */,
-				790E791B1C9522080055403B /* HelperFuntions.swift */,
+				790E791B1C9522080055403B /* HelperFunctions.swift */,
+				792253E61CAD5FEE00B4BCC1 /* ColorPalette.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -235,6 +256,7 @@
 		790E791F1C96768F0055403B /* RxSwift Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				792253E41CAD55EF00B4BCC1 /* Observable+Operators.swift */,
 			);
 			name = "RxSwift Extensions";
 			sourceTree = "<group>";
@@ -285,6 +307,7 @@
 				790E78D51C93ECDA0055403B /* Resources */,
 				F25141FEE40EE0039F5C683E /* Embed Pods Frameworks */,
 				1567107427AE641ECB6FDB71 /* Copy Pods Resources */,
+				79A839871CB4B4F000794889 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -357,7 +380,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				795B3F571C9A680F00CC5C3A /* Pods-acknowledgements.plist in Resources */,
-				790E78E51C93ECDA0055403B /* LaunchScreen.storyboard in Resources */,
 				790E78E21C93ECDA0055403B /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -424,11 +446,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				792253E51CAD55EF00B4BCC1 /* Observable+Operators.swift in Sources */,
 				790E79021C93F2850055403B /* PackageTableViewCell.swift in Sources */,
-				790E791C1C9522080055403B /* HelperFuntions.swift in Sources */,
+				790E791C1C9522080055403B /* HelperFunctions.swift in Sources */,
+				792253E31CAD429F00B4BCC1 /* UIImageExtensions.swift in Sources */,
 				796D18201C968C700009CF0F /* CouriersViewController.swift in Sources */,
 				790E79161C9516C00055403B /* PackagesViewModel.swift in Sources */,
 				790E79071C9507750055403B /* PackageTrackHistoryTableViewCell.swift in Sources */,
+				79A839791CB4ACE900794889 /* Token.swift in Sources */,
 				790E78DD1C93ECDA0055403B /* ViewController.swift in Sources */,
 				790E79051C9413490055403B /* PackageViewController.swift in Sources */,
 				790E78FF1C93F04F0055403B /* PackagesViewController.swift in Sources */,
@@ -436,6 +461,7 @@
 				79E5DEB21C9793C9006152B4 /* PackageViewModel.swift in Sources */,
 				790E791E1C96701E0055403B /* TextFieldTableViewCell.swift in Sources */,
 				790E79191C95174E0055403B /* RLMExtensions.swift in Sources */,
+				792253E71CAD5FEE00B4BCC1 /* ColorPalette.swift in Sources */,
 				79B8C4761C9FA5F8005ED570 /* StringExtensions.swift in Sources */,
 				795B3F551C9A473100CC5C3A /* SettingsViewController.swift in Sources */,
 				790E79121C9514980055403B /* Package.swift in Sources */,
@@ -462,17 +488,6 @@
 			targetProxy = 790E78EC1C93ECDA0055403B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		790E78E31C93ECDA0055403B /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				790E78E41C93ECDA0055403B /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		790E78F21C93ECDA0055403B /* Debug */ = {
@@ -561,6 +576,7 @@
 			baseConfigurationReference = 061AFD9BEA715DEE554DA10C /* Pods-Pakete.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = Pakete/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -575,6 +591,7 @@
 			baseConfigurationReference = DCD5D9AFA51847379F65D830 /* Pods-Pakete.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CURRENT_PROJECT_VERSION = 1;
 				INFOPLIST_FILE = Pakete/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
