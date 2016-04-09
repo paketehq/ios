@@ -36,6 +36,22 @@ class SettingsViewController: UIViewController {
             NSLayoutConstraint(item: self.tableView, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0)
         ])
         
+        // setup header view
+        let tableHeaderView = UIView()
+        let headerText = UILabel()
+        headerText.font = UIFont.systemFontOfSize(14.0)
+        headerText.numberOfLines = 0
+        headerText.textAlignment = .Center
+        headerText.textColor = .grayColor()
+        headerText.text = "We may be an ad-supported app, but we understand some would prefer Pakete without ads. Get an ad-free experience and help bring new features to the app for only $0.99. A single purchase works across all of your Android devices forever. We appreciate your support!"
+        headerText.frame.size = headerText.sizeThatFits(CGSize(width: self.view.frame.width - 30.0, height: CGFloat.max))
+        headerText.frame.origin.y = 15.0
+        headerText.frame.origin.x = 15.0
+        tableHeaderView.addSubview(headerText)
+        tableHeaderView.frame.size.width = self.view.frame.width
+        tableHeaderView.frame.size.height = headerText.frame.height + 20.0
+        self.tableView.tableHeaderView = tableHeaderView
+        
         // setup footer view
         let tableFooterView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 17.0))
         let versionLabel = UILabel()
