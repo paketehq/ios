@@ -18,7 +18,6 @@ target 'Pakete' do
  pod 'NSObject+Rx'
  pod 'SVProgressHUD'
  pod 'BigBrother'
- pod 'VTAcknowledgementsViewController'
  pod 'Google-Mobile-Ads-SDK'
  pod 'NSDate+TimeAgo'
  pod 'Smooch'
@@ -27,10 +26,4 @@ end
 
 target 'PaketeTests' do
 
-end
-
-# Copy pods acknowledgements
-post_install do | installer |
-    require 'fileutils'
-    FileUtils.cp_r('Pods/Target Support Files/Pods-Pakete/Pods-Pakete-Acknowledgements.plist', 'Pakete/Pods-acknowledgements.plist', :remove_destination => true)
 end
