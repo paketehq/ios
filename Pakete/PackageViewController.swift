@@ -14,10 +14,12 @@ import Keys
 class PackageViewController: UIViewController {
     
     private let tableView = UITableView(frame: CGRect.zero, style: .Grouped)
-    private let viewModel: PackageViewModel
+    private let packageViewModel: PackageViewModel
+    private let packagesViewModel: PackagesViewModel
     
-    init(viewModel: PackageViewModel) {
-        self.viewModel = viewModel
+    init(packageViewModel: PackageViewModel, packagesViewModel: PackagesViewModel) {
+        self.packageViewModel = packageViewModel
+        self.packagesViewModel = packagesViewModel
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -28,7 +30,9 @@ class PackageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        self.title = self.viewModel.name()
+        self.title = self.packageViewModel.name()
+        // add edit bar button item
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(didTapEditButton))
         
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         self.tableView.backgroundColor = ColorPalette.BlackHaze
@@ -49,9 +53,15 @@ class PackageViewController: UIViewController {
         self.setupTableHeaderView()
         
         // bindings
-        self.viewModel.package.asObservable()
-            .subscribeNext { (_) -> Void in
-                self.tableView.reloadData()
+        self.packageViewModel.package.asObservable()
+            .subscribeNext { (package) -> Void in
+                if package.archived {
+                    // if archived then pop navigation controller
+                    self.navigationController?.popViewControllerAnimated(true)
+                } else {
+                    self.title = self.packageViewModel.name()
+                    self.tableView.reloadData()
+                }
             }
             .addDisposableTo(self.rx_disposeBag)
     }
@@ -76,7 +86,7 @@ extension PackageViewController {
         // tracking number label
         let trackingNumberLabel = UILabel()
         trackingNumberLabel.translatesAutoresizingMaskIntoConstraints = false
-        trackingNumberLabel.text = self.viewModel.trackingNumber()
+        trackingNumberLabel.text = self.packageViewModel.trackingNumber()
         trackingNumberLabel.font = UIFont.systemFontOfSize(16.0)
         tableHeaderView.addSubview(trackingNumberLabel)
         NSLayoutConstraint.activateConstraints([
@@ -87,7 +97,7 @@ extension PackageViewController {
         // courier label
         let courierLabel = UILabel()
         courierLabel.translatesAutoresizingMaskIntoConstraints = false
-        courierLabel.text = self.viewModel.courierName()
+        courierLabel.text = self.packageViewModel.courierName()
         courierLabel.textColor = .lightGrayColor()
         courierLabel.font = UIFont.systemFontOfSize(14.0)
         tableHeaderView.addSubview(courierLabel)
@@ -97,20 +107,26 @@ extension PackageViewController {
         ])
         
         self.tableView.tableHeaderView = tableHeaderView
-    }    
+    }
+    
+    func didTapEditButton() {
+        let editPackageViewController = AddPackageViewController(viewModel: packagesViewModel, package: self.packageViewModel.package)
+        let editPackageNavigationController = UINavigationController(rootViewController: editPackageViewController)
+        self.presentViewController(editPackageNavigationController, animated: true, completion: nil)
+    }
 }
 
 
 // MARK: - UITableViewDataSource
 extension PackageViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.viewModel.numberOfTrackHistory()
+        return self.packageViewModel.numberOfTrackHistory()
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(PackageTrackHistoryTableViewCell.reuseIdentifier, forIndexPath: indexPath) as! PackageTrackHistoryTableViewCell
         
-        cell.configure(withViewModel: self.viewModel.trackHistoryViewModelAtIndexPath(indexPath))
+        cell.configure(withViewModel: self.packageViewModel.trackHistoryViewModelAtIndexPath(indexPath))
 
         return cell
     }

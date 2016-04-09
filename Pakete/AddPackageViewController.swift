@@ -20,17 +20,29 @@ class AddPackageViewController: UIViewController {
     private var extraFieldCell: TextFieldTableViewCell?
     private let nameCell = TextFieldTableViewCell()
     private let addButton = UIButton()
-    
+    private let archiveButton = UIButton()
+
     private var trackingNumber = Variable<String>("")
     private var name = Variable<String>("")
     private var extraField = Variable<String>("")
 
     private let courier: Courier
     private let viewModel: PackagesViewModel
+    private var package: ObservablePackage?
+    
+    private var editPackage = false
     
     init(viewModel: PackagesViewModel, courier: Courier) {
         self.viewModel = viewModel
         self.courier = courier
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    init(viewModel: PackagesViewModel, package: ObservablePackage) {
+        self.viewModel = viewModel
+        self.package = package
+        self.courier = package.value.courier
+        self.editPackage = true
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -55,26 +67,14 @@ class AddPackageViewController: UIViewController {
             NSLayoutConstraint(item: self.tableView, attribute: .Leading, relatedBy: .Equal, toItem: self.view, attribute: .Leading, multiplier: 1.0, constant: 0.0),
             NSLayoutConstraint(item: self.tableView, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0)
         ])
-        // add Add button
-        let tableFooterView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 44.0))
-        self.addButton.translatesAutoresizingMaskIntoConstraints = false
-        self.addButton.setTitle("Add Package", forState: .Normal)
-        self.addButton.backgroundColor = ColorPalette.Matisse
-        self.addButton.setTitleColor(.whiteColor(), forState: .Normal)
-        self.addButton.addTarget(self, action: #selector(didTapAddButton), forControlEvents: .TouchUpInside)
-        tableFooterView.addSubview(self.addButton)
-        NSLayoutConstraint.activateConstraints([
-            NSLayoutConstraint(item: self.addButton, attribute: .Top, relatedBy: .Equal, toItem: tableFooterView, attribute: .Top, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.addButton, attribute: .Bottom, relatedBy: .Equal, toItem: tableFooterView, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.addButton, attribute: .Leading, relatedBy: .Equal, toItem: tableFooterView, attribute: .Leading, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.addButton, attribute: .Trailing, relatedBy: .Equal, toItem: tableFooterView, attribute: .Trailing, multiplier: 1.0, constant: 0.0)
-        ])
-        self.tableView.tableFooterView = tableFooterView
+        // setup footer view buttons
+        self.setupFooterView()
         
         // setup static cells
         self.trackingNumberCell.textField.placeholder = "Code"
         self.trackingNumberCell.textField.keyboardType = .NamePhonePad
         self.nameCell.textField.placeholder = "Name"
+        self.nameCell.textField.returnKeyType = .Done
         
         // if JRS we have extra field!
         // TODO: shouldn't be harcoded :(
@@ -82,10 +82,28 @@ class AddPackageViewController: UIViewController {
             self.extraFieldCell = TextFieldTableViewCell()
             self.extraFieldCell?.textField.placeholder = "BC"
             self.extraFieldCell?.textField.keyboardType = .NumberPad
+        }
+        
+        // add cancel button if edit package
+        if editPackage, let package = self.package {
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(didTapCancelButton))
+            // populate textfields
+            self.nameCell.textField.text = package.value.name
+            // if JRS split the tracking number to get BC
+            if self.courier.code == "jrs" {
+                // split tracking number to get BC
+                let trackingNumbers = self.package?.value.trackingNumber.componentsSeparatedByString("-")
+                self.trackingNumberCell.textField.text = trackingNumbers?.first
+                self.extraFieldCell?.textField.text = trackingNumbers?.last
+            } else {
+                self.trackingNumberCell.textField.text = package.value.trackingNumber
+            }
             
-            self.extraFieldCell?.textField.rx_text
-                .bindTo(self.extraField)
-                .addDisposableTo(self.rx_disposeBag)
+            // disable tracking number cell
+            self.trackingNumberCell.textField.enabled = false
+            self.trackingNumberCell.textField.textColor = .lightGrayColor()
+            self.extraFieldCell?.textField.enabled = false
+            self.extraFieldCell?.textField.textColor = .lightGrayColor()
         }
         
         // bindings
@@ -95,6 +113,10 @@ class AddPackageViewController: UIViewController {
         
         self.nameCell.textField.rx_text
             .bindTo(self.name)
+            .addDisposableTo(self.rx_disposeBag)
+        
+        self.extraFieldCell?.textField.rx_text
+            .bindTo(self.extraField)
             .addDisposableTo(self.rx_disposeBag)
 
         let trackingNumberIsValid = self.trackingNumber.asObservable()
@@ -116,16 +138,19 @@ class AddPackageViewController: UIViewController {
         formIsValid.map({ $0 ? 1.0 : 0.5 })
             .bindTo(self.addButton.rx_alpha)
             .addDisposableTo(self.rx_disposeBag)
-    }
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        // only if still empty
-        if self.trackingNumberCell.textField.text!.isEmpty {
+        
+        if editPackage {
+            self.nameCell.textField.becomeFirstResponder()
+        } else {
             self.trackingNumberCell.textField.becomeFirstResponder()
         }
     }
-
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.view.endEditing(true) // hide keyboard
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -135,6 +160,51 @@ class AddPackageViewController: UIViewController {
 
 // MARK: - Methods
 extension AddPackageViewController {
+    func setupFooterView() {
+        let tableFooterView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 44.0))
+        // add Add button
+        self.addButton.translatesAutoresizingMaskIntoConstraints = false
+        self.addButton.setTitle((editPackage ? "Update Package" : "Add Package"), forState: .Normal)
+        self.addButton.backgroundColor = ColorPalette.Matisse
+        self.addButton.setTitleColor(.whiteColor(), forState: .Normal)
+        if editPackage {
+            self.addButton.addTarget(self, action: #selector(didTapUpdateButton), forControlEvents: .TouchUpInside)
+        } else {
+            self.addButton.addTarget(self, action: #selector(didTapAddButton), forControlEvents: .TouchUpInside)
+        }
+        tableFooterView.addSubview(self.addButton)
+        NSLayoutConstraint.activateConstraints([
+            NSLayoutConstraint(item: self.addButton, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 44.0),
+            NSLayoutConstraint(item: self.addButton, attribute: .Top, relatedBy: .Equal, toItem: tableFooterView, attribute: .Top, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: self.addButton, attribute: .Leading, relatedBy: .Equal, toItem: tableFooterView, attribute: .Leading, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: self.addButton, attribute: .Trailing, relatedBy: .Equal, toItem: tableFooterView, attribute: .Trailing, multiplier: 1.0, constant: 0.0)
+        ])
+        
+        if editPackage {
+            // add archive package button
+            self.archiveButton.translatesAutoresizingMaskIntoConstraints = false
+            self.archiveButton.setTitle("Archive Package", forState: .Normal)
+            self.archiveButton.backgroundColor = .redColor()
+            self.archiveButton.setTitleColor(.whiteColor(), forState: .Normal)
+            self.archiveButton.addTarget(self, action: #selector(didTapArchiveButton), forControlEvents: .TouchUpInside)
+            tableFooterView.addSubview(self.archiveButton)
+            NSLayoutConstraint.activateConstraints([
+                NSLayoutConstraint(item: self.archiveButton, attribute: .Top, relatedBy: .Equal, toItem: self.addButton, attribute: .Bottom, multiplier: 1.0, constant: 10.0),
+                NSLayoutConstraint(item: self.archiveButton, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 44.0),
+                NSLayoutConstraint(item: self.archiveButton, attribute: .Leading, relatedBy: .Equal, toItem: tableFooterView, attribute: .Leading, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: self.archiveButton, attribute: .Trailing, relatedBy: .Equal, toItem: tableFooterView, attribute: .Trailing, multiplier: 1.0, constant: 0.0)
+            ])
+            // adjust height
+            tableFooterView.frame.size.height = 98.0
+        }
+        
+        self.tableView.tableFooterView = tableFooterView
+    }
+    
+    func didTapCancelButton() {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
     func didTapAddButton() {
         let trackingNumber = self.extraFieldCell == nil ? self.trackingNumber.value : self.trackingNumber.value + "-" + self.extraField.value
         if let existingPackage = self.viewModel.packageWithTrackingNumber(trackingNumber, courier: self.courier) {
@@ -185,6 +255,25 @@ extension AddPackageViewController {
                 }
             })
             .addDisposableTo(self.rx_disposeBag)
+    }
+    
+    func didTapUpdateButton() {
+        self.viewModel.updatePackageName(self.name.value, package: self.package!)
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func didTapArchiveButton() {
+        // show action sheet
+        let actionSheetController = UIAlertController(title: "Archive Package", message: "Are you sure you want to archive this package?", preferredStyle: .ActionSheet)
+        actionSheetController.addAction(UIAlertAction(title: "Yes", style: .Destructive, handler: { (alertAction) -> Void in
+            if let package = self.package {
+                self.viewModel.archivePackage(package)
+                self.dismissViewControllerAnimated(true, completion: nil)
+            }
+        }))
+        actionSheetController.addAction(UIAlertAction(title: "No", style: .Cancel, handler: nil))
+        self.presentViewController(actionSheetController, animated: true, completion: nil)
+        actionSheetController.view.tintColor = ColorPalette.Matisse
     }
 }
 

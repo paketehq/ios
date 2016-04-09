@@ -119,8 +119,8 @@ extension PackagesViewController {
     }
     
     func showPackageDetails(package: ObservablePackage) {
-        let viewModel = PackageViewModel(package: package)
-        let packageViewController = PackageViewController(viewModel: viewModel)
+        let packageViewModel = PackageViewModel(package: package)
+        let packageViewController = PackageViewController(packageViewModel: packageViewModel, packagesViewModel: viewModel)
         self.navigationController?.pushViewController(packageViewController, animated: true)
     }
     
@@ -180,10 +180,7 @@ extension PackagesViewController: UITableViewDataSource {
 extension PackagesViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        
-        let viewModel = PackageViewModel(package: self.viewModel.packages.value[indexPath.row])
-        let packageViewController = PackageViewController(viewModel: viewModel)
-        self.navigationController?.pushViewController(packageViewController, animated: true)
+        self.showPackageDetails(self.viewModel.packages.value[indexPath.row])
     }
     
     func tableView(tableView: UITableView, titleForDeleteConfirmationButtonForRowAtIndexPath indexPath: NSIndexPath) -> String? {

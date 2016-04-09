@@ -109,19 +109,39 @@ class PackagesViewModel {
         })
     }
     
-    func archivePackageIndexPath(indexPath: NSIndexPath) {
-        let package = self.packages.value[indexPath.row].value
-        self.packages.value.removeAtIndex(indexPath.row)
-        
+    func archivePackage(package: ObservablePackage) {
+        let updatedPackage = package.value
         let realm = try! Realm()
         try! realm.write { () -> Void in
-            package.archived = true
+            updatedPackage.archived = true
         }
+        // trigger to update
+        package.value = updatedPackage
+        // remove from the packages
+        if let index = self.packages.value.indexOf({ $0.value == updatedPackage }) {
+            self.packages.value.removeAtIndex(index)
+        }
+    }
+    
+    func archivePackageIndexPath(indexPath: NSIndexPath) {
+        let package = self.packages.value[indexPath.row]
+        self.packages.value.removeAtIndex(indexPath.row)
+        self.archivePackage(package)
     }
         
     func packageWithTrackingNumber(trackingNumber: String, courier: Courier) -> Package? {
         let realm = try! Realm()
         return realm.objects(Package).filter({ $0.trackingNumber == trackingNumber && $0.courier == courier }).first
+    }
+    
+    func updatePackageName(name: String, package: ObservablePackage) {
+        let updatedPackage = package.value
+        let realm = try! Realm()
+        try! realm.write({ () -> Void in
+            updatedPackage.name = name
+        })
+        // trigger to update
+        package.value = updatedPackage
     }
     
     func unarchivePackage(package: Package) {

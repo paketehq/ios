@@ -28,7 +28,7 @@ struct PackageViewModel: PackageViewModelType {
     }
     
     func status() -> String {
-        guard let latestTrackHistory = self.package.value.latestTrackHistory() else { return "" }
+        guard let latestTrackHistory = self.package.value.latestTrackHistory() else { return "No information available yet" }
         return latestTrackHistory.status.toUppercaseAtSentenceBoundary()
     }
     
