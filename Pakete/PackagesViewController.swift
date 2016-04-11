@@ -93,7 +93,7 @@ extension PackagesViewController {
         ])
         
         let keys = PaketeKeys()
-        adBannerView.adUnitID = keys.adMobAdUnitIDKey()
+        adBannerView.adUnitID = keys.adMobBannerAdUnitIDKey()
         adBannerView.rootViewController = self
         
         // add bottom offset for ad banner view

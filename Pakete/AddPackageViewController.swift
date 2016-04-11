@@ -11,6 +11,8 @@ import RxSwift
 import RxCocoa
 import NSObject_Rx
 import SVProgressHUD
+import GoogleMobileAds
+import Keys
 
 class AddPackageViewController: UIViewController {
     
@@ -31,6 +33,7 @@ class AddPackageViewController: UIViewController {
     private var package: ObservablePackage?
     
     private var editPackage = false
+    private var interstitialAd: GADInterstitial!
     
     init(viewModel: PackagesViewModel, courier: Courier) {
         self.viewModel = viewModel
@@ -69,6 +72,8 @@ class AddPackageViewController: UIViewController {
         ])
         // setup footer view buttons
         self.setupFooterView()
+        // setup interstitial ad
+        self.setupInterstitialAd()
         
         // setup static cells
         self.trackingNumberCell.textField.placeholder = "Code"
@@ -160,6 +165,16 @@ class AddPackageViewController: UIViewController {
 
 // MARK: - Methods
 extension AddPackageViewController {
+    func setupInterstitialAd() {
+        let keys = PaketeKeys()
+        self.interstitialAd = GADInterstitial(adUnitID: keys.adMobInterstitialAdUnitIDKey())
+        self.interstitialAd.delegate = self
+        let request = GADRequest()
+        // Requests test ads on test devices.
+        request.testDevices = [kGADSimulatorID]
+        self.interstitialAd.loadRequest(request)
+    }
+    
     func setupFooterView() {
         let tableFooterView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 44.0))
         // add Add button
@@ -240,7 +255,12 @@ extension AddPackageViewController {
                 SVProgressHUD.dismiss()
                 switch event {
                 case .Next(_):
-                    self.dismissViewControllerAnimated(true, completion: nil)
+                    // show interstitial ad
+                    if self.interstitialAd.isReady {
+                        self.interstitialAd.presentFromRootViewController(self)
+                    } else {
+                        self.dismissViewControllerAnimated(true, completion: nil)
+                    }
                 case .Error(let error):
                     // focus back to tracking number textfield
                     self.trackingNumberCell.textField.becomeFirstResponder()
@@ -291,5 +311,16 @@ extension AddPackageViewController: UITableViewDataSource {
         default: ()
             fatalError("invalid indexpath")
         }
+    }
+}
+
+// MARK: - GADInterstitialDelegate
+extension AddPackageViewController: GADInterstitialDelegate {
+    func interstitialWillDismissScreen(ad: GADInterstitial!) {
+        self.dismissViewControllerAnimated(false, completion: nil)
+    }
+    
+    func interstitialWillLeaveApplication(ad: GADInterstitial!) {
+        self.dismissViewControllerAnimated(false, completion: nil)
     }
 }
