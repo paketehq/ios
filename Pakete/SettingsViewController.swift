@@ -151,7 +151,8 @@ extension SettingsViewController: UITableViewDelegate {
             self.presentViewController(alertController, animated: true, completion: nil)
             alertController.view.tintColor = ColorPalette.Matisse
         case 1:
-            //
+            // Report a problem
+            Smooch.show()
             break
         default: ()
         }
