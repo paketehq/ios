@@ -47,16 +47,19 @@ class PackageTableViewCell: UITableViewCell {
         self.dateLabel.font = UIFont.systemFontOfSize(12.0)
         self.dateLabel.textAlignment = .Right
         self.dateLabel.textColor = .grayColor()
+        self.dateLabel.adjustFontToRealIPhoneSize = true
         self.contentView.addSubview(self.dateLabel)
         
         self.nameLabel.translatesAutoresizingMaskIntoConstraints = false
         self.nameLabel.font = UIFont.systemFontOfSize(16.0)
+        self.nameLabel.adjustFontToRealIPhoneSize = true
         self.contentView.addSubview(self.nameLabel)
         
         self.statusLabel.translatesAutoresizingMaskIntoConstraints = false
         self.statusLabel.font = UIFont.systemFontOfSize(14.0)
         self.statusLabel.textColor = .grayColor()
         self.statusLabel.numberOfLines = 0
+        self.statusLabel.adjustFontToRealIPhoneSize = true
         self.contentView.addSubview(self.statusLabel)
         
         self.updating.asObservable()

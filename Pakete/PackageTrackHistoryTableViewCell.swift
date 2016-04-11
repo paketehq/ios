@@ -44,11 +44,13 @@ class PackageTrackHistoryTableViewCell: UITableViewCell {
         self.dateLabel.translatesAutoresizingMaskIntoConstraints = false
         self.dateLabel.font = UIFont.systemFontOfSize(12.0)
         self.dateLabel.textColor = .grayColor()
+        self.dateLabel.adjustFontToRealIPhoneSize = true
         self.contentView.addSubview(self.dateLabel)
                 
         self.statusLabel.translatesAutoresizingMaskIntoConstraints = false
         self.statusLabel.font = UIFont.systemFontOfSize(14.0)
         self.statusLabel.numberOfLines = 0
+        self.statusLabel.adjustFontToRealIPhoneSize = true
         self.contentView.addSubview(self.statusLabel)
         
         self.lineSeparatorView.translatesAutoresizingMaskIntoConstraints = false

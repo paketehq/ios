@@ -80,7 +80,7 @@ class PackageViewController: UIViewController {
 // MARK: - Methods
 extension PackageViewController {
     private func setupTableHeaderView() {
-        let tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 56.5))
+        let tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 0.0))
         tableHeaderView.backgroundColor = .whiteColor()
         
         // tracking number label
@@ -88,6 +88,7 @@ extension PackageViewController {
         trackingNumberLabel.translatesAutoresizingMaskIntoConstraints = false
         trackingNumberLabel.text = self.packageViewModel.trackingNumber()
         trackingNumberLabel.font = UIFont.systemFontOfSize(16.0)
+        trackingNumberLabel.adjustFontToRealIPhoneSize = true
         tableHeaderView.addSubview(trackingNumberLabel)
         NSLayoutConstraint.activateConstraints([
             NSLayoutConstraint(item: trackingNumberLabel, attribute: .Top, relatedBy: .Equal, toItem: tableHeaderView, attribute: .Top, multiplier: 1.0, constant: 10.0),
@@ -100,11 +101,17 @@ extension PackageViewController {
         courierLabel.text = self.packageViewModel.courierName()
         courierLabel.textColor = .lightGrayColor()
         courierLabel.font = UIFont.systemFontOfSize(14.0)
+        courierLabel.adjustFontToRealIPhoneSize = true
         tableHeaderView.addSubview(courierLabel)
         NSLayoutConstraint.activateConstraints([
             NSLayoutConstraint(item: courierLabel, attribute: .Top, relatedBy: .Equal, toItem: trackingNumberLabel, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
             NSLayoutConstraint(item: courierLabel, attribute: .Leading, relatedBy: .Equal, toItem: tableHeaderView, attribute: .Leading, multiplier: 1.0, constant: 15.0)
         ])
+        
+        // adjust height
+        let trackingNumberSize = trackingNumberLabel.sizeThatFits(CGSize(width: tableHeaderView.frame.width - 30.0, height: CGFloat.max))
+        let courierSize = courierLabel.sizeThatFits(CGSize(width: tableHeaderView.frame.width - 30.0, height: CGFloat.max))
+        tableHeaderView.frame.size.height = trackingNumberSize.height + courierSize.height + 20.0
         
         self.tableView.tableHeaderView = tableHeaderView
     }
