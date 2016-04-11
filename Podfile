@@ -6,7 +6,8 @@ plugin 'cocoapods-keys', {
   target: "Pakete",
   keys: [
     "AdMobBannerAdUnitIDKey",
-    "AdMobInterstitialAdUnitIDKey"
+    "AdMobInterstitialAdUnitIDKey",
+    "SmoochAppTokenKey"
   ]
 }
 
