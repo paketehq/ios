@@ -49,7 +49,7 @@ class SettingsViewController: UIViewController {
         headerText.frame.origin.x = 15.0
         tableHeaderView.addSubview(headerText)
         tableHeaderView.frame.size.width = self.view.frame.width
-        tableHeaderView.frame.size.height = headerText.frame.height + 20.0
+        tableHeaderView.frame.size.height = headerText.frame.height + 30.0
         self.tableView.tableHeaderView = tableHeaderView
         
         // setup footer view
