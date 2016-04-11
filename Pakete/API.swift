@@ -26,8 +26,8 @@ let defaultManager: Alamofire.Manager = {
 
 struct Pakete {
     enum Router: URLRequestConvertible {
-//        static let baseURLString = "https://agile-forest-88999.herokuapp.com/v1"
-        static let baseURLString = "http://192.168.0.115:5000/v1"
+        static let baseURLString = "https://agile-forest-88999.herokuapp.com/v1"
+//        static let baseURLString = "http://192.168.0.115:5000/v1"
 
         case TrackPackage(String, String)
         case Couriers
