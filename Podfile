@@ -5,7 +5,8 @@ plugin 'cocoapods-keys', {
   project: "Pakete",
   target: "Pakete",
   keys: [
-    "AdMobAdUnitIDKey"
+    "AdMobBannerAdUnitIDKey",
+    "AdMobInterstitialAdUnitIDKey"
   ]
 }
 
