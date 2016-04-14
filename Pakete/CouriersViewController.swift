@@ -9,6 +9,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Mixpanel
 
 class CouriersViewController: UIViewController {
     
@@ -64,7 +65,9 @@ class CouriersViewController: UIViewController {
                 self.navigationController?.pushViewController(addPackageViewController, animated: true)
             }
             .addDisposableTo(self.rx_disposeBag)
-
+        
+        // track mixpanel
+        Mixpanel.sharedInstance().track("Couriers View")
     }
 
     override func didReceiveMemoryWarning() {

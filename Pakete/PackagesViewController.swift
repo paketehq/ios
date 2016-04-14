@@ -11,6 +11,7 @@ import RxSwift
 import RxCocoa
 import GoogleMobileAds
 import Keys
+import Mixpanel
 
 class PackagesViewController: UIViewController {
     
@@ -69,6 +70,8 @@ class PackagesViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
+        // track mixpanel
+        Mixpanel.sharedInstance().track("Packages View")
     }
     
     override func didReceiveMemoryWarning() {
@@ -169,6 +172,8 @@ extension PackagesViewController: UITableViewDataSource {
             let actionSheetController = UIAlertController(title: "Archive Package", message: "Are you sure you want to archive this package?", preferredStyle: .ActionSheet)
             actionSheetController.addAction(UIAlertAction(title: "Yes", style: .Destructive, handler: { (alertAction) -> Void in
                 self.viewModel.archivePackageIndexPath(indexPath)
+                // track mixpanel
+                Mixpanel.sharedInstance().track("Archived Package")
             }))
             actionSheetController.addAction(UIAlertAction(title: "No", style: .Cancel, handler: nil))
             self.presentViewController(actionSheetController, animated: true, completion: nil)

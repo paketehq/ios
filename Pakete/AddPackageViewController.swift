@@ -13,6 +13,7 @@ import NSObject_Rx
 import SVProgressHUD
 import GoogleMobileAds
 import Keys
+import Mixpanel
 
 class AddPackageViewController: UIViewController {
     
@@ -149,6 +150,9 @@ class AddPackageViewController: UIViewController {
         } else {
             self.trackingNumberCell.textField.becomeFirstResponder()
         }
+        
+        // track mixpanel
+        Mixpanel.sharedInstance().track("Add Package View")
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -255,6 +259,8 @@ extension AddPackageViewController {
                 SVProgressHUD.dismiss()
                 switch event {
                 case .Next(_):
+                    // track mixpanel
+                    Mixpanel.sharedInstance().track("Added Package", properties: ["Courier": self.courier.name])
                     // show interstitial ad
                     if self.interstitialAd.isReady {
                         self.interstitialAd.presentFromRootViewController(self)
@@ -287,6 +293,8 @@ extension AddPackageViewController {
         let actionSheetController = UIAlertController(title: "Archive Package", message: "Are you sure you want to archive this package?", preferredStyle: .ActionSheet)
         actionSheetController.addAction(UIAlertAction(title: "Yes", style: .Destructive, handler: { (alertAction) -> Void in
             if let package = self.package {
+                // track mixpanel
+                Mixpanel.sharedInstance().track("Archived Package")
                 self.viewModel.archivePackage(package)
                 self.dismissViewControllerAnimated(true, completion: nil)
             }

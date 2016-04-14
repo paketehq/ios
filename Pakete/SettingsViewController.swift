@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import VTAcknowledgementsViewController
+import Mixpanel
 
 class SettingsViewController: UIViewController {
     
@@ -70,6 +70,9 @@ class SettingsViewController: UIViewController {
             NSLayoutConstraint(item: versionLabel, attribute: .CenterX, relatedBy: .Equal, toItem: tableFooterView, attribute: .CenterX, multiplier: 1.0, constant: 0.0)
         ])
         self.tableView.tableFooterView = tableFooterView
+        
+        // track mixpanel
+        Mixpanel.sharedInstance().track("Settings View")
     }
 
     override func didReceiveMemoryWarning() {

@@ -10,6 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 import Keys
+import Mixpanel
 
 class PackageViewController: UIViewController {
     
@@ -64,6 +65,12 @@ class PackageViewController: UIViewController {
                 }
             }
             .addDisposableTo(self.rx_disposeBag)
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        // track mixpanel
+        Mixpanel.sharedInstance().track("Package View")
     }
     
     override func viewDidAppear(animated: Bool) {
