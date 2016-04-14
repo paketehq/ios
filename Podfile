@@ -24,6 +24,7 @@ target 'Pakete' do
  pod 'NSDate+TimeAgo'
  pod 'Smooch'
  pod 'CryptoSwift'
+ pod 'Mixpanel'
 end
 
 target 'PaketeTests' do
