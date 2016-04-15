@@ -10,24 +10,9 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
-let defaultManager: Alamofire.Manager = {
-    let serverTrustPolicies: [String: ServerTrustPolicy] = [
-        "localhost:5000": .DisableEvaluation
-    ]
-    
-    let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
-    configuration.HTTPAdditionalHeaders = Alamofire.Manager.defaultHTTPHeaders
-    
-    return Alamofire.Manager(
-        configuration: configuration,
-        serverTrustPolicyManager: ServerTrustPolicyManager(policies: serverTrustPolicies)
-    )
-}()
-
 struct Pakete {
     enum Router: URLRequestConvertible {
-        static let baseURLString = "https://agile-forest-88999.herokuapp.com/v1"
-//        static let baseURLString = "http://192.168.0.115:5000/v1"
+        static let baseURLString = "https://pakete-api-staging.herokuapp.com/v1"
 
         case TrackPackage(String, String)
         case Couriers

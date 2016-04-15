@@ -69,7 +69,7 @@ class PackagesViewModel {
     // TODO: - Refactor because redundant function
     func trackPackage(package: ObservablePackage) {
         let endpoint = Pakete.Router.TrackPackage(package.value.courier.code, package.value.trackingNumber)
-        defaultManager.request(endpoint).responseSwiftyJSON { (request, response, json, error) -> Void in
+        Alamofire.request(endpoint).responseSwiftyJSON { (request, response, json, error) -> Void in
             if error == nil {
                 let package = Package(name: package.value.name, courier: package.value.courier!, json: json)
                 self.savePackage(package)
