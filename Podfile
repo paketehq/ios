@@ -5,6 +5,7 @@ plugin 'cocoapods-keys', {
   project: "Pakete",
   target: "Pakete",
   keys: [
+    "PaketeAPIKey",
     "AdMobBannerAdUnitIDKey",
     "AdMobInterstitialAdUnitIDKey",
     "SmoochAppTokenKey",
