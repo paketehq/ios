@@ -9,6 +9,8 @@
 import UIKit
 import Keys
 import Mixpanel
+import Fabric
+import Crashlytics
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -24,6 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Smooch.initWithSettings(SKTSettings(appToken: keys.smoochAppTokenKey()))
         // Mixpanel
         Mixpanel.sharedInstanceWithToken(keys.mixpanelTokenKey(), launchOptions: launchOptions)
+        // Crashlytics
+        Fabric.with([Crashlytics.self])
         
         UINavigationBar.appearance().barStyle = .Black
         UINavigationBar.appearance().setBackgroundImage(UIImage(color: ColorPalette.Matisse), forBarMetrics: UIBarMetrics.Default)

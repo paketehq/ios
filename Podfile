@@ -26,6 +26,8 @@ target 'Pakete' do
  pod 'Smooch'
  pod 'CryptoSwift'
  pod 'Mixpanel'
+ pod 'Fabric'
+ pod 'Crashlytics'
 end
 
 target 'PaketeTests' do
