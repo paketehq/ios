@@ -52,17 +52,8 @@ class PackagesViewModel {
         pendingPackages.forEach { (package) -> () in
             // mark as updating
             package.value.updating = true
-
-            // TO DO HANDLE ERROR!
+            // start tracking package
             self.trackPackage(package)
-//            self.trackPackage(package)
-//                .subscribeNext({ (package) -> Void in
-//                    // check for the package index first
-//                    if let index = self.packages.value.indexOf({ $0.value == package.value }) {
-//                        self.packages.value[index].value = package.value
-//                    }
-//                })
-//                .addDisposableTo(self.disposeBag)
         }
     }
     
