@@ -47,6 +47,13 @@ class Package: Object {
         }
     }
     
+    convenience init(name: String, trackingNumber: String, courier: Courier) {
+        self.init()
+        self.name = name
+        self.courier = courier
+        self.trackingNumber = trackingNumber
+    }
+    
     func latestTrackHistory() -> PackageTrackHistory? {
         return self.trackHistory.first // because package track history is sorted descending
     }
