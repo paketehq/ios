@@ -252,7 +252,8 @@ extension AddPackageViewController {
         
         // hide keyboard
         self.view.endEditing(true)
-        SVProgressHUD.showWithMaskType(.Black)
+        SVProgressHUD.show()
+        SVProgressHUD.setDefaultMaskType(.Black)
         
         self.viewModel.addPackage(trackingNumber, courier: self.courier, name: self.name.value)
             .subscribe({ (event) -> Void in
