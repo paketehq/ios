@@ -255,19 +255,11 @@ extension AddPackageViewController {
         SVProgressHUD.show()
         SVProgressHUD.setDefaultMaskType(.Black)
         
-        self.viewModel.addPackage(trackingNumber, courier: self.courier, name: self.name.value)
-            .subscribe({ (event) -> Void in
+        let package = Package(name: self.name.value, trackingNumber: trackingNumber, courier: self.courier)
+        self.viewModel.trackPackage(ObservablePackage(package))
+            .subscribe { (event) in
                 SVProgressHUD.dismiss()
                 switch event {
-                case .Next(_):
-                    // track mixpanel
-                    Mixpanel.sharedInstance().track("Added Package", properties: ["Courier": self.courier.name])
-                    // show interstitial ad
-                    if self.interstitialAd.isReady {
-                        self.interstitialAd.presentFromRootViewController(self)
-                    } else {
-                        self.dismissViewControllerAnimated(true, completion: nil)
-                    }
                 case .Error(let error):
                     // focus back to tracking number textfield
                     self.trackingNumberCell.textField.becomeFirstResponder()
@@ -278,10 +270,23 @@ extension AddPackageViewController {
                     alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
                     self.presentViewController(alertController, animated: true, completion: nil)
                     alertController.view.tintColor = ColorPalette.Matisse
+                case .Next(let observablePackage):
+                    // track mixpanel
+                    Mixpanel.sharedInstance().track("Added Package", properties: ["Courier": self.courier.name])
+                    // show interstitial ad
+                    if self.interstitialAd.isReady {
+                        self.interstitialAd.presentFromRootViewController(self)
+                    } else {
+                        self.dismissViewControllerAnimated(true, completion: nil)
+                    }
+                    // add to package list
+                    self.viewModel.addPackage(observablePackage)
+                    // show package
+                    self.viewModel.showPackage.onNext(observablePackage.value)
                 default: ()
                 }
-            })
-            .addDisposableTo(self.rx_disposeBag)
+            }
+            .addDisposableTo(rx_disposeBag)
     }
     
     func didTapUpdateButton() {
