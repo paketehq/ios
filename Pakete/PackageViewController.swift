@@ -17,6 +17,7 @@ class PackageViewController: UIViewController {
     private let tableView = UITableView(frame: CGRect.zero, style: .Grouped)
     private let packageViewModel: PackageViewModel
     private let packagesViewModel: PackagesViewModel
+    private var noInformationAvailableYetLabel: UILabel?
     
     init(packageViewModel: PackageViewModel, packagesViewModel: PackagesViewModel) {
         self.packageViewModel = packageViewModel
@@ -62,6 +63,11 @@ class PackageViewController: UIViewController {
                 } else {
                     self.title = self.packageViewModel.name()
                     self.tableView.reloadData()
+                    if package.trackHistory.count > 0 {
+                        self.hideNoInformationAvailableYetLabel()
+                    } else {
+                        self.showNoInformationAvailableYetLabel()
+                    }
                 }
             }
             .addDisposableTo(self.rx_disposeBag)
@@ -127,6 +133,31 @@ extension PackageViewController {
         let editPackageViewController = AddPackageViewController(viewModel: packagesViewModel, package: self.packageViewModel.package)
         let editPackageNavigationController = UINavigationController(rootViewController: editPackageViewController)
         self.presentViewController(editPackageNavigationController, animated: true, completion: nil)
+    }
+    
+    func showNoInformationAvailableYetLabel() {
+        if self.noInformationAvailableYetLabel == nil {
+            self.noInformationAvailableYetLabel = UILabel()
+            self.noInformationAvailableYetLabel?.text = "No information available yet.\nPlease try again later."
+            self.noInformationAvailableYetLabel?.textAlignment = .Center
+            self.noInformationAvailableYetLabel?.numberOfLines = 2
+            self.noInformationAvailableYetLabel?.translatesAutoresizingMaskIntoConstraints = false
+            self.noInformationAvailableYetLabel?.font = UIFont.systemFontOfSize(14.0)
+            self.noInformationAvailableYetLabel?.adjustFontToRealIPhoneSize = true
+            self.view.addSubview(self.noInformationAvailableYetLabel!)
+            NSLayoutConstraint.activateConstraints([
+                NSLayoutConstraint(item: self.noInformationAvailableYetLabel!, attribute: .Leading, relatedBy: .Equal, toItem: self.view, attribute: .Leading, multiplier: 1.0, constant: 15.0),
+                NSLayoutConstraint(item: self.noInformationAvailableYetLabel!, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: -15.0),
+                NSLayoutConstraint(item: self.noInformationAvailableYetLabel!, attribute: .CenterY, relatedBy: .Equal, toItem: self.view, attribute: .CenterY, multiplier: 1.0, constant: 0.0)
+            ])
+        }
+        
+        self.noInformationAvailableYetLabel?.hidden = false
+    }
+    
+    func hideNoInformationAvailableYetLabel() {
+        self.noInformationAvailableYetLabel?.hidden = true
+        self.tableView.hidden = false
     }
 }
 
