@@ -31,6 +31,6 @@ target 'Pakete' do
  pod 'Crashlytics'
 end
 
-target 'PaketeTests' do
-
+target 'PaketeTests', :exclusive => true do
+ pod 'Mockingjay'
 end
