@@ -62,7 +62,7 @@ class PackagesViewController: UIViewController {
         
         self.viewModel.showPackage.asObservable()
             .subscribeNext { (package) -> Void in
-                self.showPackageDetails(Variable(package))
+                self.showPackageDetails(ObservablePackage(package))
             }
             .addDisposableTo(self.rx_disposeBag)
     }

@@ -152,7 +152,7 @@ class PackagesViewModel {
         self.showPackage.onNext(package)
 
         // insert at the top of the array
-        let observablePackage = Variable(package)
+        let observablePackage = ObservablePackage(package)
         self.packages.value.insert(observablePackage, atIndex: 0)
     }
     
