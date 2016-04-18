@@ -29,22 +29,30 @@ class PackagesViewModel {
         self.refreshPackages()
     }
     
-    func fetchCouriers() {
-        let endpoint = Pakete.Router.Couriers
-        Alamofire.request(endpoint).responseSwiftyJSON { (request, response, json, error) -> Void in
-            if let error = error {
-                print(error)
-            } else {
-                // parse json
-                var couriers = [Courier]()
-                for courierJSON in json.arrayValue {
-                    let courier = Courier(json: courierJSON)
-                    couriers.append(courier)
+    func fetchCouriers() -> Observable<[Courier]> {
+        return Observable.create({ (observer) -> Disposable in
+            let endpoint = Pakete.Router.Couriers
+            let request = Alamofire.request(endpoint).responseSwiftyJSON { (request, response, json, error) -> Void in
+                if let error = error {
+                    print(error)
+                    observer.onError(error)
+                } else {
+                    // parse json
+                    var couriers = [Courier]()
+                    for courierJSON in json.arrayValue {
+                        let courier = Courier(json: courierJSON)
+                        couriers.append(courier)
+                    }
+                    self.saveCouriers(couriers)
+                    self.reloadCouriersLocalData()
+                    observer.onNext(couriers)
+                    observer.onCompleted()
                 }
-                self.saveCouriers(couriers)
-                self.reloadCouriersLocalData()
             }
-        }
+            return AnonymousDisposable {
+                request.cancel()
+            }
+        })
     }
     
     func refreshPackages() {
