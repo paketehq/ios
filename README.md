@@ -10,17 +10,24 @@ This open source app will only connect to the staging server.
 
 ## How to build
 
+0) Install bundler Gem
+
+```bash
+[sudo] gem install bundler
+```
+
 1) Clone the repository
 
 ```bash
 $ git clone https://github.com/paketehq/ios.git
 ```
 
-2) Install pods
+2) Install gems and pods
 
 ```bash
 $ cd ios
-$ pod install
+$ bundle install
+$ bundle exec pod install
 ```
 
 3) Open the workspace in Xcode
