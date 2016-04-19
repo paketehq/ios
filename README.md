@@ -1,5 +1,6 @@
 Pakete
 ============
+[![BuddyBuild](https://dashboard.buddybuild.com/api/statusImage?appID=5714a66524b97e01000a92f0&branch=master&build=latest)](https://dashboard.buddybuild.com/apps/5714a66524b97e01000a92f0/build/latest)
 ![Language](https://img.shields.io/badge/language-Swift%202-orange.svg)
 ![License](https://img.shields.io/github/license/paketehq/ios.svg?style=flat)
 
