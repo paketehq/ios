@@ -22,6 +22,9 @@ class PackagesViewModel {
     
     init() {
         self.fetchCouriers()
+            .subscribe()
+            .addDisposableTo(self.disposeBag)
+        
         // fetch local cache
         self.reloadPackagesLocalData()
         self.reloadCouriersLocalData()
