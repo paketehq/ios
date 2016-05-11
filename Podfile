@@ -29,6 +29,7 @@ target 'Pakete' do
  pod 'Mixpanel'
  pod 'Fabric'
  pod 'Crashlytics'
+ pod 'SwiftyStoreKit'
 end
 
 target 'PaketeTests', :exclusive => true do
