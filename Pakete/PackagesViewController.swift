@@ -84,6 +84,8 @@ class PackagesViewController: UIViewController {
 // MARK: - Methods
 extension PackagesViewController {
     private func setupBottomAdBannerView() {
+        guard IAPHelper.showAds() else { return }
+        
         let adBannerView = GADBannerView()
         adBannerView.autoloadEnabled = true
         adBannerView.translatesAutoresizingMaskIntoConstraints = false

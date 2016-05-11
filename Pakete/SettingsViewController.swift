@@ -8,6 +8,8 @@
 
 import UIKit
 import Mixpanel
+import SwiftyStoreKit
+import SVProgressHUD
 
 class SettingsViewController: UIViewController {
     
@@ -37,20 +39,26 @@ class SettingsViewController: UIViewController {
         ])
         
         // setup header view
-        let tableHeaderView = UIView()
-        let headerText = UILabel()
-        headerText.font = UIFont.systemFontOfSize(14.0)
-        headerText.numberOfLines = 0
-        headerText.textAlignment = .Center
-        headerText.textColor = .grayColor()
-        headerText.text = "We may be an ad-supported app, but we understand some would prefer Pakete without ads. Get an ad-free experience and help bring new features to the app for only $0.99. A single purchase works across all of your Android devices forever. We appreciate your support!"
-        headerText.frame.size = headerText.sizeThatFits(CGSize(width: self.view.frame.width - 30.0, height: CGFloat.max))
-        headerText.frame.origin.y = 15.0
-        headerText.frame.origin.x = 15.0
-        tableHeaderView.addSubview(headerText)
-        tableHeaderView.frame.size.width = self.view.frame.width
-        tableHeaderView.frame.size.height = headerText.frame.height + 30.0
-        self.tableView.tableHeaderView = tableHeaderView
+        IAPHelper.removeAdsProductInfo { (product) in
+            if let product = product {
+                let priceString = NSNumberFormatter.localizedStringFromNumber(product.price ?? 0, numberStyle: .CurrencyStyle)
+                
+                let tableHeaderView = UIView()
+                let headerText = UILabel()
+                headerText.font = UIFont.systemFontOfSize(14.0)
+                headerText.numberOfLines = 0
+                headerText.textAlignment = .Center
+                headerText.textColor = .grayColor()
+                headerText.text = "We may be an ad-supported app, but we understand some would prefer Pakete without ads. Get an ad-free experience and help bring new features to the app for only \(priceString). A single purchase works across all of your Android devices forever. We appreciate your support!"
+                headerText.frame.size = headerText.sizeThatFits(CGSize(width: self.view.frame.width - 30.0, height: CGFloat.max))
+                headerText.frame.origin.y = 15.0
+                headerText.frame.origin.x = 15.0
+                tableHeaderView.addSubview(headerText)
+                tableHeaderView.frame.size.width = self.view.frame.width
+                tableHeaderView.frame.size.height = headerText.frame.height + 30.0
+                self.tableView.tableHeaderView = tableHeaderView
+            }
+        }
         
         // setup footer view
         let tableFooterView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 17.0))
@@ -74,6 +82,10 @@ class SettingsViewController: UIViewController {
         // track mixpanel
         Mixpanel.sharedInstance().track("Settings View")
     }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -88,11 +100,27 @@ extension SettingsViewController {
     }
     
     func removeAds() {
-        
+        SVProgressHUD.showWithStatus("Purchasing Remove Ads...")
+        IAPHelper.purchaseRemoveAds { (success) in
+            if success {
+                SVProgressHUD.showSuccessWithStatus("Thank you! You won't be seeing any ads anymore!")
+            } else {
+                SVProgressHUD.showErrorWithStatus("Purchase Failed. Please try again.")
+            }
+        }
     }
     
     func restorePurchases() {
-        
+        SVProgressHUD.show()
+        IAPHelper.restorePurchases { (results) in
+            if results.restoreFailedProducts.count > 0 {
+                SVProgressHUD.showErrorWithStatus("Restore Failed. Please try again.")
+            } else if results.restoredProductIds.count > 0 {
+                SVProgressHUD.showSuccessWithStatus("Restored Purchases!")
+            } else {
+                SVProgressHUD.showInfoWithStatus("Nothing to Restore.")
+            }
+        }
     }
 }
 
@@ -143,16 +171,21 @@ extension SettingsViewController: UITableViewDelegate {
         switch indexPath.section {
         case 0:
             // remove ads
-            let alertController = UIAlertController(title: "Hate Ads?", message: nil, preferredStyle: .Alert)
-            alertController.addAction(UIAlertAction(title: "Pay to Remove Ads", style: UIAlertActionStyle.Destructive, handler: { (alertAction) -> Void in
-                self.removeAds()
-            }))
-            alertController.addAction(UIAlertAction(title: "Restore Purchases", style: UIAlertActionStyle.Default, handler: { (alertAction) -> Void in
-                self.restorePurchases()
-            }))
-            alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil))
-            self.presentViewController(alertController, animated: true, completion: nil)
-            alertController.view.tintColor = ColorPalette.Matisse
+            IAPHelper.removeAdsProductInfo({ (product) in
+                if let product = product {
+                    let priceString = NSNumberFormatter.localizedStringFromNumber(product.price ?? 0, numberStyle: .CurrencyStyle)
+                    let alertController = UIAlertController(title: "Hate Ads?", message: "Remove Ads for \(priceString) only", preferredStyle: .Alert)
+                    alertController.addAction(UIAlertAction(title: "Pay to Remove Ads", style: UIAlertActionStyle.Destructive, handler: { (alertAction) -> Void in
+                        self.removeAds()
+                    }))
+                    alertController.addAction(UIAlertAction(title: "Restore Purchases", style: UIAlertActionStyle.Default, handler: { (alertAction) -> Void in
+                        self.restorePurchases()
+                    }))
+                    alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil))
+                    self.presentViewController(alertController, animated: true, completion: nil)
+                    alertController.view.tintColor = ColorPalette.Matisse
+                }
+            })
         case 1:
             // Report a problem
             Smooch.show()
