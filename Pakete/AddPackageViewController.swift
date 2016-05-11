@@ -274,7 +274,7 @@ extension AddPackageViewController {
                     // track mixpanel
                     Mixpanel.sharedInstance().track("Added Package", properties: ["Courier": self.courier.name])
                     // show interstitial ad
-                    if self.interstitialAd.isReady {
+                    if self.interstitialAd.isReady && IAPHelper.showAds() {
                         self.interstitialAd.presentFromRootViewController(self)
                     } else {
                         self.dismissViewControllerAnimated(true, completion: nil)
