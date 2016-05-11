@@ -19,6 +19,7 @@ class PackagesViewController: UIViewController {
     private let viewModel = PackagesViewModel()
     private let refreshControl = UIRefreshControl()
     private var emptyStateLabel: UILabel?
+    private var adBannerView: GADBannerView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,6 +66,9 @@ class PackagesViewController: UIViewController {
                 self.showPackageDetails(ObservablePackage(package))
             }
             .addDisposableTo(self.rx_disposeBag)
+        
+        // Notification
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(hideAds), name: IAPDidPurchaseRemoveAdsNotification, object: nil)
     }
         
     override func viewWillAppear(animated: Bool) {
@@ -79,6 +83,10 @@ class PackagesViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
+    
 }
 
 // MARK: - Methods
@@ -86,24 +94,31 @@ extension PackagesViewController {
     private func setupBottomAdBannerView() {
         guard IAPHelper.showAds() else { return }
         
-        let adBannerView = GADBannerView()
-        adBannerView.autoloadEnabled = true
-        adBannerView.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(adBannerView)
+        self.adBannerView = GADBannerView()
+        self.adBannerView!.autoloadEnabled = true
+        self.adBannerView!.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(self.adBannerView!)
         NSLayoutConstraint.activateConstraints([
-            NSLayoutConstraint(item: adBannerView, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: adBannerView, attribute: .Leading, relatedBy: .Equal, toItem: self.view, attribute: .Leading, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: adBannerView, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: adBannerView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 50.0)
+            NSLayoutConstraint(item: self.adBannerView!, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: self.adBannerView!, attribute: .Leading, relatedBy: .Equal, toItem: self.view, attribute: .Leading, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: self.adBannerView!, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: self.adBannerView!, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 50.0)
         ])
         
         let keys = PaketeKeys()
-        adBannerView.adUnitID = keys.adMobBannerAdUnitIDKey()
-        adBannerView.rootViewController = self
+        self.adBannerView!.adUnitID = keys.adMobBannerAdUnitIDKey()
+        self.adBannerView!.rootViewController = self
         
         // add bottom offset for ad banner view
         self.tableView.contentInset.bottom = 50.0
         self.tableView.scrollIndicatorInsets.bottom = 50.0
+    }
+    
+    func hideAds() {
+        self.adBannerView?.removeFromSuperview()
+        self.adBannerView = nil
+        self.tableView.contentInset.bottom = 0.0
+        self.tableView.scrollIndicatorInsets.bottom = 0.0
     }
     
     func didPullToRefresh() {

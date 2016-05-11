@@ -13,6 +13,9 @@ import SwiftyStoreKit
 private let RemoveAdsIAPId = "ph.pakete.iap.RemoveAds"
 private let IAPRemoveAdsKey = "IAPRemoveAdsKey"
 
+// Temporary to remove soon
+let IAPDidPurchaseRemoveAdsNotification = "IAPDidPurchaseRemoveAdsNotification"
+
 let IAPHelper = PKIAPHelper()
 
 class PKIAPHelper {
@@ -53,6 +56,7 @@ class PKIAPHelper {
         SwiftyStoreKit.purchaseProduct(RemoveAdsIAPId) { result in
             switch result {
             case .Success(_):
+                NSNotificationCenter.defaultCenter().postNotificationName(IAPDidPurchaseRemoveAdsNotification, object: nil)
                 completion(success: true)
             case .Error(_):
                 completion(success: false)
