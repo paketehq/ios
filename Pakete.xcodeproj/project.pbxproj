@@ -31,6 +31,8 @@
 		796DF1561CC478B600FE6082 /* PackagesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796DF1551CC478B600FE6082 /* PackagesTests.swift */; };
 		796DF1591CC47AF300FE6082 /* Couriers.json in Resources */ = {isa = PBXBuildFile; fileRef = 796DF1581CC47AF300FE6082 /* Couriers.json */; };
 		796DF15B1CC4807600FE6082 /* LBCPackage.json in Resources */ = {isa = PBXBuildFile; fileRef = 796DF15A1CC4807600FE6082 /* LBCPackage.json */; };
+		796F24171CE2E75300AE1617 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 796F24161CE2E75300AE1617 /* StoreKit.framework */; };
+		796F24191CE2EAE500AE1617 /* IAPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796F24181CE2EAE500AE1617 /* IAPHelper.swift */; };
 		79A839791CB4ACE900794889 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A839781CB4ACE900794889 /* Token.swift */; };
 		79B8C4761C9FA5F8005ED570 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B8C4751C9FA5F8005ED570 /* StringExtensions.swift */; };
 		79E5DEB21C9793C9006152B4 /* PackageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E5DEB11C9793C9006152B4 /* PackageViewModel.swift */; };
@@ -92,6 +94,8 @@
 		796DF1551CC478B600FE6082 /* PackagesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PackagesTests.swift; sourceTree = "<group>"; };
 		796DF1581CC47AF300FE6082 /* Couriers.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Couriers.json; sourceTree = "<group>"; };
 		796DF15A1CC4807600FE6082 /* LBCPackage.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = LBCPackage.json; sourceTree = "<group>"; };
+		796F24161CE2E75300AE1617 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		796F24181CE2EAE500AE1617 /* IAPHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAPHelper.swift; sourceTree = "<group>"; };
 		79A839781CB4ACE900794889 /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		79B8C4751C9FA5F8005ED570 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		79E5DEB11C9793C9006152B4 /* PackageViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PackageViewModel.swift; sourceTree = "<group>"; };
@@ -106,6 +110,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9560B5F8C6023398FEA89FDE /* Pods_Pakete.framework in Frameworks */,
+				796F24171CE2E75300AE1617 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,6 +128,7 @@
 		6EC08CC92DE25D5A4E9A4DB6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				796F24161CE2E75300AE1617 /* StoreKit.framework */,
 				91D28494AA3215BFE121713D /* Pods_Pakete.framework */,
 				6287966E10D095C907807CFE /* Pods_PaketeTests.framework */,
 			);
@@ -258,6 +264,7 @@
 				790E791F1C96768F0055403B /* RxSwift Extensions */,
 				790E791B1C9522080055403B /* HelperFunctions.swift */,
 				792253E61CAD5FEE00B4BCC1 /* ColorPalette.swift */,
+				796F24181CE2EAE500AE1617 /* IAPHelper.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -380,6 +387,12 @@
 				TargetAttributes = {
 					790E78D61C93ECDA0055403B = {
 						CreatedOnToolsVersion = 7.2.1;
+						DevelopmentTeam = L4GZ9YEUN8;
+						SystemCapabilities = {
+							com.apple.InAppPurchase = {
+								enabled = 1;
+							};
+						};
 					};
 					790E78EA1C93ECDA0055403B = {
 						CreatedOnToolsVersion = 7.2.1;
@@ -509,6 +522,7 @@
 				79E5DEB21C9793C9006152B4 /* PackageViewModel.swift in Sources */,
 				790E791E1C96701E0055403B /* TextFieldTableViewCell.swift in Sources */,
 				790E79191C95174E0055403B /* RLMExtensions.swift in Sources */,
+				796F24191CE2EAE500AE1617 /* IAPHelper.swift in Sources */,
 				792253E71CAD5FEE00B4BCC1 /* ColorPalette.swift in Sources */,
 				79B8C4761C9FA5F8005ED570 /* StringExtensions.swift in Sources */,
 				795B3F551C9A473100CC5C3A /* SettingsViewController.swift in Sources */,
