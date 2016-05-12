@@ -20,24 +20,6 @@ let IAPHelper = PKIAPHelper()
 
 class PKIAPHelper {
     
-    private var removeAdsProduct: SKProduct?
-    
-    func removeAdsProductInfo(completion: (product: SKProduct?) -> ()) {
-        if let removeAdsProduct = self.removeAdsProduct {
-            completion(product: removeAdsProduct)
-            return
-        }
-        
-        SwiftyStoreKit.retrieveProductsInfo([RemoveAdsIAPId]) { result in
-            if let product = result.retrievedProducts.first {
-                self.removeAdsProduct = product
-                completion(product: product)
-            } else {
-                completion(product: nil)
-            }
-        }
-    }
-    
     func verifyReceipt() {
         // only verify if we won't be showing ads :D
         guard self.showAds() == false else { return }
