@@ -79,6 +79,20 @@ extension SettingsViewController {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
+    func didTapRemoveAdsButton() {
+        // remove ads
+        let alertController = UIAlertController(title: "Hate Ads?", message: "Remove Ads for $0.99 only", preferredStyle: .Alert)
+        alertController.addAction(UIAlertAction(title: "Pay to Remove Ads", style: UIAlertActionStyle.Destructive, handler: { (alertAction) -> Void in
+            self.removeAds()
+        }))
+        alertController.addAction(UIAlertAction(title: "Restore Purchases", style: UIAlertActionStyle.Default, handler: { (alertAction) -> Void in
+            self.restorePurchases()
+        }))
+        alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil))
+        self.presentViewController(alertController, animated: true, completion: nil)
+        alertController.view.tintColor = ColorPalette.Matisse
+    }
+
     func removeAds() {
         SVProgressHUD.showWithStatus("Purchasing Remove Ads...")
         IAPHelper.purchaseRemoveAds { (success) in
@@ -132,6 +146,7 @@ extension SettingsViewController {
         removeAdsButton.layer.borderWidth = 0.5
         removeAdsButton.frame.size.height = 44.0
         removeAdsButton.frame.origin.y = headerText.frame.maxY + 10.0
+        removeAdsButton.addTarget(self, action: #selector(didTapRemoveAdsButton), forControlEvents: .TouchUpInside)
         tableHeaderView.addSubview(removeAdsButton)
         
         tableHeaderView.frame.size.width = self.view.frame.width
