@@ -12,6 +12,7 @@ import Mixpanel
 import Fabric
 import Crashlytics
 import Appirater
+import Siren
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -35,6 +36,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Appirater.setUsesUntilPrompt(10)
         Appirater.appLaunched(true)
         Appirater.setDebug(true)
+        // Siren. we force users to update for now
+        Siren.sharedInstance.alertType = .Force
+        Siren.sharedInstance.checkVersion(.Daily)
         
         UINavigationBar.appearance().barStyle = .Black
         UINavigationBar.appearance().setBackgroundImage(UIImage(color: ColorPalette.Matisse), forBarMetrics: UIBarMetrics.Default)
@@ -62,11 +66,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+        Siren.sharedInstance.checkVersion(.Immediately)
     }
 
     func applicationDidBecomeActive(application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         IAPHelper.verifyReceipt()
+        Siren.sharedInstance.checkVersion(.Daily)
     }
 
     func applicationWillTerminate(application: UIApplication) {

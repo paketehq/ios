@@ -29,6 +29,7 @@ PODS:
   - RxCocoa (2.4):
     - RxSwift (~> 2.4)
   - RxSwift (2.4)
+  - Siren (0.8.0)
   - Smooch (4.1.2)
   - SVProgressHUD (2.0.3)
   - SwiftyJSON (2.3.2)
@@ -51,6 +52,7 @@ DEPENDENCIES:
   - RealmSwift
   - RxCocoa
   - RxSwift
+  - Siren
   - Smooch
   - SVProgressHUD
   - SwiftyJSON
@@ -77,6 +79,7 @@ SPEC CHECKSUMS:
   RealmSwift: 3056e6d7ad30ed50dd866185a615fccea73db5f5
   RxCocoa: 7d6cd877de99f5640306b3d6cf87f580c1d91b61
   RxSwift: 67b9ef4e8b34fb394e200e754c6a09cc16559f94
+  Siren: e37819c0ef6130098e31ba01cd66857e574bd01a
   Smooch: cacdc2d4c6443d7c8167b70f066ac53d79c7ea94
   SVProgressHUD: b0830714205bea1317ea1a2ebc71e5633af334d4
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
