@@ -19,7 +19,7 @@
     {
       "size" : "40x40",
       "idiom" : "iphone",
-      "filename" : "Icon-Small-50@2x.png",
+      "filename" : "Icon-60@2x-1.png",
       "scale" : "3x"
     },
     {
@@ -31,7 +31,7 @@
     {
       "size" : "60x60",
       "idiom" : "iphone",
-      "filename" : "Icon-72@2x.png",
+      "filename" : "Icon-60@3x.png",
       "scale" : "3x"
     }
   ],
