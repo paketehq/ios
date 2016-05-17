@@ -32,6 +32,6 @@ target 'Pakete' do
  pod 'SwiftyStoreKit'
 end
 
-target 'PaketeTests', :exclusive => true do
+target 'PaketeTests' do
  pod 'Mockingjay'
 end
