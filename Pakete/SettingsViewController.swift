@@ -10,6 +10,7 @@ import UIKit
 import Mixpanel
 import SwiftyStoreKit
 import SVProgressHUD
+import Appirater
 
 class SettingsViewController: UIViewController {
     
@@ -92,7 +93,7 @@ extension SettingsViewController {
         self.presentViewController(alertController, animated: true, completion: nil)
         alertController.view.tintColor = ColorPalette.Matisse
     }
-
+    
     func removeAds() {
         SVProgressHUD.showWithStatus("Purchasing Remove Ads...")
         IAPHelper.purchaseRemoveAds { (success) in
@@ -222,21 +223,23 @@ extension SettingsViewController: UITableViewDelegate {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         switch indexPath.section {
         case 0:
-            // remove ads
-            let alertController = UIAlertController(title: "Hate Ads?", message: "Remove Ads for $0.99 only", preferredStyle: .Alert)
-            alertController.addAction(UIAlertAction(title: "Pay to Remove Ads", style: UIAlertActionStyle.Destructive, handler: { (alertAction) -> Void in
-                self.removeAds()
-            }))
-            alertController.addAction(UIAlertAction(title: "Restore Purchases", style: UIAlertActionStyle.Default, handler: { (alertAction) -> Void in
-                self.restorePurchases()
-            }))
-            alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil))
-            self.presentViewController(alertController, animated: true, completion: nil)
-            alertController.view.tintColor = ColorPalette.Matisse
+            switch indexPath.row {
+            case 0:
+                // Rate Pakete
+                Appirater.forceShowPrompt(false)
+            case 1:
+                // Contact the Pakete Team
+                Smooch.show()
+            default: ()
+            }
         case 1:
-            // Report a problem
-            Smooch.show()
-            break
+            switch indexPath.row {
+            case 0: break
+                // Tweet about Pakete
+            case 1: break
+                // Tell your friends about Pakete
+            default: ()
+            }
         default: ()
         }
         

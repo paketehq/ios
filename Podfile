@@ -30,6 +30,7 @@ target 'Pakete' do
  pod 'Fabric'
  pod 'Crashlytics'
  pod 'SwiftyStoreKit'
+ pod 'Appirater'
 end
 
 target 'PaketeTests' do

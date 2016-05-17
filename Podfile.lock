@@ -1,5 +1,6 @@
 PODS:
   - Alamofire (3.3.1)
+  - Appirater (2.0.5)
   - BigBrother (0.3.0)
   - Crashlytics (3.7.0):
     - Fabric (~> 1.6.3)
@@ -36,6 +37,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
+  - Appirater
   - BigBrother
   - Crashlytics
   - CryptoSwift
@@ -60,6 +62,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Alamofire: 369bc67b6f5ac33ded3648d7bd21c5bfb91c2ecc
+  Appirater: e7c0a47fb67ee5041ce8479e6ba960927fb40264
   BigBrother: e3cdf5f22636c7b7e92ec4e3615e58cb58681125
   Crashlytics: c3a2333dea9e2733d2777f730910321fc9e25c0d
   CryptoSwift: baf01e3fb3226c0155cd54c266be882b13d45d5e
