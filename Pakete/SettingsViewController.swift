@@ -39,21 +39,7 @@ class SettingsViewController: UIViewController {
         ])
         
         // setup header view
-        let tableHeaderView = UIView()
-        let headerText = UILabel()
-        headerText.font = UIFont.systemFontOfSize(14.0)
-        headerText.numberOfLines = 0
-        headerText.textAlignment = .Center
-        headerText.textColor = .grayColor()
-        headerText.text = "We may be an ad-supported app, but we understand some would prefer Pakete without ads. Get an ad-free experience and help bring new features to the app for only $0.99. A single purchase works across all of your Android devices forever. We appreciate your support!"
-        headerText.frame.size = headerText.sizeThatFits(CGSize(width: self.view.frame.width - 30.0, height: CGFloat.max))
-        headerText.frame.origin.y = 15.0
-        headerText.frame.origin.x = 15.0
-        tableHeaderView.addSubview(headerText)
-        tableHeaderView.frame.size.width = self.view.frame.width
-        tableHeaderView.frame.size.height = headerText.frame.height + 30.0
-        self.tableView.tableHeaderView = tableHeaderView
-        
+        self.setupTableHeaderView()
         // setup footer view
         let tableFooterView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 17.0))
         let versionLabel = UILabel()
@@ -96,7 +82,10 @@ extension SettingsViewController {
     func removeAds() {
         SVProgressHUD.showWithStatus("Purchasing Remove Ads...")
         IAPHelper.purchaseRemoveAds { (success) in
-            if success == false {
+            if success {
+                // remove remove ads table header view
+                self.tableView.tableHeaderView = nil
+            } else {
                 SVProgressHUD.showErrorWithStatus("Purchase Failed. Please try again.")
             }
         }
@@ -108,11 +97,46 @@ extension SettingsViewController {
             if results.restoreFailedProducts.count > 0 {
                 SVProgressHUD.showErrorWithStatus("Restore Failed. Please try again.")
             } else if results.restoredProductIds.count > 0 {
+                // remove remove ads table header view
+                self.tableView.tableHeaderView = nil
                 SVProgressHUD.showSuccessWithStatus("Restored Purchases!")
             } else {
                 SVProgressHUD.showInfoWithStatus("Nothing to Restore.")
             }
         }
+    }
+    
+    private func setupTableHeaderView() {
+        if IAPHelper.showAds() == false { return }
+        
+        let tableHeaderView = UIView()
+        let headerText = UILabel()
+        headerText.font = UIFont.systemFontOfSize(14.0)
+        headerText.numberOfLines = 0
+        headerText.textAlignment = .Center
+        headerText.textColor = .grayColor()
+        headerText.text = "We may be an ad-supported app, but we understand some would prefer Pakete without ads. Get an ad-free experience and help bring new features to the app for only $0.99. A single purchase works across all of your iOS devices forever. We appreciate your support!"
+        headerText.frame.size = headerText.sizeThatFits(CGSize(width: self.view.frame.width - 30.0, height: CGFloat.max))
+        headerText.frame.origin.y = 15.0
+        headerText.frame.origin.x = 15.0
+        tableHeaderView.addSubview(headerText)
+        // add remove ads button
+        let removeAdsButton = UIButton()
+        removeAdsButton.backgroundColor = .whiteColor()
+        removeAdsButton.setTitle("Remove Ads", forState: .Normal)
+        removeAdsButton.setTitleColor(.redColor(), forState: .Normal)
+        removeAdsButton.titleLabel?.textAlignment = .Center
+        removeAdsButton.titleLabel?.font = UIFont.systemFontOfSize(15.0)
+        removeAdsButton.frame.size.width = self.view.frame.size.width + 1.0
+        removeAdsButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+        removeAdsButton.layer.borderWidth = 0.5
+        removeAdsButton.frame.size.height = 44.0
+        removeAdsButton.frame.origin.y = headerText.frame.maxY + 10.0
+        tableHeaderView.addSubview(removeAdsButton)
+        
+        tableHeaderView.frame.size.width = self.view.frame.width
+        tableHeaderView.frame.size.height = headerText.frame.height + removeAdsButton.frame.height + 40.0
+        self.tableView.tableHeaderView = tableHeaderView
     }
 }
 
@@ -122,24 +146,43 @@ extension SettingsViewController: UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        switch section {
+        case 0: // Rate Pakete, Contact the Pakete Team
+            return 2
+        case 1: // Tweet about Pakete, Tell your friends about Pakete
+            return 2
+        default:
+            return 0
+        }
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
-        cell.textLabel?.font = UIFont.systemFontOfSize(16.0)
+        cell.textLabel?.font = UIFont.systemFontOfSize(15.0)
         
         switch indexPath.section {
         case 0:
-            // remove ads
-            cell.textLabel?.textColor = .redColor()
-            cell.textLabel?.textAlignment = .Center
-            cell.textLabel?.text = "Remove Ads"
-        case 1:
-            cell.accessoryType = .DisclosureIndicator
             switch indexPath.row {
             case 0:
-                cell.textLabel?.text = "Report a Problem"
+                // Rate Pakete
+                cell.imageView?.image = UIImage(named: "ratePaketeIcon")
+                cell.textLabel?.text = "Rate Pakete"
+            case 1:
+                // Contact the Pakete Team
+                cell.imageView?.image = UIImage(named: "contactPaketeTeamIcon")
+                cell.textLabel?.text = "Contact the Pakete Team"
+            default: ()
+            }
+        case 1:
+            switch indexPath.row {
+            case 0:
+                // Tweet about Pakete
+                cell.imageView?.image = UIImage(named: "twitterIcon")
+                cell.textLabel?.text = "Tweet about Pakete"
+            case 1:
+                // Tell your friends about Pakete
+                cell.imageView?.image = UIImage(named: "facebookIcon")
+                cell.textLabel?.text = "Tell your friends about Pakete"
             default: ()
             }
         default: ()
@@ -152,8 +195,10 @@ extension SettingsViewController: UITableViewDataSource {
 extension SettingsViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
+        case 0:
+            return "We'd love to know how we can make Pakete even better and would appreciate if you left a review on the App Store."
         case 1:
-            return "Support"
+            return "Tell your Friends"
         default: return nil
         }
     }
@@ -180,5 +225,28 @@ extension SettingsViewController: UITableViewDelegate {
         default: ()
         }
         
+    }
+    
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        let headerLabel = UILabel()
+        headerLabel.translatesAutoresizingMaskIntoConstraints = false
+        headerLabel.font = UIFont.systemFontOfSize(14)
+        headerLabel.numberOfLines = 0
+        headerLabel.text = self.tableView(tableView, titleForHeaderInSection: section)
+        headerLabel.textColor = .grayColor()
+        headerView.addSubview(headerLabel)
+        NSLayoutConstraint.activateConstraints([
+            NSLayoutConstraint(item: headerLabel, attribute: .Leading, relatedBy: .Equal, toItem: headerView, attribute: .Leading, multiplier: 1.0, constant: 15.0),
+            NSLayoutConstraint(item: headerLabel, attribute: .Trailing, relatedBy: .Equal, toItem: headerView, attribute: .Trailing, multiplier: 1.0, constant: -15.0),
+            NSLayoutConstraint(item: headerLabel, attribute: .Top, relatedBy: .Equal, toItem: headerView, attribute: .Top, multiplier: 1.0, constant: 0.0)
+        ])
+        
+        return headerView
+    }
+    
+    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        guard let title = self.tableView(tableView, titleForHeaderInSection: section) else { return 0.0 }
+        return title.heightWithConstrainedWidth(self.view.frame.width - 30.0, font: UIFont.systemFontOfSize(13.0)) + 10.0
     }
 }
