@@ -94,7 +94,7 @@ extension SettingsViewController {
         alertController.view.tintColor = ColorPalette.Matisse
     }
     
-    func removeAds() {
+    private func removeAds() {
         SVProgressHUD.showWithStatus("Purchasing Remove Ads...")
         IAPHelper.purchaseRemoveAds { (success) in
             if success {
@@ -106,7 +106,7 @@ extension SettingsViewController {
         }
     }
     
-    func restorePurchases() {
+    private func restorePurchases() {
         SVProgressHUD.show()
         IAPHelper.restorePurchases { (results) in
             if results.restoreFailedProducts.count > 0 {
