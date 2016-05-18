@@ -11,6 +11,7 @@ import Keys
 import Mixpanel
 import Fabric
 import Crashlytics
+import TwitterKit
 import Appirater
 import Siren
 
@@ -29,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Mixpanel
         Mixpanel.sharedInstanceWithToken(keys.mixpanelTokenKey(), launchOptions: launchOptions)
         // Crashlytics
-        Fabric.with([Crashlytics.self])
+        Fabric.with([Crashlytics.self, Twitter.self])
         // Appirater
         Appirater.setAppId("1112831205")
         Appirater.setDaysUntilPrompt(10)

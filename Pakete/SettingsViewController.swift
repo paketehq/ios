@@ -11,10 +11,13 @@ import Mixpanel
 import SwiftyStoreKit
 import SVProgressHUD
 import Appirater
+import TwitterKit
 
 class SettingsViewController: UIViewController {
     
     private let tableView = UITableView(frame: CGRect.zero, style: .Grouped)
+    private let shareMessage = "Checkout Pakete - a free PH Package Tracking app that I use to track my packages"
+    private let appURL = "http://pakete.ph"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -154,6 +157,13 @@ extension SettingsViewController {
         tableHeaderView.frame.size.height = headerText.frame.height + removeAdsButton.frame.height + 40.0
         self.tableView.tableHeaderView = tableHeaderView
     }
+    
+    private func didTapTweetAboutPakete() {
+        let composer = TWTRComposer()
+        composer.setText(self.shareMessage + " " + self.appURL)
+        // Called from a UIViewController
+        composer.showFromViewController(self) { _ in }
+    }
 }
 
 extension SettingsViewController: UITableViewDataSource {
@@ -234,8 +244,9 @@ extension SettingsViewController: UITableViewDelegate {
             }
         case 1:
             switch indexPath.row {
-            case 0: break
+            case 0:
                 // Tweet about Pakete
+                self.didTapTweetAboutPakete()
             case 1: break
                 // Tell your friends about Pakete
             default: ()
