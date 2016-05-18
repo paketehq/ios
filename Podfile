@@ -32,8 +32,9 @@ target 'Pakete' do
  pod 'SwiftyStoreKit'
  pod 'Siren'
  pod 'Appirater'
-end
 
-target 'PaketeTests' do
- pod 'Mockingjay'
+ target 'PaketeTests' do
+  inherit! :search_paths
+  pod 'Mockingjay'
+ end
 end
