@@ -12,6 +12,7 @@ import SwiftyStoreKit
 import SVProgressHUD
 import Appirater
 import TwitterKit
+import FBSDKShareKit
 
 class SettingsViewController: UIViewController {
     
@@ -164,6 +165,12 @@ extension SettingsViewController {
         // Called from a UIViewController
         composer.showFromViewController(self) { _ in }
     }
+    
+    private func didTapTellYourFriendsAboutPakete() {
+        let content = FBSDKShareLinkContent()
+        content.contentURL = NSURL(string: self.appURL)
+        FBSDKShareDialog.showFromViewController(self, withContent: content, delegate: nil)
+    }
 }
 
 extension SettingsViewController: UITableViewDataSource {
@@ -247,8 +254,9 @@ extension SettingsViewController: UITableViewDelegate {
             case 0:
                 // Tweet about Pakete
                 self.didTapTweetAboutPakete()
-            case 1: break
+            case 1:
                 // Tell your friends about Pakete
+                self.didTapTellYourFriendsAboutPakete()
             default: ()
             }
         default: ()
