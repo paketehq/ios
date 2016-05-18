@@ -14,6 +14,7 @@ import Crashlytics
 import TwitterKit
 import Appirater
 import Siren
+import FBSDKCoreKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -39,6 +40,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Siren. we force users to update for now
         Siren.sharedInstance.alertType = .Force
         Siren.sharedInstance.checkVersion(.Daily)
+        // Facebook
+        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
         UINavigationBar.appearance().barStyle = .Black
         UINavigationBar.appearance().setBackgroundImage(UIImage(color: ColorPalette.Matisse), forBarMetrics: UIBarMetrics.Default)
@@ -52,6 +55,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.makeKeyAndVisible()
         
         return true
+    }
+    
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+        return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
     }
 
     func applicationWillResignActive(application: UIApplication) {
@@ -73,6 +80,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         IAPHelper.verifyReceipt()
         Siren.sharedInstance.checkVersion(.Daily)
+        FBSDKAppEvents.activateApp()
     }
 
     func applicationWillTerminate(application: UIApplication) {
