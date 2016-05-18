@@ -29,6 +29,7 @@ target 'Pakete' do
  pod 'Mixpanel'
  pod 'Fabric'
  pod 'Crashlytics'
+ pod 'TwitterKit'
  pod 'SwiftyStoreKit'
  pod 'Siren'
  pod 'Appirater'
