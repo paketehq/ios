@@ -2,10 +2,20 @@ PODS:
   - Alamofire (3.4.0)
   - Appirater (2.0.5)
   - BigBrother (0.4.0)
+  - Bolts (1.7.0):
+    - Bolts/AppLinks (= 1.7.0)
+    - Bolts/Tasks (= 1.7.0)
+  - Bolts/AppLinks (1.7.0):
+    - Bolts/Tasks
+  - Bolts/Tasks (1.7.0)
   - Crashlytics (3.7.0):
     - Fabric (~> 1.6.3)
   - CryptoSwift (0.4.1)
   - Fabric (1.6.7)
+  - FBSDKCoreKit (4.11.0):
+    - Bolts (~> 1.7)
+  - FBSDKShareKit (4.11.0):
+    - FBSDKCoreKit
   - Google-Mobile-Ads-SDK (7.8.1)
   - Keys (1.0.0)
   - Mixpanel (2.9.9):
@@ -47,6 +57,8 @@ DEPENDENCIES:
   - Crashlytics
   - CryptoSwift
   - Fabric
+  - FBSDKCoreKit
+  - FBSDKShareKit
   - Google-Mobile-Ads-SDK
   - Keys (from `Pods/CocoaPodsKeys`)
   - Mixpanel
@@ -71,9 +83,12 @@ SPEC CHECKSUMS:
   Alamofire: c19a627cefd6a95f840401c49ab1f124e07f54ee
   Appirater: e7c0a47fb67ee5041ce8479e6ba960927fb40264
   BigBrother: 50274213cffbf9582c38d673ee1787f24510c55c
+  Bolts: a0058fa3b331c5a1e4402d534f2dae36dbff31e4
   Crashlytics: c3a2333dea9e2733d2777f730910321fc9e25c0d
   CryptoSwift: 25b5aff3f260967391f8fff2e9abe4254d2c6fd5
   Fabric: caf7580c725e64db144f610ac65cd60956911dc7
+  FBSDKCoreKit: 686ac982723a14ec9ddb85e2f81235d7706c891b
+  FBSDKShareKit: 2d1746144cfc8a9dbbd24997c34ee0471be51b6a
   Google-Mobile-Ads-SDK: 3c2a6656117989469bfe7645640aa1de024a4c6c
   Keys: 9c35bf00f612ee1d48556f4a4b9b4551e224e90f
   Mixpanel: 818d1940c2d9402453b349545022a86968097f57
@@ -93,6 +108,6 @@ SPEC CHECKSUMS:
   TwitterKit: 38232c31f622db1f26a5952436eaa88d10763fd0
   URITemplate: 398a48d6559e23b77bd41176b675b017ad1fc959
 
-PODFILE CHECKSUM: 2805db576ed44a05663b9be64e78a7c799fe0729
+PODFILE CHECKSUM: 6abc58f46cb82e00fae82baf69414501df47e569
 
 COCOAPODS: 1.0.0

@@ -33,6 +33,8 @@ target 'Pakete' do
  pod 'SwiftyStoreKit'
  pod 'Siren'
  pod 'Appirater'
+ pod 'FBSDKCoreKit'
+ pod 'FBSDKShareKit'
 
  target 'PaketeTests' do
   inherit! :search_paths
