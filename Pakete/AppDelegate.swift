@@ -35,7 +35,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Appirater.setDaysUntilPrompt(10)
         Appirater.setUsesUntilPrompt(10)
         Appirater.appLaunched(true)
-        Appirater.setDebug(true)
         // Siren. we force users to update for now
         Siren.sharedInstance.alertType = .Force
         Siren.sharedInstance.checkVersion(.Daily)
