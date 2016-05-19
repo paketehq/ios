@@ -24,12 +24,12 @@ lane :oss do
             MixpanelTokenKey)
 
   commands = keys.map do |key|
-    command = "bundle exec pod keys set #{key} '-' Pakete"
+    command = "bundle exec pod keys set #{key} ''"
 
     command
   end.join(' ; ')
 
-  sh "#{commands}"
+  sh "cd .. ; #{commands}"
 
   cocoapods
 end
