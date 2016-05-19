@@ -28,7 +28,7 @@ $ git clone https://github.com/paketehq/ios.git
 ```bash
 $ cd ios
 $ bundle install
-$ bundle exec pod install
+$ bundle exec fastlane oss
 ```
 
 3) Open the workspace in Xcode
