@@ -28,18 +28,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let keys = PaketeKeys()
         // Smooch
         Smooch.initWithSettings(SKTSettings(appToken: keys.smoochAppTokenKey()))
-        // Mixpanel
-        Mixpanel.sharedInstanceWithToken(keys.mixpanelTokenKey(), launchOptions: launchOptions)
-        // Crashlytics
-        Fabric.with([Crashlytics.self, Twitter.self])
-        // Appirater
-        Appirater.setAppId("1112831205")
-        Appirater.setDaysUntilPrompt(10)
-        Appirater.setUsesUntilPrompt(10)
-        Appirater.appLaunched(true)
-        // Siren. we force users to update for now
-        Siren.sharedInstance.alertType = .Force
-        Siren.sharedInstance.checkVersion(.Daily)
+        // Twitter
+        var kits = [Twitter.self]
+        #if RELEASE
+            // Mixpanel
+            Mixpanel.sharedInstanceWithToken(keys.mixpanelTokenKey(), launchOptions: launchOptions)
+            // Appirater
+            Appirater.setAppId("1112831205")
+            Appirater.setDaysUntilPrompt(10)
+            Appirater.setUsesUntilPrompt(10)
+            Appirater.appLaunched(true)
+            // Siren. we force users to update for now
+            Siren.sharedInstance.alertType = .Force
+            Siren.sharedInstance.checkVersion(.Daily)
+            // Crashlytics
+            kits.append(Crashlytics.self)
+        #endif
+        // Fabric
+        Fabric.with(kits)
         // Facebook
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         
