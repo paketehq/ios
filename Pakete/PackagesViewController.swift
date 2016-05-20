@@ -69,8 +69,9 @@ class PackagesViewController: UIViewController {
         
         // Notification
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(hideAds), name: IAPDidPurchaseRemoveAdsNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(applicationWillEnterForeground), name: UIApplicationWillEnterForegroundNotification, object: nil)
     }
-        
+    
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
@@ -112,6 +113,11 @@ extension PackagesViewController {
         // add bottom offset for ad banner view
         self.tableView.contentInset.bottom = 50.0
         self.tableView.scrollIndicatorInsets.bottom = 50.0
+    }
+    
+    func applicationWillEnterForeground() {
+        // force refresh
+        self.viewModel.refreshPackages()
     }
     
     func hideAds() {
