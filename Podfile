@@ -35,6 +35,7 @@ target 'Pakete' do
  pod 'Appirater'
  pod 'FBSDKCoreKit'
  pod 'FBSDKShareKit'
+ pod 'Countly'
 
  target 'PaketeTests' do
   inherit! :search_paths
