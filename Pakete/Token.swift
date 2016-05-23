@@ -19,7 +19,7 @@ struct Token {
     
     init() {
         let keys = PaketeKeys()
-        if keys.paketeAPIKey().characters.count > 0 {
+        if keys.paketeAPIKey().isEmpty == false {
             self.key = keys.paketeAPIKey().dataUsingEncoding(NSUTF8StringEncoding)
         } else {
             self.key = "1234567890123456".dataUsingEncoding(NSUTF8StringEncoding)
