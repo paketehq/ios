@@ -21,7 +21,8 @@ lane :oss do
             AdMobBannerAdUnitIDKey
             AdMobInterstitialAdUnitIDKey
             SmoochAppTokenKey
-            MixpanelTokenKey)
+            MixpanelTokenKey
+            CountlyAppKey)
 
   commands = keys.map do |key|
     command = "bundle exec pod keys set #{key} ''"

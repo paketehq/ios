@@ -9,7 +9,8 @@ plugin 'cocoapods-keys', {
     "AdMobBannerAdUnitIDKey",
     "AdMobInterstitialAdUnitIDKey",
     "SmoochAppTokenKey",
-    "MixpanelTokenKey"
+    "MixpanelTokenKey",
+    "CountlyAppKey"
   ]
 }
 
