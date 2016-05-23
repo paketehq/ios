@@ -153,19 +153,21 @@ extension PackagesViewController {
     func showEmptyStateLabel() {
         if self.emptyStateLabel == nil {
             self.emptyStateLabel = UILabel()
-            self.emptyStateLabel?.translatesAutoresizingMaskIntoConstraints = false
-            self.emptyStateLabel?.text = "You have no packages to track yet.\nTap the \"+\" button to track a package."
-            self.emptyStateLabel?.numberOfLines = 0
-            self.emptyStateLabel?.font = UIFont.systemFontOfSize(14.0)
-            self.emptyStateLabel?.textAlignment = .Center
-            self.emptyStateLabel?.backgroundColor = .whiteColor()
-            self.view.addSubview(self.emptyStateLabel!)
-            NSLayoutConstraint.activateConstraints([
-                NSLayoutConstraint(item: self.emptyStateLabel!, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Top, multiplier: 1.0, constant: 0.0),
-                NSLayoutConstraint(item: self.emptyStateLabel!, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
-                NSLayoutConstraint(item: self.emptyStateLabel!, attribute: .Width, relatedBy: .Equal, toItem: self.view, attribute: .Width, multiplier: 1.0, constant: 0.0),
-                NSLayoutConstraint(item: self.emptyStateLabel!, attribute: .Height, relatedBy: .Equal, toItem: self.view, attribute: .Height, multiplier: 1.0, constant: 0.0),
-            ])
+            if let emptyStateLabel = self.emptyStateLabel {
+                emptyStateLabel.translatesAutoresizingMaskIntoConstraints = false
+                emptyStateLabel.text = "You have no packages to track yet.\nTap the \"+\" button to track a package."
+                emptyStateLabel.numberOfLines = 0
+                emptyStateLabel.font = UIFont.systemFontOfSize(14.0)
+                emptyStateLabel.textAlignment = .Center
+                emptyStateLabel.backgroundColor = .clearColor()
+                self.view.addSubview(emptyStateLabel)
+                NSLayoutConstraint.activateConstraints([
+                    NSLayoutConstraint(item: emptyStateLabel, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Top, multiplier: 1.0, constant: 0.0),
+                    NSLayoutConstraint(item: emptyStateLabel, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
+                    NSLayoutConstraint(item: emptyStateLabel, attribute: .Width, relatedBy: .Equal, toItem: self.view, attribute: .Width, multiplier: 1.0, constant: 0.0),
+                    NSLayoutConstraint(item: emptyStateLabel, attribute: .Height, relatedBy: .Equal, toItem: self.view, attribute: .Height, multiplier: 1.0, constant: 0.0),
+                ])
+            }
         } else {
             self.emptyStateLabel?.hidden = false
         }
