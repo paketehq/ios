@@ -15,6 +15,7 @@ import TwitterKit
 import Appirater
 import Siren
 import FBSDKCoreKit
+import Countly
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -33,6 +34,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         #if RELEASE
             // Mixpanel
             Mixpanel.sharedInstanceWithToken(keys.mixpanelTokenKey(), launchOptions: launchOptions)
+            // Countly
+            let config = CountlyConfig()
+            config.appKey = keys.countlyAppKey()
+            config.host = "http://countly.pakete.ph"
+            config.features = [CLYAutoViewTracking]
+            Countly.sharedInstance().startWithConfig(config)
             // Appirater
             Appirater.setAppId("1112831205")
             Appirater.setDaysUntilPrompt(10)
