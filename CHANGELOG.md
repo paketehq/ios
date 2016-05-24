@@ -1,3 +1,17 @@
+## [0.9.2](https://github.com/paketehq/ios/releases/tag/0.9.2)
+
+#### Added
+- Countly Integration
+- Force refresh packages if app relaunched from background
+
+#### Fixed
+- Should show bottom ad banner even packages is empty
+
+#### Updated
+- Don't run analytics if on Debug Configuration
+
+---
+
 ## [0.9.1](https://github.com/paketehq/ios/releases/tag/0.9.1)
 
 #### Added
