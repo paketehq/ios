@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Smooch
         Smooch.initWithSettings(SKTSettings(appToken: keys.smoochAppTokenKey()))
         // Twitter
-        var kits = [Twitter.self]
+        var kits: [AnyObject] = [Twitter.self]
         #if RELEASE
             // Mixpanel
             Mixpanel.sharedInstanceWithToken(keys.mixpanelTokenKey(), launchOptions: launchOptions)
