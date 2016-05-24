@@ -1,3 +1,15 @@
+## [0.9.1](https://github.com/paketehq/ios/releases/tag/0.9.1)
+
+#### Added
+- Twitter Share
+- Facebook Share
+- App Rater
+- App Version Checker
+
+#### Updated
+- Settings page with social share buttons
+- Remove Ads button will be hidden if already purchased
+
 ---
 
 ## [0.9](https://github.com/paketehq/ios/releases/tag/0.9)
