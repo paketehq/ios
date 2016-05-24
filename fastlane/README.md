@@ -5,6 +5,14 @@ fastlane documentation
 sudo gem install fastlane
 ```
 # Available Actions
+### oss
+```
+fastlane oss
+```
+Set all the API keys required for distribution
+
+----
+
 ## iOS
 ### ios test
 ```
