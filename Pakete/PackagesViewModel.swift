@@ -68,10 +68,19 @@ class PackagesViewModel {
             package.value = updatingPackage
             // start tracking package
             self.trackPackage(package)
-                .subscribeNext { (updatedPackage) in
-                    // trigger to update package
-                    package.value = updatedPackage.value
-                }
+                .subscribe({ (event) in
+                    switch event {
+                    case .Next(let updatedPackage):
+                        // trigger to update package
+                        package.value = updatedPackage.value
+                    case .Error(let error):
+                        package.value.updating = false
+                        if let behaviorSubject = package.asObservable() as? BehaviorSubject {
+                            behaviorSubject.on(.Error(error))
+                        }
+                    default: ()
+                    }
+                })
                 .addDisposableTo(self.disposeBag)
         }
     }

@@ -120,7 +120,7 @@ class PackageTableViewCell: UITableViewCell {
     func configure(withViewModel viewModel: PackageViewModel) {
         self.viewModel = viewModel
         self.viewModel.package.asObservable()
-            .subscribeNext({ (_) in
+            .subscribe({ (_) in
                 self.reloadData()
             })
             .addDisposableTo(rx_disposeBag)
