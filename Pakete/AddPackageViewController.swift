@@ -77,9 +77,9 @@ class AddPackageViewController: UIViewController {
         self.setupInterstitialAd()
         
         // setup static cells
-        self.trackingNumberCell.textField.placeholder = "Code"
+        self.trackingNumberCell.textField.placeholder = "Tracking Number"
         self.trackingNumberCell.textField.keyboardType = .NamePhonePad
-        self.nameCell.textField.placeholder = "Name"
+        self.nameCell.textField.placeholder = "Description"
         self.nameCell.textField.returnKeyType = .Done
         
         // if JRS we have extra field!
