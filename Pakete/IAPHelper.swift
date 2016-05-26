@@ -26,6 +26,7 @@ class PKIAPHelper {
         
         SwiftyStoreKit.verifyReceipt { (result) in
             if case .Success(_) = result {
+                NSNotificationCenter.defaultCenter().postNotificationName(IAPDidPurchaseRemoveAdsNotification, object: nil)
                 NSUserDefaults.standardUserDefaults().setBool(true, forKey: IAPRemoveAdsKey)
             } else {
                 NSUserDefaults.standardUserDefaults().setBool(false, forKey: IAPRemoveAdsKey)
@@ -51,6 +52,7 @@ class PKIAPHelper {
             if results.restoreFailedProducts.count > 0 {
                 NSUserDefaults.standardUserDefaults().setBool(false, forKey: IAPRemoveAdsKey)
             } else if results.restoredProductIds.count > 0 {
+                NSNotificationCenter.defaultCenter().postNotificationName(IAPDidPurchaseRemoveAdsNotification, object: nil)
                 NSUserDefaults.standardUserDefaults().setBool(true, forKey: IAPRemoveAdsKey)
             }
             NSUserDefaults.standardUserDefaults().synchronize()
