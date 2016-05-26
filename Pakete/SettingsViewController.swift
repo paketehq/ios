@@ -102,6 +102,7 @@ extension SettingsViewController {
         SVProgressHUD.showWithStatus("Purchasing Remove Ads...")
         IAPHelper.purchaseRemoveAds { (success) in
             if success {
+                SVProgressHUD.dismiss()
                 // remove remove ads table header view
                 self.tableView.tableHeaderView = nil
             } else {
