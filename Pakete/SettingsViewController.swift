@@ -230,7 +230,7 @@ extension SettingsViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 0:
-            return "We'd love to know how we can make Pakete even better and would appreciate if you left a review on the App Store."
+            return "We'd love to know how we can make Pakete even better and would appreciate if you leave a review on the App Store."
         case 1:
             return "Tell your Friends"
         default: return nil
