@@ -15,7 +15,7 @@ class PKDateHelper {
     init () {
         self.dateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
         self.dateFormatter.timeZone = NSTimeZone.localTimeZone()
-        self.dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'.'SSSZZZZZ"
+        self.dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
     }
     
     func dateFromISOString(dateString: String) -> NSDate? {
