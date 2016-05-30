@@ -14,12 +14,44 @@ import Appirater
 import TwitterKit
 import FBSDKShareKit
 
+enum PackagesSortByType: Int {
+    case LastUpdated
+    case DateAdded
+    case Name
+    
+    var description: String {
+        switch self {
+        case LastUpdated:
+            return "Last Updated"
+        case DateAdded:
+            return "Date Added"
+        case Name:
+            return "Name"
+        }
+    }
+    
+    static var arrayValues: [PackagesSortByType] {
+        return [.LastUpdated, .DateAdded, .Name]
+    }
+}
+
 class SettingsViewController: UIViewController {
     
     private let tableView = UITableView(frame: CGRect.zero, style: .Grouped)
     private let shareMessage = "Checkout Pakete - a free PH Package Tracking app that I use to track my packages"
     private let appURL = "http://pakete.ph"
+    private let viewModel: PackagesViewModel
+    private let groupByDeliveredSwitch = UISwitch()
 
+    init(viewModel: PackagesViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -28,9 +60,12 @@ class SettingsViewController: UIViewController {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
         // add done bar button item
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(didTapDoneButton))
+        // group by delivered switch
+        self.groupByDeliveredSwitch.onTintColor = ColorPalette.Matisse
+        self.groupByDeliveredSwitch.on = self.viewModel.packagesGroupByDelivered()
+        self.groupByDeliveredSwitch.addTarget(self, action: #selector(groupByDeliveredSwitchValueDidChange), forControlEvents: .ValueChanged)
 
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
-        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.rowHeight = 44.0
         self.tableView.dataSource = self
@@ -68,8 +103,9 @@ class SettingsViewController: UIViewController {
         Mixpanel.sharedInstance().track("Settings View")
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -96,6 +132,10 @@ extension SettingsViewController {
         alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil))
         self.presentViewController(alertController, animated: true, completion: nil)
         alertController.view.tintColor = ColorPalette.Matisse
+    }
+    
+    func groupByDeliveredSwitchValueDidChange() {
+        self.viewModel.groupByDelivered(self.groupByDeliveredSwitch.on)
     }
     
     private func removeAds() {
@@ -176,14 +216,16 @@ extension SettingsViewController {
 
 extension SettingsViewController: UITableViewDataSource {
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0: // Rate Pakete, Contact the Pakete Team
+        case 0: // Sort by, Group by delivered
             return 2
-        case 1: // Tweet about Pakete, Tell your friends about Pakete
+        case 1: // Rate Pakete, Contact the Pakete Team
+            return 2
+        case 2: // Tweet about Pakete, Tell your friends about Pakete
             return 2
         default:
             return 0
@@ -191,11 +233,31 @@ extension SettingsViewController: UITableViewDataSource {
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+        var cell: UITableViewCell!
+        cell = tableView.dequeueReusableCellWithIdentifier("Cell")
+        if cell == nil {
+            cell = UITableViewCell(style: .Value1, reuseIdentifier: "Cell")
+        }
         cell.textLabel?.font = UIFont.systemFontOfSize(15.0)
-        
+        cell.detailTextLabel?.font = UIFont.systemFontOfSize(15.0)
+
         switch indexPath.section {
         case 0:
+            cell.accessoryType = .DisclosureIndicator
+            switch indexPath.row {
+            case 0:
+                // Sort by
+                cell.imageView?.image = UIImage(named: "sortBy")
+                cell.textLabel?.text = "Sort by"
+                cell.detailTextLabel?.text = self.viewModel.packagesSortBy().description
+            case 1:
+                // Group by delivered
+                cell.accessoryView = self.groupByDeliveredSwitch
+                cell.imageView?.image = UIImage(named: "groupBy")
+                cell.textLabel?.text = "Group by Delivered"
+            default: ()
+            }
+        case 1:
             switch indexPath.row {
             case 0:
                 // Rate Pakete
@@ -207,7 +269,7 @@ extension SettingsViewController: UITableViewDataSource {
                 cell.textLabel?.text = "Contact the Pakete Team"
             default: ()
             }
-        case 1:
+        case 2:
             switch indexPath.row {
             case 0:
                 // Tweet about Pakete
@@ -230,8 +292,10 @@ extension SettingsViewController: UITableViewDelegate {
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 0:
-            return "We'd love to know how we can make Pakete even better and would appreciate if you leave a review on the App Store."
+            return "Packages"
         case 1:
+            return "We'd love to know how we can make Pakete even better and would appreciate if you leave a review on the App Store."
+        case 2:
             return "Tell your Friends"
         default: return nil
         }
@@ -243,6 +307,18 @@ extension SettingsViewController: UITableViewDelegate {
         case 0:
             switch indexPath.row {
             case 0:
+                // Sort by
+                let sortByViewController = SortByViewController(viewModel: self.viewModel)
+                self.navigationController?.pushViewController(sortByViewController, animated: true)
+            case 1:
+                // Group by delivered
+                self.groupByDeliveredSwitch.on = !self.groupByDeliveredSwitch.on
+                self.groupByDeliveredSwitchValueDidChange()
+            default: ()
+            }
+        case 1:
+            switch indexPath.row {
+            case 0:
                 // Rate Pakete
                 Appirater.forceShowPrompt(false)
             case 1:
@@ -250,7 +326,7 @@ extension SettingsViewController: UITableViewDelegate {
                 Smooch.show()
             default: ()
             }
-        case 1:
+        case 2:
             switch indexPath.row {
             case 0:
                 // Tweet about Pakete

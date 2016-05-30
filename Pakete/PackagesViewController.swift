@@ -139,7 +139,7 @@ extension PackagesViewController {
     }
     
     func didTapSettingsButton() {
-        let settingsViewController = SettingsViewController()
+        let settingsViewController = SettingsViewController(viewModel: self.viewModel)
         let settingsNavigationController = UINavigationController(rootViewController: settingsViewController)
         self.presentViewController(settingsNavigationController, animated: true, completion: nil)
     }
