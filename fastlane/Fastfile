@@ -20,6 +20,7 @@ lane :oss do
   keys = %w(PaketeAPIKey
             AdMobBannerAdUnitIDKey
             AdMobInterstitialAdUnitIDKey
+            AdMobNativeAdUnitIDKey
             SmoochAppTokenKey
             MixpanelTokenKey
             CountlyAppKey)
