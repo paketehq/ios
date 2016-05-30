@@ -32,11 +32,11 @@ PODS:
   - NSDate+TimeAgo (1.0.6)
   - NSObject+Rx (1.2.1):
     - RxSwift (~> 2.1)
-  - Realm (0.102.1):
-    - Realm/Headers (= 0.102.1)
-  - Realm/Headers (0.102.1)
-  - RealmSwift (0.102.1):
-    - Realm (= 0.102.1)
+  - Realm (1.0.0):
+    - Realm/Headers (= 1.0.0)
+  - Realm/Headers (1.0.0)
+  - RealmSwift (1.0.0):
+    - Realm (= 1.0.0)
   - RxCocoa (2.5.0):
     - RxSwift (~> 2.5)
   - RxSwift (2.5.0)
@@ -98,8 +98,8 @@ SPEC CHECKSUMS:
   Mockingjay: cc4249c2ed9b21fbc9adabf6329d7473212b4251
   NSDate+TimeAgo: 35601c619b2d59290055e4fe76e61d97677a2360
   NSObject+Rx: 5d032a7f161602dec6b82dcf12731e91ce15b8da
-  Realm: 5254be610db3e5024879684717bf038990bb59ec
-  RealmSwift: 3e24e6bcf56d98ccc134f4909e00839b81a659af
+  Realm: e15cd8e7c11d3e576f628ba0b7cb855269b4991c
+  RealmSwift: 3229306d020d96f83b335f87a0dcbf2cef0e6a2b
   RxCocoa: e1b1562e57a554d0fb2aabf9d71b637f177257c7
   RxSwift: 402b41a50e922a0368fc14cb3bc9f4427920e8ae
   Siren: e37819c0ef6130098e31ba01cd66857e574bd01a
@@ -111,6 +111,6 @@ SPEC CHECKSUMS:
   TwitterKit: 38232c31f622db1f26a5952436eaa88d10763fd0
   URITemplate: 398a48d6559e23b77bd41176b675b017ad1fc959
 
-PODFILE CHECKSUM: a9ab9e0ab91ceeff42d2db974987ed8909514b51
+PODFILE CHECKSUM: 33887b5e3b96163dcb189760f5c0772b439ac7c3
 
 COCOAPODS: 1.0.0
