@@ -11,6 +11,8 @@ import RxSwift
 import RxCocoa
 import Keys
 import Mixpanel
+import GoogleMobileAds
+import Keys
 
 class PackageViewController: UIViewController {
     
@@ -18,6 +20,8 @@ class PackageViewController: UIViewController {
     private let packageViewModel: PackageViewModel
     private let packagesViewModel: PackagesViewModel
     private var noInformationAvailableYetLabel: UILabel?
+    private var nativeExpressAdView: GADNativeExpressAdView!
+    private var nativeExpressAdLoaded = false
     
     init(packageViewModel: PackageViewModel, packagesViewModel: PackagesViewModel) {
         self.packageViewModel = packageViewModel
@@ -35,6 +39,16 @@ class PackageViewController: UIViewController {
         self.title = self.packageViewModel.name()
         // add edit bar button item
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(didTapEditButton))
+        
+        // setup native express ad view
+        if IAPHelper.showAds() {
+            self.nativeExpressAdView = GADNativeExpressAdView(adSize: GADAdSizeFullWidthPortraitWithHeight(80.0))
+            self.nativeExpressAdView.translatesAutoresizingMaskIntoConstraints = false
+            self.nativeExpressAdView.adUnitID = PaketeKeys().adMobNativeAdUnitIDKey()
+            self.nativeExpressAdView.rootViewController = self
+            self.nativeExpressAdView.delegate = self
+            self.nativeExpressAdView.autoloadEnabled = true
+        }
         
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         self.tableView.backgroundColor = ColorPalette.BlackHaze
@@ -126,6 +140,19 @@ extension PackageViewController {
         let courierSize = courierLabel.sizeThatFits(CGSize(width: tableHeaderView.frame.width - 30.0, height: CGFloat.max))
         tableHeaderView.frame.size.height = trackingNumberSize.height + courierSize.height + 20.0
         
+        // native ad view
+        if self.nativeExpressAdLoaded {
+            tableHeaderView.addSubview(self.nativeExpressAdView)
+            NSLayoutConstraint.activateConstraints([
+                NSLayoutConstraint(item: self.nativeExpressAdView, attribute: .Leading, relatedBy: .Equal, toItem: tableHeaderView, attribute: .Leading, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: self.nativeExpressAdView, attribute: .Trailing, relatedBy: .Equal, toItem: tableHeaderView, attribute: .Trailing, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: self.nativeExpressAdView, attribute: .Bottom, relatedBy: .Equal, toItem: tableHeaderView, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: self.nativeExpressAdView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 80.0)
+            ])
+            // adjust the tableheaderview height
+            tableHeaderView.frame.size.height += self.nativeExpressAdView.frame.height
+        }
+        
         self.tableView.tableHeaderView = tableHeaderView
     }
     
@@ -174,5 +201,14 @@ extension PackageViewController: UITableViewDataSource {
         cell.configure(withViewModel: self.packageViewModel.trackHistoryViewModelAtIndexPath(indexPath))
 
         return cell
+    }
+}
+
+// MARK: - GADNativeExpressAdViewDelegate
+extension PackageViewController: GADNativeExpressAdViewDelegate {
+    func nativeExpressAdViewDidReceiveAd(nativeExpressAdView: GADNativeExpressAdView!) {
+        self.nativeExpressAdLoaded = true
+        // recreate table header view
+        self.setupTableHeaderView()
     }
 }
