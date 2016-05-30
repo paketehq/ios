@@ -76,7 +76,7 @@ class PackagesViewController: UIViewController {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
         // track mixpanel
-        Mixpanel.sharedInstance().track("Packages View")
+        Mixpanel.sharedInstance().track("Packages View", properties: ["Packages Count": self.viewModel.packages.value.count])
     }
     
     override func didReceiveMemoryWarning() {
