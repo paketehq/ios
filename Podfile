@@ -37,7 +37,6 @@ target 'Pakete' do
  pod 'FBSDKCoreKit'
  pod 'FBSDKShareKit'
  pod 'Countly'
- pod 'mopub-ios-sdk'
 
  target 'PaketeTests' do
   inherit! :search_paths

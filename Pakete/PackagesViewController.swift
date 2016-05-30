@@ -10,7 +10,6 @@ import UIKit
 import RxSwift
 import RxCocoa
 import GoogleMobileAds
-import mopub_ios_sdk
 import Keys
 import Mixpanel
 
