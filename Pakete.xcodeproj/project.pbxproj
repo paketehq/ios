@@ -36,6 +36,7 @@
 		79A839791CB4ACE900794889 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A839781CB4ACE900794889 /* Token.swift */; };
 		79B8C4761C9FA5F8005ED570 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B8C4751C9FA5F8005ED570 /* StringExtensions.swift */; };
 		79E5DEB21C9793C9006152B4 /* PackageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E5DEB11C9793C9006152B4 /* PackageViewModel.swift */; };
+		79EB12061CFC03870035DC81 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EB12051CFC03870035DC81 /* Constants.swift */; };
 		824479CC3A0A684F6145DEA1 /* Pods_Pakete.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AB804FB52AF32289F07D3E9 /* Pods_Pakete.framework */; };
 /* End PBXBuildFile section */
 
@@ -100,6 +101,7 @@
 		79A839781CB4ACE900794889 /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		79B8C4751C9FA5F8005ED570 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		79E5DEB11C9793C9006152B4 /* PackageViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PackageViewModel.swift; sourceTree = "<group>"; };
+		79EB12051CFC03870035DC81 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		8E6CFCF3A72C9797FD803F0C /* Pods_PaketeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PaketeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BE9544C91C4F28AECAC42C20 /* Pods-PaketeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PaketeTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PaketeTests/Pods-PaketeTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -170,6 +172,7 @@
 			isa = PBXGroup;
 			children = (
 				790E78DA1C93ECDA0055403B /* AppDelegate.swift */,
+				79EB12051CFC03870035DC81 /* Constants.swift */,
 				790E78FC1C93EFDB0055403B /* Controllers */,
 				790E78FB1C93EFD70055403B /* Views */,
 				790E78FD1C93EFE00055403B /* View Models */,
@@ -575,6 +578,7 @@
 				790E78DB1C93ECDA0055403B /* AppDelegate.swift in Sources */,
 				790E79101C950FE20055403B /* API.swift in Sources */,
 				790E790C1C950E1E0055403B /* AddPackageViewController.swift in Sources */,
+				79EB12061CFC03870035DC81 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
