@@ -163,18 +163,73 @@ class PackagesViewModel {
         self.packages.value.insert(observablePackage, atIndex: 0)
     }
     
+    // MARK: - Settings
+    func packagesSortBy() -> PackagesSortByType {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        return PackagesSortByType(rawValue: userDefaults.integerForKey(Constants.Defaults.SortByKey))!
+    }
+
+    func packagesGroupByDelivered() -> Bool {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        guard let groupByDelivered = userDefaults.objectForKey(Constants.Defaults.GroupByDeliveredKey) else {
+            // set group by delivered to on
+            userDefaults.setBool(true, forKey: Constants.Defaults.GroupByDeliveredKey)
+            userDefaults.synchronize()
+            return true
+        }
+        return groupByDelivered.boolValue
+    }
+
+    func sortBy(sort: PackagesSortByType) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setInteger(sort.rawValue, forKey: Constants.Defaults.SortByKey)
+        userDefaults.synchronize()
+        // reload packages
+        self.reloadPackagesLocalData()
+    }
+
+    func groupByDelivered(group: Bool) {
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setBool(group, forKey: Constants.Defaults.GroupByDeliveredKey)
+        userDefaults.synchronize()
+        // reload packages
+        self.reloadPackagesLocalData()
+    }
 }
 
 extension PackagesViewModel {
     private func reloadPackagesLocalData() {
         let realm = try! Realm()
-        let activePackages = realm.objects(Package).filter("archived = %@", false).sorted("createdAt", ascending: false).toObservableArray()
-        // completed packages
-        let completedPackages = activePackages.filter({ $0.value.completed })
-        // in transit packages
-        let inTransitPackages = activePackages.filter({ $0.value.completed == false })
-        // merge so completed packages will be at the bottom
-        self.packages.value = [inTransitPackages, completedPackages].flatMap { $0 }
+        var activePackages = realm.objects(Package).filter("archived = %@", false).toArray()
+        // sort packages
+        switch self.packagesSortBy() {
+        case .LastUpdated:
+            // we need to pick the latest track history date
+            activePackages = activePackages.sort({ (package1, package2) in
+                if let package1LatestTrackHistory = package1.latestTrackHistory(),
+                    package2LatestTrackHistory = package2.latestTrackHistory() {
+                    return package1LatestTrackHistory.date.timeIntervalSinceNow > package2LatestTrackHistory.date.timeIntervalSinceNow
+                }
+                return true
+            })
+        case .DateAdded:
+            activePackages = activePackages.sort({ $0.createdAt.compare($1.createdAt) == .OrderedDescending })
+        case .Name:
+            activePackages = activePackages.sort({ $0.name.lowercaseString < $1.name.lowercaseString })
+        }
+        // check if group by delivered
+        if self.packagesGroupByDelivered() {
+            // completed packages
+            let completedPackages = activePackages.filter({ $0.completed })
+            // in transit packages
+            let inTransitPackages = activePackages.filter({ $0.completed == false })
+            // merge so completed packages will be at the bottom
+            let combinedPackages = [inTransitPackages, completedPackages].flatMap { $0 }
+            // set to packages
+            self.packages.value = combinedPackages.map { ObservablePackage($0) }
+        } else {
+            self.packages.value = activePackages.map { ObservablePackage($0) }
+        }
     }
     
     private func reloadCouriersLocalData() {
