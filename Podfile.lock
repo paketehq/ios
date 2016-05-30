@@ -29,6 +29,9 @@ PODS:
     - URITemplate (~> 1.3)
   - Mockingjay/XCTest (1.2.1):
     - Mockingjay/Core
+  - mopub-ios-sdk (4.6.0):
+    - mopub-ios-sdk/MoPubSDK (= 4.6.0)
+  - mopub-ios-sdk/MoPubSDK (4.6.0)
   - NSDate+TimeAgo (1.0.6)
   - NSObject+Rx (1.2.1):
     - RxSwift (~> 2.1)
@@ -65,6 +68,7 @@ DEPENDENCIES:
   - Keys (from `Pods/CocoaPodsKeys`)
   - Mixpanel
   - Mockingjay
+  - mopub-ios-sdk
   - NSDate+TimeAgo
   - NSObject+Rx
   - RealmSwift
@@ -96,6 +100,7 @@ SPEC CHECKSUMS:
   Keys: 9c35bf00f612ee1d48556f4a4b9b4551e224e90f
   Mixpanel: 818d1940c2d9402453b349545022a86968097f57
   Mockingjay: cc4249c2ed9b21fbc9adabf6329d7473212b4251
+  mopub-ios-sdk: 5e7193f1a0f9bfe6513816416117d9c28d8dcf19
   NSDate+TimeAgo: 35601c619b2d59290055e4fe76e61d97677a2360
   NSObject+Rx: 5d032a7f161602dec6b82dcf12731e91ce15b8da
   Realm: 5254be610db3e5024879684717bf038990bb59ec
