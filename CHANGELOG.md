@@ -1,3 +1,10 @@
+## [0.9.4](https://github.com/paketehq/ios/releases/tag/0.9.4)
+
+#### Updated
+- Temporarily disabled in-app purchase receipt verification
+
+---
+
 ## [0.9.3](https://github.com/paketehq/ios/releases/tag/0.9.3)
 
 #### Added
