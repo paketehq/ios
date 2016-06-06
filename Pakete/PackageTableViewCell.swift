@@ -53,6 +53,7 @@ class PackageTableViewCell: UITableViewCell {
         self.nameLabel.translatesAutoresizingMaskIntoConstraints = false
         self.nameLabel.font = UIFont.systemFontOfSize(16.0)
         self.nameLabel.adjustFontToRealIPhoneSize = true
+        self.nameLabel.numberOfLines = 0
         self.contentView.addSubview(self.nameLabel)
         
         self.statusLabel.translatesAutoresizingMaskIntoConstraints = false
