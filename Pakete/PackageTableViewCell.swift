@@ -15,7 +15,6 @@ class PackageTableViewCell: UITableViewCell {
     
     let nameLabel = UILabel()
     let statusLabel = UILabel()
-    let dateLabel = UILabel()
     let statusImageView = UIImageView()
 
     private var activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
@@ -42,13 +41,6 @@ class PackageTableViewCell: UITableViewCell {
         
         self.activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(self.activityIndicatorView)
-        
-        self.dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.dateLabel.font = UIFont.systemFontOfSize(12.0)
-        self.dateLabel.textAlignment = .Right
-        self.dateLabel.textColor = .grayColor()
-        self.dateLabel.adjustFontToRealIPhoneSize = true
-        self.contentView.addSubview(self.dateLabel)
         
         self.nameLabel.translatesAutoresizingMaskIntoConstraints = false
         self.nameLabel.font = UIFont.systemFontOfSize(16.0)
@@ -82,14 +74,10 @@ class PackageTableViewCell: UITableViewCell {
                 
                 NSLayoutConstraint(item: self.activityIndicatorView, attribute: .CenterY, relatedBy: .Equal, toItem: self.statusImageView, attribute: .CenterY, multiplier: 1.0, constant: 0.0),
                 NSLayoutConstraint(item: self.activityIndicatorView, attribute: .CenterX, relatedBy: .Equal, toItem: self.statusImageView, attribute: .CenterX, multiplier: 1.0, constant: 0.0),
-
-                
-                NSLayoutConstraint(item: self.dateLabel, attribute: .CenterY, relatedBy: .Equal, toItem: self.nameLabel, attribute: .CenterY, multiplier: 1.0, constant: 0.0),
-                NSLayoutConstraint(item: self.dateLabel, attribute: .Trailing, relatedBy: .Equal, toItem: self.contentView, attribute: .Trailing, multiplier: 1.0, constant: 0.0),
                 
                 NSLayoutConstraint(item: self.nameLabel, attribute: .Top, relatedBy: .Equal, toItem: self.contentView, attribute: .Top, multiplier: 1.0, constant: 10.0),
                 NSLayoutConstraint(item: self.nameLabel, attribute: .Leading, relatedBy: .Equal, toItem: self.statusImageView, attribute: .Trailing, multiplier: 1.0, constant: 15.0),
-                NSLayoutConstraint(item: self.nameLabel, attribute: .Trailing, relatedBy: .Equal, toItem: self.dateLabel, attribute: .Leading, multiplier: 1.0, constant: -10.0),
+                NSLayoutConstraint(item: self.nameLabel, attribute: .Trailing, relatedBy: .Equal, toItem: self.contentView, attribute: .Trailing, multiplier: 1.0, constant: -10.0),
                 
                 NSLayoutConstraint(item: self.statusLabel, attribute: .Top, relatedBy: .Equal, toItem: self.nameLabel, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
                 NSLayoutConstraint(item: self.statusLabel, attribute: .Leading, relatedBy: .Equal, toItem: self.statusImageView, attribute: .Trailing, multiplier: 1.0, constant: 15.0),
@@ -133,7 +121,6 @@ extension PackageTableViewCell {
     private func reloadData() {
         self.nameLabel.text = self.viewModel.name()
         self.statusLabel.text = self.viewModel.status()
-        self.dateLabel.text = self.viewModel.lastUpdateDateString()
         self.setupPackageStatusImageView()
         
         self.setNeedsUpdateConstraints()
