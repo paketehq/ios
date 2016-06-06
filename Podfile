@@ -25,7 +25,6 @@ target 'Pakete' do
  pod 'SVProgressHUD'
  pod 'BigBrother'
  pod 'Google-Mobile-Ads-SDK'
- pod 'NSDate+TimeAgo'
  pod 'Smooch'
  pod 'CryptoSwift'
  pod 'Mixpanel'
