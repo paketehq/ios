@@ -1,3 +1,10 @@
+## [0.9.5](https://github.com/paketehq/ios/releases/tag/0.9.5)
+
+#### Updated
+- Removed Relative time
+
+---
+
 ## [0.9.4](https://github.com/paketehq/ios/releases/tag/0.9.4)
 
 #### Updated
