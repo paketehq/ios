@@ -8,11 +8,9 @@
 
 import Foundation
 import RxSwift
-import NSDate_TimeAgo
 
 protocol PackageViewModelType {
     func status() -> String
-    func lastUpdateDateString() -> String
 }
 
 struct PackageViewModel: PackageViewModelType {
@@ -30,11 +28,6 @@ struct PackageViewModel: PackageViewModelType {
     func status() -> String {
         guard let latestTrackHistory = self.package.value.latestTrackHistory() else { return "No information available yet" }
         return latestTrackHistory.status
-    }
-    
-    func lastUpdateDateString() -> String {
-        guard let latestTrackHistory = self.package.value.latestTrackHistory() else { return "" }
-        return latestTrackHistory.date.timeAgoSimple()
     }
     
     func trackingNumber() -> String {
@@ -76,6 +69,6 @@ struct PackageTrackHistoryViewModel: PackageViewModelType {
     }
     
     func lastUpdateDateString() -> String {
-        return self.packageTrackHistory.date.timeAgo()
+        return DateHelper.stringFromDate(self.packageTrackHistory.date, dateStyle: .MediumStyle, timeStyle: .ShortStyle)
     }
 }
