@@ -73,10 +73,11 @@ class PackagesViewModel {
                     case .Next(let updatedPackage):
                         // trigger to update package
                         package.value = updatedPackage.value
-                    case .Error(let error):
+                    case .Error:
                         package.value.updating = false
                         if let behaviorSubject = package.asObservable() as? BehaviorSubject {
-                            behaviorSubject.on(.Error(error))
+                            // just send the same value so it will trigger to refresh
+                            behaviorSubject.onNext(package.value)
                         }
                     default: ()
                     }
