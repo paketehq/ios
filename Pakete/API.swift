@@ -47,7 +47,7 @@ struct Pakete {
             URLRequest.HTTPMethod = method.rawValue
             URLRequest.setValue("compress, gzip", forHTTPHeaderField: "Accept-Encoding")
             URLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            URLRequest.setValue(Token().tokenString(), forHTTPHeaderField: "Authorization")
+            URLRequest.setValue(Token().tokenString(), forHTTPHeaderField: "pakete-api-key")
             let encoding = Alamofire.ParameterEncoding.URL
             
             return encoding.encode(URLRequest, parameters: parameters).0
