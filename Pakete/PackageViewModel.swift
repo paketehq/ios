@@ -35,7 +35,7 @@ struct PackageViewModel: PackageViewModelType {
     }
     
     func courierName() -> String {
-        return self.package.value.courier?.name.capitalizedString ?? ""
+        return self.package.value.courier?.name ?? ""
     }
     
     func numberOfTrackHistory() -> Int {
