@@ -38,8 +38,6 @@ enum PackagesSortByType: Int {
 class SettingsViewController: UIViewController {
     
     private let tableView = UITableView(frame: CGRect.zero, style: .Grouped)
-    private let shareMessage = "Checkout Pakete - a free PH Package Tracking app that I use to track my packages"
-    private let appURL = "http://pakete.ph"
     private let viewModel: PackagesViewModel
     private let groupByDeliveredSwitch = UISwitch()
 
@@ -202,14 +200,14 @@ extension SettingsViewController {
     
     private func didTapTweetAboutPakete() {
         let composer = TWTRComposer()
-        composer.setText(self.shareMessage + " " + self.appURL)
+        composer.setText(Constants.App.ShareMessage + " " + Constants.App.URL)
         // Called from a UIViewController
         composer.showFromViewController(self) { _ in }
     }
     
     private func didTapTellYourFriendsAboutPakete() {
         let content = FBSDKShareLinkContent()
-        content.contentURL = NSURL(string: self.appURL)
+        content.contentURL = NSURL(string: Constants.App.URL)
         FBSDKShareDialog.showFromViewController(self, withContent: content, delegate: nil)
     }
 }
