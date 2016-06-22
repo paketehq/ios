@@ -54,6 +54,13 @@ struct PackageViewModel: PackageViewModelType {
         let packageTrackHistory = self.package.value.trackHistory[indexPath.row]
         return PackageTrackHistoryViewModel(packageTrackHistory: packageTrackHistory)
     }
+    
+    func latestTrackHistory() -> PackageTrackHistoryViewModel? {
+        if let latestTrackHistory = self.package.value.latestTrackHistory() {
+            return PackageTrackHistoryViewModel(packageTrackHistory: latestTrackHistory)
+        }
+        return nil
+    }
 }
 
 struct PackageTrackHistoryViewModel: PackageViewModelType {
