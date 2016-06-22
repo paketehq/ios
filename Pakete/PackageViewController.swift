@@ -37,8 +37,8 @@ class PackageViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         self.title = self.packageViewModel.name()
-        // add edit bar button item
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Edit, target: self, action: #selector(didTapEditButton))
+        // add more bar button item
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "barButtonItemMore"), style: .Plain, target: self, action: #selector(didTapMoreButton))
         
         // setup native express ad view
         if IAPHelper.showAds() {
@@ -154,6 +154,41 @@ extension PackageViewController {
         }
         
         self.tableView.tableHeaderView = tableHeaderView
+    }
+    
+    func didTapMoreButton() {
+        let actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        if let latestTrackHistoryViewModel = self.packageViewModel.latestTrackHistory() {
+            actionSheetController.addAction(UIAlertAction(title: "Share", style: .Default, handler: { (alertAction) in
+                let shareString = "\(self.packageViewModel.courierName()) \(self.packageViewModel.trackingNumber()) Status is \(latestTrackHistoryViewModel.status()) at \(latestTrackHistoryViewModel.lastUpdateDateString())"
+                let activityViewController = UIActivityViewController(activityItems: [shareString], applicationActivities: nil)
+                self.presentViewController(activityViewController, animated: true, completion: nil)
+                activityViewController.view.tintColor = ColorPalette.Matisse
+            }))
+        }
+        actionSheetController.addAction(UIAlertAction(title: "Edit", style: .Default, handler: { (alertAction) in
+            self.didTapEditButton()
+        }))
+        actionSheetController.addAction(UIAlertAction(title: "Archive", style: .Destructive, handler: { (alertAction) in
+            self.didTapArchiveButton()
+        }))
+        actionSheetController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        self.presentViewController(actionSheetController, animated: true, completion: nil)
+        actionSheetController.view.tintColor = ColorPalette.Matisse
+    }
+    
+    func didTapArchiveButton() {
+        // show action sheet
+        let actionSheetController = UIAlertController(title: "Archive Package", message: "Are you sure you want to archive this package?", preferredStyle: .ActionSheet)
+        actionSheetController.addAction(UIAlertAction(title: "Yes", style: .Destructive, handler: { (alertAction) -> Void in
+            // track mixpanel
+            Mixpanel.sharedInstance().track("Archived Package")
+            self.packagesViewModel.archivePackage(self.packageViewModel.package)
+            self.navigationController?.popViewControllerAnimated(true)
+        }))
+        actionSheetController.addAction(UIAlertAction(title: "No", style: .Cancel, handler: nil))
+        self.presentViewController(actionSheetController, animated: true, completion: nil)
+        actionSheetController.view.tintColor = ColorPalette.Matisse
     }
     
     func didTapEditButton() {
