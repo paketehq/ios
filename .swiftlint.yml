@@ -15,6 +15,7 @@ opt_in_rules:
 excluded:
   - Pods
   - iOSInjectionProject
+  - PaketeTests
 
 force_cast: warning
 file_length:
