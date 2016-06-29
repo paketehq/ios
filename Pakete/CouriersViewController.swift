@@ -12,10 +12,10 @@ import RxCocoa
 import Mixpanel
 
 class CouriersViewController: UIViewController {
-    
+
     private let tableView = UITableView(frame: CGRect.zero, style: .Grouped)
     private let viewModel: PackagesViewModel
-    
+
     init(viewModel: PackagesViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -33,7 +33,7 @@ class CouriersViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(didTapCancelButton))
         // remove back button title
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
-        
+
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "CourierCell")
         self.tableView.rowHeight = 44.0
@@ -45,27 +45,27 @@ class CouriersViewController: UIViewController {
             NSLayoutConstraint(item: self.tableView, attribute: .Leading, relatedBy: .Equal, toItem: self.view, attribute: .Leading, multiplier: 1.0, constant: 0.0),
             NSLayoutConstraint(item: self.tableView, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0)
         ])
-        
+
         self.viewModel.couriers.asObservable()
             .bindTo(self.tableView.rx_itemsWithCellIdentifier("CourierCell", cellType: UITableViewCell.self)) { (_, courier, cell) in
                 cell.textLabel?.font = UIFont.systemFontOfSize(16.0)
                 cell.textLabel?.text = courier.name
             }
             .addDisposableTo(self.rx_disposeBag)
-        
+
         self.tableView.rx_itemSelected
             .subscribeNext { (indexPath) -> Void in
                 self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
             }
             .addDisposableTo(self.rx_disposeBag)
-        
+
         self.tableView.rx_modelSelected(Courier)
             .subscribeNext { courier in
                 let addPackageViewController = AddPackageViewController(viewModel: self.viewModel, courier: courier)
                 self.navigationController?.pushViewController(addPackageViewController, animated: true)
             }
             .addDisposableTo(self.rx_disposeBag)
-        
+
         // track mixpanel
         Mixpanel.sharedInstance().track("Couriers View")
     }
@@ -74,7 +74,7 @@ class CouriersViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
 }
 
 extension CouriersViewController {

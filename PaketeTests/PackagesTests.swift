@@ -14,7 +14,7 @@ import NSObject_Rx
 @testable import Pakete
 
 class PackagesTests: XCTestCase {
-    
+
     let packagesViewModel = PackagesViewModel()
 
     override func setUp() {
@@ -22,33 +22,33 @@ class PackagesTests: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         Realm.Configuration.defaultConfiguration.inMemoryIdentifier = self.name
     }
-    
+
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
-    
+
     func testCouriersIsNotEmpty() {
         // stub endpoint
         let endpoint = Pakete.Router.Couriers
         self.stubResponseForEndpoint(endpoint, stubFileName: "Couriers")
-        
+
         packagesViewModel.fetchCouriers()
             .subscribeNext { (couriers) in
                 XCTAssertNotEqual(couriers.count, 0)
             }
         .addDisposableTo(rx_disposeBag)
     }
-    
+
     func testTrackLBCPackage() {
         let courier = Courier()
         courier.code = "lbc"
         let package = Package(name: "LBC Package", trackingNumber: "123456789012", courier: courier)
-        
+
         // stub endpoint
         let endpoint = Pakete.Router.TrackPackage(courier.code, package.trackingNumber)
         self.stubResponseForEndpoint(endpoint, stubFileName: "LBCPackage")
-        
+
         self.packagesViewModel.trackPackage(ObservablePackage(package))
             .subscribeNext { (package) in
                 XCTAssertNotNil(package.value)
@@ -62,7 +62,7 @@ class PackagesTests: XCTestCase {
 extension PackagesTests {
     func stubResponseForEndpoint(endpoint: Pakete.Router, stubFileName: String) {
         let stubbedResponse = self.stubbedResponseFor(stubFileName)
-        
+
         var httpMethod: Mockingjay.HTTPMethod!
         switch endpoint.method {
         case .GET:
@@ -77,10 +77,10 @@ extension PackagesTests {
         }
         self.stub(http(httpMethod, uri: endpoint.URLRequest.URLString), builder: jsonData(stubbedResponse))
     }
-    
+
     private func stubbedResponseFor(filename: String) -> NSData! {
         @objc class TestClass: NSObject { }
-        
+
         let bundle = NSBundle(forClass: TestClass.self)
         let path = bundle.pathForResource(filename, ofType: "json")
         return NSData(contentsOfFile: path!)

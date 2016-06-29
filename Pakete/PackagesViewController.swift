@@ -14,7 +14,7 @@ import Keys
 import Mixpanel
 
 class PackagesViewController: UIViewController {
-    
+
     private let tableView = UITableView()
     private let viewModel = PackagesViewModel()
     private let refreshControl = UIRefreshControl()
@@ -31,7 +31,7 @@ class PackagesViewController: UIViewController {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(didTapAddButton))
         // add settings bar button item
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(named: "barButtonItemSettings"), style: .Plain, target: self, action: #selector(didTapSettingsButton))
-                
+
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         self.tableView.registerClass(PackageTableViewCell.self, forCellReuseIdentifier: PackageTableViewCell.reuseIdentifier)
         self.tableView.rowHeight = UITableViewAutomaticDimension
@@ -49,107 +49,108 @@ class PackagesViewController: UIViewController {
         // refresh control
         self.refreshControl.addTarget(self, action: #selector(didPullToRefresh), forControlEvents: .ValueChanged)
         self.tableView.insertSubview(self.refreshControl, atIndex: 0)
-        
+
         // ad banner
         self.setupBottomAdBannerView()
-        
+
         // bindings
         self.viewModel.packages.asObservable()
             .subscribeNext { (packages) -> Void in
                 self.tableView.reloadData()
-                if packages.count == 0 { self.showEmptyStateLabel() } else { self.hideEmptyStateLabel() }
+                if packages.isEmpty { self.showEmptyStateLabel() } else { self.hideEmptyStateLabel() }
             }
             .addDisposableTo(self.rx_disposeBag)
-        
+
         self.viewModel.showPackage.asObservable()
             .subscribeNext { (package) -> Void in
                 self.showPackageDetails(ObservablePackage(package))
             }
             .addDisposableTo(self.rx_disposeBag)
-        
+
         // Notification
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(hideAds), name: IAPDidPurchaseRemoveAdsNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(applicationWillEnterForeground), name: UIApplicationWillEnterForegroundNotification, object: nil)
     }
-    
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
         // track mixpanel
         Mixpanel.sharedInstance().track("Packages View", properties: ["Packages Count": self.viewModel.packages.value.count])
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }
-    
+
 }
 
 // MARK: - Methods
 extension PackagesViewController {
     private func setupBottomAdBannerView() {
         guard IAPHelper.showAds() else { return }
-        
-        self.adBannerView = GADBannerView()
-        self.adBannerView!.autoloadEnabled = true
-        self.adBannerView!.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(self.adBannerView!)
+
+        let adBannerView = GADBannerView()
+        adBannerView.autoloadEnabled = true
+        adBannerView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(adBannerView)
         NSLayoutConstraint.activateConstraints([
-            NSLayoutConstraint(item: self.adBannerView!, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.adBannerView!, attribute: .Leading, relatedBy: .Equal, toItem: self.view, attribute: .Leading, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.adBannerView!, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.adBannerView!, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 50.0)
+            NSLayoutConstraint(item: adBannerView, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: adBannerView, attribute: .Leading, relatedBy: .Equal, toItem: self.view, attribute: .Leading, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: adBannerView, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: adBannerView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 50.0)
         ])
-        
+
         let keys = PaketeKeys()
-        self.adBannerView!.adUnitID = keys.adMobBannerAdUnitIDKey()
-        self.adBannerView!.rootViewController = self
-        
+        adBannerView.adUnitID = keys.adMobBannerAdUnitIDKey()
+        adBannerView.rootViewController = self
+        self.adBannerView = adBannerView
+
         // add bottom offset for ad banner view
         self.tableView.contentInset.bottom = 50.0
         self.tableView.scrollIndicatorInsets.bottom = 50.0
     }
-    
+
     func applicationWillEnterForeground() {
         // force refresh
         self.viewModel.refreshPackages()
     }
-    
+
     func hideAds() {
         self.adBannerView?.removeFromSuperview()
         self.adBannerView = nil
         self.tableView.contentInset.bottom = 0.0
         self.tableView.scrollIndicatorInsets.bottom = 0.0
     }
-    
+
     func didPullToRefresh() {
         self.viewModel.refreshPackages()
         self.refreshControl.endRefreshing()
     }
-    
+
     func didTapAddButton() {
         let couriersViewController = CouriersViewController(viewModel: self.viewModel)
         let couriersNavigationController = UINavigationController(rootViewController: couriersViewController)
         self.presentViewController(couriersNavigationController, animated: true, completion: nil)
     }
-    
+
     func didTapSettingsButton() {
         let settingsViewController = SettingsViewController(viewModel: self.viewModel)
         let settingsNavigationController = UINavigationController(rootViewController: settingsViewController)
         self.presentViewController(settingsNavigationController, animated: true, completion: nil)
     }
-    
+
     func showPackageDetails(package: ObservablePackage) {
         let packageViewModel = PackageViewModel(package: package)
         let packageViewController = PackageViewController(packageViewModel: packageViewModel, packagesViewModel: viewModel)
         self.navigationController?.pushViewController(packageViewController, animated: true)
     }
-    
+
     func showEmptyStateLabel() {
         if self.emptyStateLabel == nil {
             self.emptyStateLabel = UILabel()
@@ -172,7 +173,7 @@ extension PackagesViewController {
             self.emptyStateLabel?.hidden = false
         }
     }
-    
+
     func hideEmptyStateLabel() {
         self.emptyStateLabel?.hidden = true
     }
@@ -182,15 +183,16 @@ extension PackagesViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.viewModel.packages.value.count
     }
-    
+
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(PackageTableViewCell.reuseIdentifier, forIndexPath: indexPath) as! PackageTableViewCell
-        
-        let viewModel = PackageViewModel(package: self.viewModel.packages.value[indexPath.row])
-        cell.configure(withViewModel: viewModel)
-        return cell
+        if let cell = tableView.dequeueReusableCellWithIdentifier(PackageTableViewCell.reuseIdentifier, forIndexPath: indexPath) as? PackageTableViewCell {
+            let viewModel = PackageViewModel(package: self.viewModel.packages.value[indexPath.row])
+            cell.configure(withViewModel: viewModel)
+            return cell
+        }
+        return UITableViewCell()
     }
-    
+
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             // show action sheet
@@ -212,7 +214,7 @@ extension PackagesViewController: UITableViewDelegate {
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
         self.showPackageDetails(self.viewModel.packages.value[indexPath.row])
     }
-    
+
     func tableView(tableView: UITableView, titleForDeleteConfirmationButtonForRowAtIndexPath indexPath: NSIndexPath) -> String? {
         return "Archive"
     }

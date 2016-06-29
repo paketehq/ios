@@ -16,7 +16,7 @@ import Keys
 import Mixpanel
 
 class AddPackageViewController: UIViewController {
-    
+
     private let tableView = UITableView(frame: CGRect.zero, style: .Grouped)
     // static cells
     private let trackingNumberCell = TextFieldTableViewCell()
@@ -32,16 +32,16 @@ class AddPackageViewController: UIViewController {
     private let courier: Courier
     private let viewModel: PackagesViewModel
     private var package: ObservablePackage?
-    
+
     private var editPackage = false
     private var interstitialAd: GADInterstitial!
-    
+
     init(viewModel: PackagesViewModel, courier: Courier) {
         self.viewModel = viewModel
         self.courier = courier
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     init(viewModel: PackagesViewModel, package: ObservablePackage) {
         self.viewModel = viewModel
         self.package = package
@@ -61,7 +61,8 @@ class AddPackageViewController: UIViewController {
 
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         self.tableView.dataSource = self
-        self.tableView.registerClass(TextFieldTableViewCell.self, forCellReuseIdentifier: TextFieldTableViewCell.reuseIdentifier)
+        self.tableView.registerClass(TextFieldTableViewCell.self,
+                                     forCellReuseIdentifier: TextFieldTableViewCell.reuseIdentifier)
         self.tableView.rowHeight = 44.0
         self.tableView.tableFooterView = UIView()
         self.view.addSubview(self.tableView)
@@ -75,13 +76,13 @@ class AddPackageViewController: UIViewController {
         self.setupFooterView()
         // setup interstitial ad
         self.setupInterstitialAd()
-        
+
         // setup static cells
         self.trackingNumberCell.textField.placeholder = "Tracking Number"
         self.trackingNumberCell.textField.keyboardType = .NamePhonePad
         self.nameCell.textField.placeholder = "Description"
         self.nameCell.textField.returnKeyType = .Done
-        
+
         // if JRS we have extra field!
         // TODO: shouldn't be harcoded :(
         if self.courier.code == "jrs" {
@@ -89,7 +90,7 @@ class AddPackageViewController: UIViewController {
             self.extraFieldCell?.textField.placeholder = "BC"
             self.extraFieldCell?.textField.keyboardType = .NumberPad
         }
-        
+
         // add cancel button if edit package
         if editPackage, let package = self.package {
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(didTapCancelButton))
@@ -104,39 +105,39 @@ class AddPackageViewController: UIViewController {
             } else {
                 self.trackingNumberCell.textField.text = package.value.trackingNumber
             }
-            
+
             // disable tracking number cell
             self.trackingNumberCell.textField.enabled = false
             self.trackingNumberCell.textField.textColor = .lightGrayColor()
             self.extraFieldCell?.textField.enabled = false
             self.extraFieldCell?.textField.textColor = .lightGrayColor()
         }
-        
+
         // bindings
         self.trackingNumberCell.textField.rx_text
             .bindTo(self.trackingNumber)
             .addDisposableTo(self.rx_disposeBag)
-        
+
         self.nameCell.textField.rx_text
             .bindTo(self.name)
             .addDisposableTo(self.rx_disposeBag)
-        
+
         self.extraFieldCell?.textField.rx_text
             .bindTo(self.extraField)
             .addDisposableTo(self.rx_disposeBag)
 
         let trackingNumberIsValid = self.trackingNumber.asObservable()
             .map(isNotEmptyString)
-        
+
         let nameIsValid = self.name.asObservable()
             .map(isNotEmptyString)
-        
+
         var formValidations = [trackingNumberIsValid, nameIsValid]
         if self.extraFieldCell != nil {
             let extraFieldIsValid = self.extraField.asObservable().map(isNotEmptyString)
             formValidations.append(extraFieldIsValid)
         }
-        
+
         // observe if form is valid
         let formIsValid = formValidations.combineLatestAnd()
         formIsValid.bindTo(self.addButton.rx_enabled)
@@ -144,27 +145,27 @@ class AddPackageViewController: UIViewController {
         formIsValid.map({ $0 ? 1.0 : 0.5 })
             .bindTo(self.addButton.rx_alpha)
             .addDisposableTo(self.rx_disposeBag)
-        
+
         if editPackage {
             self.nameCell.textField.becomeFirstResponder()
         } else {
             self.trackingNumberCell.textField.becomeFirstResponder()
         }
-        
+
         // track mixpanel
         Mixpanel.sharedInstance().track("Add Package View")
     }
-    
+
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         self.view.endEditing(true) // hide keyboard
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
 }
 
 // MARK: - Methods
@@ -178,7 +179,7 @@ extension AddPackageViewController {
         request.testDevices = [kGADSimulatorID]
         self.interstitialAd.loadRequest(request)
     }
-    
+
     func setupFooterView() {
         let tableFooterView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 44.0))
         // add Add button
@@ -198,7 +199,7 @@ extension AddPackageViewController {
             NSLayoutConstraint(item: self.addButton, attribute: .Leading, relatedBy: .Equal, toItem: tableFooterView, attribute: .Leading, multiplier: 1.0, constant: 0.0),
             NSLayoutConstraint(item: self.addButton, attribute: .Trailing, relatedBy: .Equal, toItem: tableFooterView, attribute: .Trailing, multiplier: 1.0, constant: 0.0)
         ])
-        
+
         if editPackage {
             // add archive package button
             self.archiveButton.translatesAutoresizingMaskIntoConstraints = false
@@ -216,14 +217,14 @@ extension AddPackageViewController {
             // adjust height
             tableFooterView.frame.size.height = 98.0
         }
-        
+
         self.tableView.tableFooterView = tableFooterView
     }
-    
+
     func didTapCancelButton() {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
-    
+
     func didTapAddButton() {
         let trackingNumber = self.extraFieldCell == nil ? self.trackingNumber.value : self.trackingNumber.value + "-" + self.extraField.value
         if let existingPackage = self.viewModel.packageWithTrackingNumber(trackingNumber, courier: self.courier) {
@@ -249,12 +250,12 @@ extension AddPackageViewController {
 
             return
         }
-        
+
         // hide keyboard
         self.view.endEditing(true)
         SVProgressHUD.show()
         SVProgressHUD.setDefaultMaskType(.Black)
-        
+
         let package = Package(name: self.name.value, trackingNumber: trackingNumber, courier: self.courier)
         self.viewModel.trackPackage(ObservablePackage(package))
             .subscribe { (event) in
@@ -263,7 +264,7 @@ extension AddPackageViewController {
                 case .Error(let error):
                     // focus back to tracking number textfield
                     self.trackingNumberCell.textField.becomeFirstResponder()
-                    
+
                     // show error
                     let error = error as NSError
                     let alertController = UIAlertController(title: "Sorry!", message: error.localizedFailureReason, preferredStyle: .Alert)
@@ -288,12 +289,14 @@ extension AddPackageViewController {
             }
             .addDisposableTo(rx_disposeBag)
     }
-    
+
     func didTapUpdateButton() {
-        self.viewModel.updatePackageName(self.name.value, package: self.package!)
+        if let package = self.package {
+            self.viewModel.updatePackageName(self.name.value, package: package)
+        }
         self.dismissViewControllerAnimated(true, completion: nil)
     }
-    
+
     func didTapArchiveButton() {
         // show action sheet
         let actionSheetController = UIAlertController(title: "Archive Package", message: "Are you sure you want to archive this package?", preferredStyle: .ActionSheet)
@@ -316,7 +319,7 @@ extension AddPackageViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.extraFieldCell == nil ? 2 : 3
     }
-    
+
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         switch indexPath.row {
         case 0: return self.trackingNumberCell
@@ -330,11 +333,11 @@ extension AddPackageViewController: UITableViewDataSource {
 
 // MARK: - GADInterstitialDelegate
 extension AddPackageViewController: GADInterstitialDelegate {
-    func interstitialWillDismissScreen(ad: GADInterstitial!) {
+    func interstitialWillDismissScreen(adInterstitial: GADInterstitial!) {
         self.dismissViewControllerAnimated(false, completion: nil)
     }
-    
-    func interstitialWillLeaveApplication(ad: GADInterstitial!) {
+
+    func interstitialWillLeaveApplication(adInterstitial: GADInterstitial!) {
         self.dismissViewControllerAnimated(false, completion: nil)
     }
 }

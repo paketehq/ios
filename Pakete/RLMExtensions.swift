@@ -14,10 +14,10 @@ extension Results {
     func toArray() -> [Results.Generator.Element] {
         return map { $0 }
     }
-    
+
     func toObservableArray() -> [Variable<Results.Generator.Element>] {
         return map { Variable($0) }
-    }    
+    }
 }
 
 extension List {

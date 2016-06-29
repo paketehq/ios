@@ -14,17 +14,17 @@ extension UILabel {
             if newValue {
                 let currentFont = self.font
                 var sizeScale: CGFloat = 1.0
-                
-                if DeviceType.IS_IPHONE_6 {
+
+                if DeviceType.iPhone6 {
                     sizeScale = 1.1
-                } else if DeviceType.IS_IPHONE_6P {
+                } else if DeviceType.iPhone6Plus {
                     sizeScale = 1.2
                 }
-                
+
                 self.font = currentFont.fontWithSize(currentFont.pointSize * sizeScale)
             }
         }
-        
+
         get {
             return false
         }
@@ -33,15 +33,15 @@ extension UILabel {
 
 // TO DO: Transfer somewhere
 struct ScreenSize {
-    static let SCREEN_WIDTH = UIScreen.mainScreen().bounds.size.width
-    static let SCREEN_HEIGHT = UIScreen.mainScreen().bounds.size.height
-    static let SCREEN_MAX_LENGTH = max(ScreenSize.SCREEN_WIDTH, ScreenSize.SCREEN_HEIGHT)
-    static let SCREEN_MIN_LENGTH = min(ScreenSize.SCREEN_WIDTH, ScreenSize.SCREEN_HEIGHT)
+    static let ScreenWidth = UIScreen.mainScreen().bounds.size.width
+    static let ScreenHeight = UIScreen.mainScreen().bounds.size.height
+    static let ScreenMaxLength = max(ScreenSize.ScreenWidth, ScreenSize.ScreenHeight)
+    static let ScreenMinLength = min(ScreenSize.ScreenHeight, ScreenSize.ScreenHeight)
 }
 
 struct DeviceType {
-    static let IS_IPHONE_4_OR_LESS =  UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.SCREEN_MAX_LENGTH < 568.0
-    static let IS_IPHONE_5 = UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.SCREEN_MAX_LENGTH == 568.0
-    static let IS_IPHONE_6 = UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.SCREEN_MAX_LENGTH == 667.0
-    static let IS_IPHONE_6P = UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.SCREEN_MAX_LENGTH == 736.0
+    static let iPhone4 =  UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.ScreenMaxLength < 568.0
+    static let iPhone5 = UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.ScreenMaxLength == 568.0
+    static let iPhone6 = UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.ScreenMaxLength == 667.0
+    static let iPhone6Plus = UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.ScreenMaxLength == 736.0
 }
