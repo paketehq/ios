@@ -17,7 +17,6 @@ PODS:
     - Bolts (~> 1.7)
   - FBSDKShareKit (4.11.0):
     - FBSDKCoreKit
-  - Google-Mobile-Ads-SDK (7.8.1)
   - Keys (1.0.0)
   - Mixpanel (2.9.9):
     - Mixpanel/Mixpanel (= 2.9.9)
@@ -60,7 +59,6 @@ DEPENDENCIES:
   - Fabric
   - FBSDKCoreKit
   - FBSDKShareKit
-  - Google-Mobile-Ads-SDK
   - Keys (from `Pods/CocoaPodsKeys`)
   - Mixpanel
   - Mockingjay
@@ -90,7 +88,6 @@ SPEC CHECKSUMS:
   Fabric: caf7580c725e64db144f610ac65cd60956911dc7
   FBSDKCoreKit: 686ac982723a14ec9ddb85e2f81235d7706c891b
   FBSDKShareKit: 2d1746144cfc8a9dbbd24997c34ee0471be51b6a
-  Google-Mobile-Ads-SDK: 3c2a6656117989469bfe7645640aa1de024a4c6c
   Keys: 9c35bf00f612ee1d48556f4a4b9b4551e224e90f
   Mixpanel: 818d1940c2d9402453b349545022a86968097f57
   Mockingjay: cc4249c2ed9b21fbc9adabf6329d7473212b4251
@@ -108,6 +105,6 @@ SPEC CHECKSUMS:
   TwitterKit: 38232c31f622db1f26a5952436eaa88d10763fd0
   URITemplate: 398a48d6559e23b77bd41176b675b017ad1fc959
 
-PODFILE CHECKSUM: bed54d59406b19404770e00b8837a2d155f2bb21
+PODFILE CHECKSUM: 3e5db08ce39f3e5207e6b60d983c565c55bdedaf
 
 COCOAPODS: 1.0.1

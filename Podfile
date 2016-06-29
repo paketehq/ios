@@ -24,7 +24,6 @@ target 'Pakete' do
  pod 'NSObject+Rx'
  pod 'SVProgressHUD'
  pod 'BigBrother'
- pod 'Google-Mobile-Ads-SDK'
  pod 'Smooch'
  pod 'CryptoSwift'
  pod 'Mixpanel'
