@@ -350,6 +350,7 @@
 				01FF00CA1A4E934DFA73611F /* [CP] Check Pods Manifest.lock */,
 				12D2FD7A585EDA9EA4755B92 /* [CP] Check Pods Manifest.lock */,
 				AFC34452FCDB9A9C9FC2595E /* [CP] Check Pods Manifest.lock */,
+				793DEEA01D22721600B1A6B5 /* Linter */,
 				790E78D31C93ECDA0055403B /* Sources */,
 				790E78D41C93ECDA0055403B /* Frameworks */,
 				790E78D51C93ECDA0055403B /* Resources */,
@@ -359,7 +360,6 @@
 				2E24C190D8CDE9F6E11ACDA9 /* [CP] Copy Pods Resources */,
 				B6F33D585C7A8D9569168C3C /* 📦 Embed Pods Frameworks */,
 				AC933BDBA314F947B3CE0605 /* 📦 Copy Pods Resources */,
-				793DEEA01D22721600B1A6B5 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -549,6 +549,20 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PaketeTests/Pods-PaketeTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		793DEEA01D22721600B1A6B5 /* Linter */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Linter;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
 		};
 		79F111141CBF59D600DC475E /* Crashlytics */ = {
 			isa = PBXShellScriptBuildPhase;
