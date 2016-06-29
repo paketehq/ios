@@ -12,7 +12,7 @@ import RxCocoa
 import Mixpanel
 
 class SortByViewController: UIViewController {
-    
+
     private let tableView = UITableView(frame: CGRect.zero, style: .Grouped)
     private let viewModel: PackagesViewModel
     private var selectedIndexPath: NSIndexPath?
@@ -21,7 +21,7 @@ class SortByViewController: UIViewController {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -30,7 +30,7 @@ class SortByViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         self.title = "Sort By"
-        
+
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "SortByCell")
         self.tableView.rowHeight = 44.0
@@ -42,7 +42,7 @@ class SortByViewController: UIViewController {
             NSLayoutConstraint(item: self.tableView, attribute: .Leading, relatedBy: .Equal, toItem: self.view, attribute: .Leading, multiplier: 1.0, constant: 0.0),
             NSLayoutConstraint(item: self.tableView, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0)
         ])
-        
+
         let sortByTypes = Variable(PackagesSortByType.arrayValues)
         sortByTypes.asObservable()
             .bindTo(self.tableView.rx_itemsWithCellIdentifier("SortByCell", cellType: UITableViewCell.self)) { (index, sortByType, cell) in
@@ -57,7 +57,7 @@ class SortByViewController: UIViewController {
                 }
             }
             .addDisposableTo(self.rx_disposeBag)
-        
+
         self.tableView.rx_itemSelected
             .subscribeNext { (indexPath) -> Void in
                 self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
@@ -67,7 +67,7 @@ class SortByViewController: UIViewController {
                 self.navigationController?.popViewControllerAnimated(true)
             }
             .addDisposableTo(self.rx_disposeBag)
-        
+
         // track mixpanel
         Mixpanel.sharedInstance().track("Sort By View")
     }
@@ -76,5 +76,5 @@ class SortByViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
 }

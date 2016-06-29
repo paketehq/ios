@@ -95,20 +95,21 @@ extension PackagesViewController {
     private func setupBottomAdBannerView() {
         guard IAPHelper.showAds() else { return }
 
-        self.adBannerView = GADBannerView()
-        self.adBannerView!.autoloadEnabled = true
-        self.adBannerView!.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(self.adBannerView!)
+        let adBannerView = GADBannerView()
+        adBannerView.autoloadEnabled = true
+        adBannerView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(adBannerView)
         NSLayoutConstraint.activateConstraints([
-            NSLayoutConstraint(item: self.adBannerView!, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.adBannerView!, attribute: .Leading, relatedBy: .Equal, toItem: self.view, attribute: .Leading, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.adBannerView!, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.adBannerView!, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 50.0)
+            NSLayoutConstraint(item: adBannerView, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: adBannerView, attribute: .Leading, relatedBy: .Equal, toItem: self.view, attribute: .Leading, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: adBannerView, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0),
+            NSLayoutConstraint(item: adBannerView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 50.0)
         ])
 
         let keys = PaketeKeys()
-        self.adBannerView!.adUnitID = keys.adMobBannerAdUnitIDKey()
-        self.adBannerView!.rootViewController = self
+        adBannerView.adUnitID = keys.adMobBannerAdUnitIDKey()
+        adBannerView.rootViewController = self
+        self.adBannerView = adBannerView
 
         // add bottom offset for ad banner view
         self.tableView.contentInset.bottom = 50.0
@@ -184,11 +185,12 @@ extension PackagesViewController: UITableViewDataSource {
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(PackageTableViewCell.reuseIdentifier, forIndexPath: indexPath) as! PackageTableViewCell
-
-        let viewModel = PackageViewModel(package: self.viewModel.packages.value[indexPath.row])
-        cell.configure(withViewModel: viewModel)
-        return cell
+        if let cell = tableView.dequeueReusableCellWithIdentifier(PackageTableViewCell.reuseIdentifier, forIndexPath: indexPath) as? PackageTableViewCell {
+            let viewModel = PackageViewModel(package: self.viewModel.packages.value[indexPath.row])
+            cell.configure(withViewModel: viewModel)
+            return cell
+        }
+        return UITableViewCell()
     }
 
     func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {

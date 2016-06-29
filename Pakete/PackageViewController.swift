@@ -15,14 +15,14 @@ import GoogleMobileAds
 import Keys
 
 class PackageViewController: UIViewController {
-    
+
     private let tableView = UITableView(frame: CGRect.zero, style: .Grouped)
     private let packageViewModel: PackageViewModel
     private let packagesViewModel: PackagesViewModel
     private var noInformationAvailableYetLabel: UILabel?
     private var nativeExpressAdView: GADNativeExpressAdView!
     private var nativeExpressAdLoaded = false
-    
+
     init(packageViewModel: PackageViewModel, packagesViewModel: PackagesViewModel) {
         self.packageViewModel = packageViewModel
         self.packagesViewModel = packagesViewModel
@@ -39,7 +39,7 @@ class PackageViewController: UIViewController {
         self.title = self.packageViewModel.name()
         // add more bar button item
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "barButtonItemMore"), style: .Plain, target: self, action: #selector(didTapMoreButton))
-        
+
         // setup native express ad view
         if IAPHelper.showAds() {
             self.nativeExpressAdView = GADNativeExpressAdView(adSize: GADAdSizeFullWidthPortraitWithHeight(80.0))
@@ -49,7 +49,7 @@ class PackageViewController: UIViewController {
             self.nativeExpressAdView.delegate = self
             self.nativeExpressAdView.autoloadEnabled = true
         }
-        
+
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         self.tableView.backgroundColor = ColorPalette.BlackHaze
         self.tableView.dataSource = self
@@ -67,7 +67,7 @@ class PackageViewController: UIViewController {
         ])
         // setup table header view
         self.setupTableHeaderView()
-        
+
         // bindings
         self.packageViewModel.package.asObservable()
             .subscribeNext { (package) -> Void in
@@ -77,22 +77,22 @@ class PackageViewController: UIViewController {
                 } else {
                     self.title = self.packageViewModel.name()
                     self.tableView.reloadData()
-                    if package.trackHistory.count > 0 {
-                        self.hideNoInformationAvailableYetLabel()
-                    } else {
+                    if package.trackHistory.isEmpty {
                         self.showNoInformationAvailableYetLabel()
+                    } else {
+                        self.hideNoInformationAvailableYetLabel()
                     }
                 }
             }
             .addDisposableTo(self.rx_disposeBag)
     }
-    
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         // track mixpanel
         Mixpanel.sharedInstance().track("Package View")
     }
-    
+
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
     }
@@ -101,7 +101,7 @@ class PackageViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
 }
 
 // MARK: - Methods
@@ -109,7 +109,7 @@ extension PackageViewController {
     private func setupTableHeaderView() {
         let tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 0.0))
         tableHeaderView.backgroundColor = .whiteColor()
-        
+
         // tracking number label
         let trackingNumberLabel = UILabel()
         trackingNumberLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -121,7 +121,7 @@ extension PackageViewController {
             NSLayoutConstraint(item: trackingNumberLabel, attribute: .Top, relatedBy: .Equal, toItem: tableHeaderView, attribute: .Top, multiplier: 1.0, constant: 10.0),
             NSLayoutConstraint(item: trackingNumberLabel, attribute: .Leading, relatedBy: .Equal, toItem: tableHeaderView, attribute: .Leading, multiplier: 1.0, constant: 15.0)
         ])
-        
+
         // courier label
         let courierLabel = UILabel()
         courierLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -134,12 +134,12 @@ extension PackageViewController {
             NSLayoutConstraint(item: courierLabel, attribute: .Top, relatedBy: .Equal, toItem: trackingNumberLabel, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
             NSLayoutConstraint(item: courierLabel, attribute: .Leading, relatedBy: .Equal, toItem: tableHeaderView, attribute: .Leading, multiplier: 1.0, constant: 15.0)
         ])
-        
+
         // adjust height
         let trackingNumberSize = trackingNumberLabel.sizeThatFits(CGSize(width: tableHeaderView.frame.width - 30.0, height: CGFloat.max))
         let courierSize = courierLabel.sizeThatFits(CGSize(width: tableHeaderView.frame.width - 30.0, height: CGFloat.max))
         tableHeaderView.frame.size.height = trackingNumberSize.height + courierSize.height + 20.0
-        
+
         // native ad view
         if self.nativeExpressAdLoaded {
             tableHeaderView.addSubview(self.nativeExpressAdView)
@@ -152,10 +152,10 @@ extension PackageViewController {
             // adjust the tableheaderview height
             tableHeaderView.frame.size.height += self.nativeExpressAdView.frame.height
         }
-        
+
         self.tableView.tableHeaderView = tableHeaderView
     }
-    
+
     func didTapMoreButton() {
         let actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
         if let latestTrackHistoryViewModel = self.packageViewModel.latestTrackHistory() {
@@ -176,7 +176,7 @@ extension PackageViewController {
         self.presentViewController(actionSheetController, animated: true, completion: nil)
         actionSheetController.view.tintColor = ColorPalette.Matisse
     }
-    
+
     func didTapArchiveButton() {
         // show action sheet
         let actionSheetController = UIAlertController(title: "Archive Package", message: "Are you sure you want to archive this package?", preferredStyle: .ActionSheet)
@@ -190,33 +190,34 @@ extension PackageViewController {
         self.presentViewController(actionSheetController, animated: true, completion: nil)
         actionSheetController.view.tintColor = ColorPalette.Matisse
     }
-    
+
     func didTapEditButton() {
         let editPackageViewController = AddPackageViewController(viewModel: packagesViewModel, package: self.packageViewModel.package)
         let editPackageNavigationController = UINavigationController(rootViewController: editPackageViewController)
         self.presentViewController(editPackageNavigationController, animated: true, completion: nil)
     }
-    
+
     func showNoInformationAvailableYetLabel() {
         if self.noInformationAvailableYetLabel == nil {
-            self.noInformationAvailableYetLabel = UILabel()
-            self.noInformationAvailableYetLabel?.text = "No information available yet.\nPlease try again later."
-            self.noInformationAvailableYetLabel?.textAlignment = .Center
-            self.noInformationAvailableYetLabel?.numberOfLines = 2
-            self.noInformationAvailableYetLabel?.translatesAutoresizingMaskIntoConstraints = false
-            self.noInformationAvailableYetLabel?.font = UIFont.systemFontOfSize(14.0)
-            self.noInformationAvailableYetLabel?.adjustFontToRealIPhoneSize = true
-            self.view.addSubview(self.noInformationAvailableYetLabel!)
+            let noInformationAvailableYetLabel = UILabel()
+            noInformationAvailableYetLabel.text = "No information available yet.\nPlease try again later."
+            noInformationAvailableYetLabel.textAlignment = .Center
+            noInformationAvailableYetLabel.numberOfLines = 2
+            noInformationAvailableYetLabel.translatesAutoresizingMaskIntoConstraints = false
+            noInformationAvailableYetLabel.font = UIFont.systemFontOfSize(14.0)
+            noInformationAvailableYetLabel.adjustFontToRealIPhoneSize = true
+            self.view.addSubview(noInformationAvailableYetLabel)
             NSLayoutConstraint.activateConstraints([
-                NSLayoutConstraint(item: self.noInformationAvailableYetLabel!, attribute: .Leading, relatedBy: .Equal, toItem: self.view, attribute: .Leading, multiplier: 1.0, constant: 15.0),
-                NSLayoutConstraint(item: self.noInformationAvailableYetLabel!, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: -15.0),
-                NSLayoutConstraint(item: self.noInformationAvailableYetLabel!, attribute: .CenterY, relatedBy: .Equal, toItem: self.view, attribute: .CenterY, multiplier: 1.0, constant: 0.0)
+                NSLayoutConstraint(item: noInformationAvailableYetLabel, attribute: .Leading, relatedBy: .Equal, toItem: self.view, attribute: .Leading, multiplier: 1.0, constant: 15.0),
+                NSLayoutConstraint(item: noInformationAvailableYetLabel, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: -15.0),
+                NSLayoutConstraint(item: noInformationAvailableYetLabel, attribute: .CenterY, relatedBy: .Equal, toItem: self.view, attribute: .CenterY, multiplier: 1.0, constant: 0.0)
             ])
+            self.noInformationAvailableYetLabel = noInformationAvailableYetLabel
         }
-        
+
         self.noInformationAvailableYetLabel?.hidden = false
     }
-    
+
     func hideNoInformationAvailableYetLabel() {
         self.noInformationAvailableYetLabel?.hidden = true
         self.tableView.hidden = false
@@ -229,13 +230,14 @@ extension PackageViewController: UITableViewDataSource {
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.packageViewModel.numberOfTrackHistory()
     }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(PackageTrackHistoryTableViewCell.reuseIdentifier, forIndexPath: indexPath) as! PackageTrackHistoryTableViewCell
-        
-        cell.configure(withViewModel: self.packageViewModel.trackHistoryViewModelAtIndexPath(indexPath))
 
-        return cell
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if let cell = tableView.dequeueReusableCellWithIdentifier(PackageTrackHistoryTableViewCell.reuseIdentifier, forIndexPath: indexPath) as? PackageTrackHistoryTableViewCell {
+            cell.configure(withViewModel: self.packageViewModel.trackHistoryViewModelAtIndexPath(indexPath))
+
+            return cell
+        }
+        return UITableViewCell()
     }
 }
 

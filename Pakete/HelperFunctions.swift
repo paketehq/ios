@@ -8,32 +8,32 @@
 
 import Foundation
 
-let DateHelper = PKDateHelper()
+private let dateHelper = PKDateHelper()
 class PKDateHelper {
-    private let dateFormatter = NSDateFormatter()
-    
+    let dateFormatter = NSDateFormatter()
+
     init () {
         self.dateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
         self.dateFormatter.timeZone = NSTimeZone.localTimeZone()
     }
-    
-    func dateFromISOString(dateString: String) -> NSDate? {
-        self.dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        return self.dateFormatter.dateFromString(dateString)
-    }
-    
-    func stringFromDate(date: NSDate, dateStyle: NSDateFormatterStyle, timeStyle: NSDateFormatterStyle) -> String {
-        self.dateFormatter.dateStyle = dateStyle
-        self.dateFormatter.timeStyle = timeStyle
-        return self.dateFormatter.stringFromDate(date)
-    }
+}
+
+func dateFromISOString(dateString: String) -> NSDate? {
+    dateHelper.dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+    return dateHelper.dateFormatter.dateFromString(dateString)
+}
+
+func stringFromDate(date: NSDate, dateStyle: NSDateFormatterStyle, timeStyle: NSDateFormatterStyle) -> String {
+    dateHelper.dateFormatter.dateStyle = dateStyle
+    dateHelper.dateFormatter.timeStyle = timeStyle
+    return dateHelper.dateFormatter.stringFromDate(date)
 }
 
 func isNotEmptyString(string: String) -> Bool {
     return string.isEmpty == false
 }
 
-func delay(delay:Double, closure:()->()) {
+func delay(delay: Double, closure:()->()) {
     dispatch_after(
         dispatch_time(
             DISPATCH_TIME_NOW,

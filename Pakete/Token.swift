@@ -13,10 +13,10 @@ import CryptoSwift
 import Keys
 
 struct Token {
-    
-    private var iv: NSData!
+
+    private var randomIV: NSData!
     private var key: NSData!
-    
+
     init() {
         let keys = PaketeKeys()
         if keys.paketeAPIKey().characters.count == 16 {
@@ -24,9 +24,9 @@ struct Token {
         } else {
             self.key = "1234567890123456".dataUsingEncoding(NSUTF8StringEncoding)
         }
-        self.iv = randomIV()
+        self.randomIV = generateRandomIV()
     }
-    
+
     func tokenString() -> String {
         return self.base64GeneratedEncryptedString()
     }
@@ -34,26 +34,35 @@ struct Token {
 }
 
 private extension Token {
-    func randomIV() -> NSData {
-        let data = NSMutableData(length: self.key.length)!
-        let result = SecRandomCopyBytes(kSecRandomDefault, self.key.length, UnsafeMutablePointer<UInt8>(data.mutableBytes))
-        guard result == errSecSuccess else {
-            fatalError("SECURITY FAILURE: Could not generate secure random numbers: \(result).")
+    func generateRandomIV() -> NSData {
+        if let data = NSMutableData(length: self.key.length) {
+            let result = SecRandomCopyBytes(kSecRandomDefault, self.key.length, UnsafeMutablePointer<UInt8>(data.mutableBytes))
+            guard result == errSecSuccess else {
+                fatalError("SECURITY FAILURE: Could not generate secure random numbers: \(result).")
+            }
+
+            return data
+        } else {
+            fatalError("key is empty")
         }
-        
-        return data
     }
-    
+
     func base64GeneratedEncryptedString() -> String {
         guard let deviceId = UIDevice.currentDevice().identifierForVendor?.UUIDString else { return "" }
         let timeInterval = NSDate().timeIntervalSince1970
         let nonce = deviceId + ":\(timeInterval)"
-        let nonceData = nonce.dataUsingEncoding(NSUTF8StringEncoding)!
-        
-        let encrypted = try! nonceData.encrypt(AES(key: self.key.arrayOfBytes(), iv: self.iv.arrayOfBytes()))
-        let encryptedBase64 = encrypted.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
-        
-        let base64IVString = self.iv.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
-        return "\(base64IVString):\(encryptedBase64)"
+        if let nonceData = nonce.dataUsingEncoding(NSUTF8StringEncoding) {
+            do {
+                let encrypted = try nonceData.encrypt(AES(key: self.key.arrayOfBytes(), iv: self.randomIV.arrayOfBytes()))
+                let encryptedBase64 = encrypted.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
+
+                let base64IVString = self.randomIV.base64EncodedStringWithOptions(NSDataBase64EncodingOptions(rawValue: 0))
+                return "\(base64IVString):\(encryptedBase64)"
+            } catch {
+                fatalError("can't generate encrypted string")
+            }
+        } else {
+            fatalError("nonce data is nil")
+        }
     }
 }

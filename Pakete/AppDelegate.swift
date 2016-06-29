@@ -22,10 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        
+
         let keys = PaketeKeys()
         // Smooch
         Smooch.initWithSettings(SKTSettings(appToken: keys.smoochAppTokenKey()))
@@ -55,21 +54,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Fabric.with(kits)
         // Facebook
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
-        
+
         UINavigationBar.appearance().barStyle = .Black
         UINavigationBar.appearance().setBackgroundImage(UIImage(color: ColorPalette.Matisse), forBarMetrics: UIBarMetrics.Default)
         UINavigationBar.appearance().titleTextAttributes = [NSForegroundColorAttributeName: UIColor.whiteColor()]
         UINavigationBar.appearance().translucent = false
         UIBarButtonItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName: UIColor.whiteColor()], forState: .Normal)
-        
+
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window?.tintColor = .whiteColor()
         self.window?.rootViewController = UINavigationController(rootViewController: PackagesViewController())
         self.window?.makeKeyAndVisible()
-        
+
         return true
     }
-    
+
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
         return FBSDKApplicationDelegate.sharedInstance().application(application, openURL: url, sourceApplication: sourceApplication, annotation: annotation)
     }
@@ -100,6 +99,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-
 }
-
