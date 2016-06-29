@@ -66,22 +66,26 @@ extension Request {
                 var responseJSON = JSON.null
                 var responseError: NSError?
 
-                switch response.result {
-                case .Success(let value):
-                    if let httpURLResponse = response.response {
-                        responseJSON = SwiftyJSON.JSON(value)
-                        // if not 200 then it's a problem
-                        if httpURLResponse.statusCode != 200 {
-                            responseError = NSError(domain: response.request!.URLString, code: httpURLResponse.statusCode, userInfo: [NSLocalizedFailureReasonErrorKey: responseJSON["message"].stringValue])
+                if let originalRequest = response.request {
+                    switch response.result {
+                    case .Success(let value):
+                        if let httpURLResponse = response.response {
+                            responseJSON = SwiftyJSON.JSON(value)
+                            // if not 200 then it's a problem
+                            if httpURLResponse.statusCode != 200 {
+                                responseError = NSError(domain: originalRequest.URLString, code: httpURLResponse.statusCode, userInfo: [NSLocalizedFailureReasonErrorKey: responseJSON["message"].stringValue])
+                            }
                         }
+                    case .Failure(let error):
+                        responseError = error
                     }
-                case .Failure(let error):
-                    responseError = error
-                }
 
-                dispatch_async(dispatch_get_main_queue(), {
-                    completionHandler(request: response.request!, response: response.response, json: responseJSON, error: responseError)
-                })
+                    dispatch_async(dispatch_get_main_queue(), {
+                        completionHandler(request: originalRequest, response: response.response, json: responseJSON, error: responseError)
+                    })
+                } else {
+                    fatalError("original request is nil")
+                }
             })
         })
     }
