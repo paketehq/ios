@@ -35,6 +35,7 @@
 		796F24191CE2EAE500AE1617 /* IAPHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 796F24181CE2EAE500AE1617 /* IAPHelper.swift */; };
 		79A839791CB4ACE900794889 /* Token.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79A839781CB4ACE900794889 /* Token.swift */; };
 		79B8C4761C9FA5F8005ED570 /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79B8C4751C9FA5F8005ED570 /* StringExtensions.swift */; };
+		79BD66831D23CE9000E3A942 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79BD66821D23CE9000E3A942 /* GoogleMobileAds.framework */; };
 		79E5DEB21C9793C9006152B4 /* PackageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79E5DEB11C9793C9006152B4 /* PackageViewModel.swift */; };
 		79EB12061CFC03870035DC81 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EB12051CFC03870035DC81 /* Constants.swift */; };
 		79EB12081CFC16470035DC81 /* SortByViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79EB12071CFC16470035DC81 /* SortByViewController.swift */; };
@@ -101,6 +102,7 @@
 		796F24181CE2EAE500AE1617 /* IAPHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IAPHelper.swift; sourceTree = "<group>"; };
 		79A839781CB4ACE900794889 /* Token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Token.swift; sourceTree = "<group>"; };
 		79B8C4751C9FA5F8005ED570 /* StringExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
+		79BD66821D23CE9000E3A942 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GoogleMobileAds.framework; path = Pakete/Vendor/GoogleMobileAds.framework; sourceTree = "<group>"; };
 		79E5DEB11C9793C9006152B4 /* PackageViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PackageViewModel.swift; sourceTree = "<group>"; };
 		79EB12051CFC03870035DC81 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		79EB12071CFC16470035DC81 /* SortByViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SortByViewController.swift; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				79BD66831D23CE9000E3A942 /* GoogleMobileAds.framework in Frameworks */,
 				796F24171CE2E75300AE1617 /* StoreKit.framework in Frameworks */,
 				824479CC3A0A684F6145DEA1 /* Pods_Pakete.framework in Frameworks */,
 			);
@@ -143,6 +146,7 @@
 		6EC08CC92DE25D5A4E9A4DB6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				79BD66821D23CE9000E3A942 /* GoogleMobileAds.framework */,
 				796F24161CE2E75300AE1617 /* StoreKit.framework */,
 				1AB804FB52AF32289F07D3E9 /* Pods_Pakete.framework */,
 				8E6CFCF3A72C9797FD803F0C /* Pods_PaketeTests.framework */,
