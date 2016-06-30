@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 private let dateHelper = PKDateHelper()
 class PKDateHelper {
@@ -40,4 +41,36 @@ func delay(delay: Double, closure:()->()) {
             Int64(delay * Double(NSEC_PER_SEC))
         ),
     dispatch_get_main_queue(), closure)
+}
+
+extension UIView {
+    public func constrainEqual(attribute: NSLayoutAttribute, to: AnyObject?, multiplier: CGFloat = 1, constant: CGFloat = 0) {
+        constrainEqual(attribute, to: to, attribute, multiplier: multiplier, constant: constant)
+    }
+
+    public func constrainEqual(attribute: NSLayoutAttribute, to: AnyObject?, _ toAttribute: NSLayoutAttribute, multiplier: CGFloat = 1, constant: CGFloat = 0) {
+        NSLayoutConstraint.activateConstraints([
+            NSLayoutConstraint(item: self, attribute: attribute, relatedBy: .Equal, toItem: to, attribute: toAttribute, multiplier: multiplier, constant: constant)
+            ]
+        )
+    }
+
+    public func constrainEdgestoMarginOf(view: UIView) {
+        constrainEqual(.Top, to: view, .TopMargin)
+        constrainEqual(.Leading, to: view, .LeadingMargin)
+        constrainEqual(.Trailing, to: view, .TrailingMargin)
+        constrainEqual(.Bottom, to: view, .BottomMargin)
+    }
+
+    public func constrainEdges(toView view: UIView) {
+        constrainEqual(.Top, to: view, .Top)
+        constrainEqual(.Leading, to: view, .Leading)
+        constrainEqual(.Trailing, to: view, .Trailing)
+        constrainEqual(.Bottom, to: view, .Bottom)
+    }
+
+    public func center(inView view: UIView) {
+        constrainEqual(.CenterX, to: view)
+        constrainEqual(.CenterY, to: view)
+    }
 }
