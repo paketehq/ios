@@ -66,12 +66,7 @@ class AddPackageViewController: UIViewController {
         self.tableView.rowHeight = 44.0
         self.tableView.tableFooterView = UIView()
         self.view.addSubview(self.tableView)
-        NSLayoutConstraint.activateConstraints([
-            NSLayoutConstraint(item: self.tableView, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Top, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.tableView, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.tableView, attribute: .Leading, relatedBy: .Equal, toItem: self.view, attribute: .Leading, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.tableView, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0)
-        ])
+        self.tableView.constrainEdges(toView: self.view)
         // setup footer view buttons
         self.setupFooterView()
         // setup interstitial ad
@@ -193,12 +188,10 @@ extension AddPackageViewController {
             self.addButton.addTarget(self, action: #selector(didTapAddButton), forControlEvents: .TouchUpInside)
         }
         tableFooterView.addSubview(self.addButton)
-        NSLayoutConstraint.activateConstraints([
-            NSLayoutConstraint(item: self.addButton, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 44.0),
-            NSLayoutConstraint(item: self.addButton, attribute: .Top, relatedBy: .Equal, toItem: tableFooterView, attribute: .Top, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.addButton, attribute: .Leading, relatedBy: .Equal, toItem: tableFooterView, attribute: .Leading, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.addButton, attribute: .Trailing, relatedBy: .Equal, toItem: tableFooterView, attribute: .Trailing, multiplier: 1.0, constant: 0.0)
-        ])
+        self.addButton.constrainEqual(.Top, to: tableFooterView)
+        self.addButton.constrainEqual(.Leading, to: tableFooterView)
+        self.addButton.constrainEqual(.Trailing, to: tableFooterView)
+        self.addButton.constrainEqual(.Height, to: nil, .NotAnAttribute, constant: 44.0)
 
         if editPackage {
             // add archive package button
@@ -208,12 +201,10 @@ extension AddPackageViewController {
             self.archiveButton.setTitleColor(.whiteColor(), forState: .Normal)
             self.archiveButton.addTarget(self, action: #selector(didTapArchiveButton), forControlEvents: .TouchUpInside)
             tableFooterView.addSubview(self.archiveButton)
-            NSLayoutConstraint.activateConstraints([
-                NSLayoutConstraint(item: self.archiveButton, attribute: .Top, relatedBy: .Equal, toItem: self.addButton, attribute: .Bottom, multiplier: 1.0, constant: 10.0),
-                NSLayoutConstraint(item: self.archiveButton, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 44.0),
-                NSLayoutConstraint(item: self.archiveButton, attribute: .Leading, relatedBy: .Equal, toItem: tableFooterView, attribute: .Leading, multiplier: 1.0, constant: 0.0),
-                NSLayoutConstraint(item: self.archiveButton, attribute: .Trailing, relatedBy: .Equal, toItem: tableFooterView, attribute: .Trailing, multiplier: 1.0, constant: 0.0)
-            ])
+            self.archiveButton.constrainEqual(.Top, to: self.addButton, .Top, constant: 10.0)
+            self.archiveButton.constrainEqual(.Leading, to: tableFooterView)
+            self.archiveButton.constrainEqual(.Trailing, to: tableFooterView)
+            self.archiveButton.constrainEqual(.Height, to: nil, .NotAnAttribute, constant: 44.0)
             // adjust height
             tableFooterView.frame.size.height = 98.0
         }

@@ -69,12 +69,7 @@ class SettingsViewController: UIViewController {
         self.tableView.dataSource = self
         self.tableView.delegate = self
         self.view.addSubview(self.tableView)
-        NSLayoutConstraint.activateConstraints([
-            NSLayoutConstraint(item: self.tableView, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Top, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.tableView, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.tableView, attribute: .Leading, relatedBy: .Equal, toItem: self.view, attribute: .Leading, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.tableView, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0)
-        ])
+        self.tableView.constrainEdges(toView: self.view)
 
         // setup header view
         self.setupTableHeaderView()
@@ -90,10 +85,7 @@ class SettingsViewController: UIViewController {
         versionLabel.font = UIFont.systemFontOfSize(14.0)
         versionLabel.textColor = .grayColor()
         tableFooterView.addSubview(versionLabel)
-        NSLayoutConstraint.activateConstraints([
-            NSLayoutConstraint(item: versionLabel, attribute: .CenterY, relatedBy: .Equal, toItem: tableFooterView, attribute: .CenterY, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: versionLabel, attribute: .CenterX, relatedBy: .Equal, toItem: tableFooterView, attribute: .CenterX, multiplier: 1.0, constant: 0.0)
-        ])
+        versionLabel.center(inView: tableFooterView)
         self.tableView.tableFooterView = tableFooterView
 
         // track mixpanel
@@ -347,11 +339,9 @@ extension SettingsViewController: UITableViewDelegate {
         headerLabel.text = self.tableView(tableView, titleForHeaderInSection: section)
         headerLabel.textColor = .grayColor()
         headerView.addSubview(headerLabel)
-        NSLayoutConstraint.activateConstraints([
-            NSLayoutConstraint(item: headerLabel, attribute: .Leading, relatedBy: .Equal, toItem: headerView, attribute: .Leading, multiplier: 1.0, constant: 15.0),
-            NSLayoutConstraint(item: headerLabel, attribute: .Trailing, relatedBy: .Equal, toItem: headerView, attribute: .Trailing, multiplier: 1.0, constant: -15.0),
-            NSLayoutConstraint(item: headerLabel, attribute: .Top, relatedBy: .Equal, toItem: headerView, attribute: .Top, multiplier: 1.0, constant: 0.0)
-        ])
+        headerLabel.constrainEqual(.Top, to: headerView)
+        headerLabel.constrainEqual(.Leading, to: headerView, .Leading, constant: 15.0)
+        headerLabel.constrainEqual(.Trailing, to: headerView, .Trailing, constant: -15.0)
 
         return headerView
     }

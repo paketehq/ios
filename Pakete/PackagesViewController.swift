@@ -40,12 +40,7 @@ class PackagesViewController: UIViewController {
         self.tableView.dataSource = self
         self.tableView.delegate = self
         self.view.addSubview(self.tableView)
-        NSLayoutConstraint.activateConstraints([
-            NSLayoutConstraint(item: self.tableView, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Top, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.tableView, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.tableView, attribute: .Leading, relatedBy: .Equal, toItem: self.view, attribute: .Leading, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.tableView, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0)
-        ])
+        self.tableView.constrainEdges(toView: self.view)
         // refresh control
         self.refreshControl.addTarget(self, action: #selector(didPullToRefresh), forControlEvents: .ValueChanged)
         self.tableView.insertSubview(self.refreshControl, atIndex: 0)
@@ -99,12 +94,10 @@ extension PackagesViewController {
         adBannerView.autoloadEnabled = true
         adBannerView.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(adBannerView)
-        NSLayoutConstraint.activateConstraints([
-            NSLayoutConstraint(item: adBannerView, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: adBannerView, attribute: .Leading, relatedBy: .Equal, toItem: self.view, attribute: .Leading, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: adBannerView, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: adBannerView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 50.0)
-        ])
+        adBannerView.constrainEqual(.Bottom, to: self.view)
+        adBannerView.constrainEqual(.Leading, to: self.view)
+        adBannerView.constrainEqual(.Trailing, to: self.view)
+        adBannerView.constrainEqual(.Height, to: nil, .NotAnAttribute, constant: 50.0)
 
         let keys = PaketeKeys()
         adBannerView.adUnitID = keys.adMobBannerAdUnitIDKey()
@@ -162,12 +155,7 @@ extension PackagesViewController {
                 emptyStateLabel.textAlignment = .Center
                 emptyStateLabel.backgroundColor = .clearColor()
                 self.view.addSubview(emptyStateLabel)
-                NSLayoutConstraint.activateConstraints([
-                    NSLayoutConstraint(item: emptyStateLabel, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Top, multiplier: 1.0, constant: 0.0),
-                    NSLayoutConstraint(item: emptyStateLabel, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
-                    NSLayoutConstraint(item: emptyStateLabel, attribute: .Width, relatedBy: .Equal, toItem: self.view, attribute: .Width, multiplier: 1.0, constant: 0.0),
-                    NSLayoutConstraint(item: emptyStateLabel, attribute: .Height, relatedBy: .Equal, toItem: self.view, attribute: .Height, multiplier: 1.0, constant: 0.0),
-                ])
+                emptyStateLabel.constrainEdges(toView: self.view)
             }
         } else {
             self.emptyStateLabel?.hidden = false

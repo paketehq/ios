@@ -59,12 +59,7 @@ class PackageViewController: UIViewController {
         self.tableView.separatorStyle = .None
         self.tableView.tableFooterView = UIView()
         self.view.addSubview(self.tableView)
-        NSLayoutConstraint.activateConstraints([
-            NSLayoutConstraint(item: self.tableView, attribute: .Top, relatedBy: .Equal, toItem: self.view, attribute: .Top, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.tableView, attribute: .Bottom, relatedBy: .Equal, toItem: self.view, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.tableView, attribute: .Leading, relatedBy: .Equal, toItem: self.view, attribute: .Leading, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: self.tableView, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: 0.0)
-        ])
+        self.tableView.constrainEdges(toView: self.view)
         // setup table header view
         self.setupTableHeaderView()
 
@@ -117,10 +112,8 @@ extension PackageViewController {
         trackingNumberLabel.font = UIFont.systemFontOfSize(16.0)
         trackingNumberLabel.adjustFontToRealIPhoneSize = true
         tableHeaderView.addSubview(trackingNumberLabel)
-        NSLayoutConstraint.activateConstraints([
-            NSLayoutConstraint(item: trackingNumberLabel, attribute: .Top, relatedBy: .Equal, toItem: tableHeaderView, attribute: .Top, multiplier: 1.0, constant: 10.0),
-            NSLayoutConstraint(item: trackingNumberLabel, attribute: .Leading, relatedBy: .Equal, toItem: tableHeaderView, attribute: .Leading, multiplier: 1.0, constant: 15.0)
-        ])
+        trackingNumberLabel.constrainEqual(.Top, to: tableHeaderView, .Top, constant: 10.0)
+        trackingNumberLabel.constrainEqual(.Leading, to: tableHeaderView, .Leading, constant: 15.0)
 
         // courier label
         let courierLabel = UILabel()
@@ -130,10 +123,8 @@ extension PackageViewController {
         courierLabel.font = UIFont.systemFontOfSize(14.0)
         courierLabel.adjustFontToRealIPhoneSize = true
         tableHeaderView.addSubview(courierLabel)
-        NSLayoutConstraint.activateConstraints([
-            NSLayoutConstraint(item: courierLabel, attribute: .Top, relatedBy: .Equal, toItem: trackingNumberLabel, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
-            NSLayoutConstraint(item: courierLabel, attribute: .Leading, relatedBy: .Equal, toItem: tableHeaderView, attribute: .Leading, multiplier: 1.0, constant: 15.0)
-        ])
+        courierLabel.constrainEqual(.Top, to: trackingNumberLabel, .Bottom)
+        courierLabel.constrainEqual(.Leading, to: tableHeaderView, .Leading, constant: 15.0)
 
         // adjust height
         let trackingNumberSize = trackingNumberLabel.sizeThatFits(CGSize(width: tableHeaderView.frame.width - 30.0, height: CGFloat.max))
@@ -143,12 +134,10 @@ extension PackageViewController {
         // native ad view
         if self.nativeExpressAdLoaded {
             tableHeaderView.addSubview(self.nativeExpressAdView)
-            NSLayoutConstraint.activateConstraints([
-                NSLayoutConstraint(item: self.nativeExpressAdView, attribute: .Leading, relatedBy: .Equal, toItem: tableHeaderView, attribute: .Leading, multiplier: 1.0, constant: 0.0),
-                NSLayoutConstraint(item: self.nativeExpressAdView, attribute: .Trailing, relatedBy: .Equal, toItem: tableHeaderView, attribute: .Trailing, multiplier: 1.0, constant: 0.0),
-                NSLayoutConstraint(item: self.nativeExpressAdView, attribute: .Bottom, relatedBy: .Equal, toItem: tableHeaderView, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
-                NSLayoutConstraint(item: self.nativeExpressAdView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 80.0)
-            ])
+            self.nativeExpressAdView.constrainEqual(.Leading, to: tableHeaderView)
+            self.nativeExpressAdView.constrainEqual(.Trailing, to: tableHeaderView)
+            self.nativeExpressAdView.constrainEqual(.Bottom, to: tableHeaderView)
+            self.nativeExpressAdView.constrainEqual(.Height, to: nil, .NotAnAttribute, constant: 80.0)
             // adjust the tableheaderview height
             tableHeaderView.frame.size.height += self.nativeExpressAdView.frame.height
         }
@@ -207,11 +196,7 @@ extension PackageViewController {
             noInformationAvailableYetLabel.font = UIFont.systemFontOfSize(14.0)
             noInformationAvailableYetLabel.adjustFontToRealIPhoneSize = true
             self.view.addSubview(noInformationAvailableYetLabel)
-            NSLayoutConstraint.activateConstraints([
-                NSLayoutConstraint(item: noInformationAvailableYetLabel, attribute: .Leading, relatedBy: .Equal, toItem: self.view, attribute: .Leading, multiplier: 1.0, constant: 15.0),
-                NSLayoutConstraint(item: noInformationAvailableYetLabel, attribute: .Trailing, relatedBy: .Equal, toItem: self.view, attribute: .Trailing, multiplier: 1.0, constant: -15.0),
-                NSLayoutConstraint(item: noInformationAvailableYetLabel, attribute: .CenterY, relatedBy: .Equal, toItem: self.view, attribute: .CenterY, multiplier: 1.0, constant: 0.0)
-            ])
+            noInformationAvailableYetLabel.center(inView: self.view)
             self.noInformationAvailableYetLabel = noInformationAvailableYetLabel
         }
 
