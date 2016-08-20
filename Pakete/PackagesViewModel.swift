@@ -68,6 +68,7 @@ class PackagesViewModel {
             package.value = updatingPackage
             // start tracking package
             self.trackPackage(package)
+                .shareReplay(1)
                 .subscribe({ (event) in
                     switch event {
                     case .Next(let updatedPackage):
