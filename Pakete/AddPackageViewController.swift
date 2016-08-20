@@ -201,7 +201,7 @@ extension AddPackageViewController {
             self.archiveButton.setTitleColor(.whiteColor(), forState: .Normal)
             self.archiveButton.addTarget(self, action: #selector(didTapArchiveButton), forControlEvents: .TouchUpInside)
             tableFooterView.addSubview(self.archiveButton)
-            self.archiveButton.constrainEqual(.Top, to: self.addButton, .Top, constant: 10.0)
+            self.archiveButton.constrainEqual(.Top, to: self.addButton, .Bottom, constant: 10.0)
             self.archiveButton.constrainEqual(.Leading, to: tableFooterView)
             self.archiveButton.constrainEqual(.Trailing, to: tableFooterView)
             self.archiveButton.constrainEqual(.Height, to: nil, .NotAnAttribute, constant: 44.0)
