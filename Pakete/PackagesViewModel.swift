@@ -18,7 +18,7 @@ class PackagesViewModel {
     let packages: Variable<[ObservablePackage]> = Variable([])
     let couriers: Variable<[Courier]> = Variable([])
     var showPackage: PublishSubject<Package> = PublishSubject()
-    private var disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
 
     init() {
         self.fetchCouriers()

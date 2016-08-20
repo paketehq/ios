@@ -15,7 +15,7 @@ protocol PackageViewModelType {
 
 struct PackageViewModel: PackageViewModelType {
 
-    var package: Variable<Package>
+    let package: Variable<Package>
 
     init(package: Variable<Package>) {
         self.package = package
