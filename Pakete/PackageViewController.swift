@@ -65,7 +65,7 @@ class PackageViewController: UIViewController {
 
         // bindings
         self.packageViewModel.package.asObservable()
-            .subscribeNext { (package) -> Void in
+            .subscribeNext { [unowned self] (package) -> Void in
                 if package.archived {
                     // if archived then pop navigation controller
                     self.navigationController?.popViewControllerAnimated(true)

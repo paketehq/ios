@@ -142,7 +142,7 @@ extension SettingsViewController {
 
     private func restorePurchases() {
         SVProgressHUD.show()
-        IAPHelper.restorePurchases { (results) in
+        IAPHelper.restorePurchases { [unowned self] (results) in
             if results.restoreFailedProducts.isEmpty == false {
                 SVProgressHUD.showErrorWithStatus("Restore Failed. Please try again.")
             } else if results.restoredProductIds.isEmpty == false {

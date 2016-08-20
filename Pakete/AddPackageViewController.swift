@@ -87,7 +87,7 @@ class AddPackageViewController: UIViewController {
         }
 
         // add cancel button if edit package
-        if editPackage, let package = self.package {
+        if self.editPackage, let package = self.package {
             self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(didTapCancelButton))
             // populate textfields
             self.nameCell.textField.text = package.value.name
@@ -249,34 +249,32 @@ extension AddPackageViewController {
 
         let package = Package(name: self.name.value, trackingNumber: trackingNumber, courier: self.courier)
         self.viewModel.trackPackage(ObservablePackage(package))
-            .subscribe { (event) in
+            .map { [unowned self] observablePackage in
                 SVProgressHUD.dismiss()
-                switch event {
-                case .Error(let error):
-                    // focus back to tracking number textfield
-                    self.trackingNumberCell.textField.becomeFirstResponder()
-
-                    // show error
-                    let error = error as NSError
-                    let alertController = UIAlertController(title: "Sorry!", message: error.localizedFailureReason, preferredStyle: .Alert)
-                    alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                    self.presentViewController(alertController, animated: true, completion: nil)
-                    alertController.view.tintColor = ColorPalette.Matisse
-                case .Next(let observablePackage):
-                    // track mixpanel
-                    Mixpanel.sharedInstance().track("Added Package", properties: ["Courier": self.courier.name])
-                    // show interstitial ad
-                    if self.interstitialAd.isReady && IAPHelper.showAds() {
-                        self.interstitialAd.presentFromRootViewController(self)
-                    } else {
-                        self.dismissViewControllerAnimated(true, completion: nil)
-                    }
-                    // add to package list
-                    self.viewModel.addPackage(observablePackage)
-                    // show package
-                    self.viewModel.showPackage.onNext(observablePackage.value)
-                default: ()
+                // track mixpanel
+                Mixpanel.sharedInstance().track("Added Package", properties: ["Courier": self.courier.name])
+                // show interstitial ad
+                if self.interstitialAd.isReady && IAPHelper.showAds() {
+                    self.interstitialAd.presentFromRootViewController(self)
+                } else {
+                    self.dismissViewControllerAnimated(true, completion: nil)
                 }
+                // add to package list
+                self.viewModel.addPackage(observablePackage)
+                // show package
+                self.viewModel.showPackage.onNext(observablePackage.value)
+            }
+            .subscribeError { [unowned self] (error) in
+                SVProgressHUD.dismiss()
+                // focus back to tracking number textfield
+                self.trackingNumberCell.textField.becomeFirstResponder()
+
+                // show error
+                let error = error as NSError
+                let alertController = UIAlertController(title: "Sorry!", message: error.localizedFailureReason, preferredStyle: .Alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
+                self.presentViewController(alertController, animated: true, completion: nil)
+                alertController.view.tintColor = ColorPalette.Matisse
             }
             .addDisposableTo(rx_disposeBag)
     }

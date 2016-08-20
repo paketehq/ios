@@ -50,14 +50,14 @@ class PackagesViewController: UIViewController {
 
         // bindings
         self.viewModel.packages.asObservable()
-            .subscribeNext { (packages) -> Void in
+            .subscribeNext { [unowned self] (packages) -> Void in
                 self.tableView.reloadData()
                 if packages.isEmpty { self.showEmptyStateLabel() } else { self.hideEmptyStateLabel() }
             }
             .addDisposableTo(self.rx_disposeBag)
 
         self.viewModel.showPackage.asObservable()
-            .subscribeNext { (package) -> Void in
+            .subscribeNext { [unowned self] (package) -> Void in
                 self.showPackageDetails(ObservablePackage(package))
             }
             .addDisposableTo(self.rx_disposeBag)
@@ -69,7 +69,6 @@ class PackagesViewController: UIViewController {
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.tableView.reloadData()
         // track mixpanel
         Mixpanel.sharedInstance().track("Packages View", properties: ["Packages Count": self.viewModel.packages.value.count])
     }

@@ -40,7 +40,7 @@ class SortByViewController: UIViewController {
 
         let sortByTypes = Variable(PackagesSortByType.arrayValues)
         sortByTypes.asObservable()
-            .bindTo(self.tableView.rx_itemsWithCellIdentifier("SortByCell", cellType: UITableViewCell.self)) { (index, sortByType, cell) in
+            .bindTo(self.tableView.rx_itemsWithCellIdentifier("SortByCell", cellType: UITableViewCell.self)) { [unowned self] (index, sortByType, cell) in
                 cell.textLabel?.font = UIFont.systemFontOfSize(15.0)
                 cell.textLabel?.text = sortByType.description
                 cell.tintColor = .grayColor()
@@ -54,7 +54,7 @@ class SortByViewController: UIViewController {
             .addDisposableTo(self.rx_disposeBag)
 
         self.tableView.rx_itemSelected
-            .subscribeNext { (indexPath) -> Void in
+            .subscribeNext { [unowned self] (indexPath) -> Void in
                 self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
                 let packageSortByType = sortByTypes.value[indexPath.row]
                 self.viewModel.sortBy(packageSortByType)

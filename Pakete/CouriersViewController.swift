@@ -49,13 +49,13 @@ class CouriersViewController: UIViewController {
             .addDisposableTo(self.rx_disposeBag)
 
         self.tableView.rx_itemSelected
-            .subscribeNext { (indexPath) -> Void in
+            .subscribeNext { [unowned self] (indexPath) -> Void in
                 self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
             }
             .addDisposableTo(self.rx_disposeBag)
 
         self.tableView.rx_modelSelected(Courier)
-            .subscribeNext { courier in
+            .subscribeNext { [unowned self] courier in
                 let addPackageViewController = AddPackageViewController(viewModel: self.viewModel, courier: courier)
                 self.navigationController?.pushViewController(addPackageViewController, animated: true)
             }
