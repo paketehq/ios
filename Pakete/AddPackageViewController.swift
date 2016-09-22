@@ -110,35 +110,38 @@ class AddPackageViewController: UIViewController {
 
         // bindings
         self.trackingNumberCell.textField.rx_text
-            .bindTo(self.trackingNumber)
+            .asDriver()
+            .drive(self.trackingNumber)
             .addDisposableTo(self.rx_disposeBag)
 
         self.nameCell.textField.rx_text
-            .bindTo(self.name)
+            .asDriver()
+            .drive(self.name)
             .addDisposableTo(self.rx_disposeBag)
 
         self.extraFieldCell?.textField.rx_text
-            .bindTo(self.extraField)
+            .asDriver()
+            .drive(self.extraField)
             .addDisposableTo(self.rx_disposeBag)
 
-        let trackingNumberIsValid = self.trackingNumber.asObservable()
+        let trackingNumberIsValid = self.trackingNumber.asDriver()
             .map(isNotEmptyString)
 
-        let nameIsValid = self.name.asObservable()
+        let nameIsValid = self.name.asDriver()
             .map(isNotEmptyString)
 
         var formValidations = [trackingNumberIsValid, nameIsValid]
         if self.extraFieldCell != nil {
-            let extraFieldIsValid = self.extraField.asObservable().map(isNotEmptyString)
+            let extraFieldIsValid = self.extraField.asDriver().map(isNotEmptyString)
             formValidations.append(extraFieldIsValid)
         }
 
         // observe if form is valid
         let formIsValid = formValidations.combineLatestAnd()
-        formIsValid.bindTo(self.addButton.rx_enabled)
+        formIsValid.drive(self.addButton.rx_enabled)
             .addDisposableTo(rx_disposeBag)
         formIsValid.map({ $0 ? 1.0 : 0.5 })
-            .bindTo(self.addButton.rx_alpha)
+            .drive(self.addButton.rx_alpha)
             .addDisposableTo(self.rx_disposeBag)
 
         if editPackage {

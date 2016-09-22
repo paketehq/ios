@@ -41,21 +41,24 @@ class CouriersViewController: UIViewController {
         self.view.addSubview(self.tableView)
         self.tableView.constrainEdges(toView: self.view)
 
-        self.viewModel.couriers.asObservable()
-            .bindTo(self.tableView.rx_itemsWithCellIdentifier("CourierCell", cellType: UITableViewCell.self)) { (_, courier, cell) in
+        self.viewModel.couriers
+            .asDriver()
+            .drive(self.tableView.rx_itemsWithCellIdentifier("CourierCell", cellType: UITableViewCell.self)) { (_, courier, cell) in
                 cell.textLabel?.font = UIFont.systemFontOfSize(16.0)
                 cell.textLabel?.text = courier.name
             }
             .addDisposableTo(self.rx_disposeBag)
 
         self.tableView.rx_itemSelected
-            .subscribeNext { [unowned self] (indexPath) -> Void in
+            .asDriver()
+            .driveNext { [unowned self] (indexPath) -> Void in
                 self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
             }
             .addDisposableTo(self.rx_disposeBag)
 
-        self.tableView.rx_modelSelected(Courier)
-            .subscribeNext { [unowned self] courier in
+        self.tableView.rx_modelSelected(Courier.self)
+            .asDriver()
+            .driveNext { [unowned self] courier in
                 let addPackageViewController = AddPackageViewController(viewModel: self.viewModel, courier: courier)
                 self.navigationController?.pushViewController(addPackageViewController, animated: true)
             }

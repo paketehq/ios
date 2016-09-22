@@ -7,10 +7,11 @@
 //
 
 import RxSwift
+import RxCocoa
 
-extension CollectionType where Generator.Element: ObservableType, Generator.Element.E: BooleanType {
+extension CollectionType where Generator.Element: DriverConvertibleType, Generator.Element.E: BooleanType {
 
-    func combineLatestAnd() -> Observable<Bool> {
+    func combineLatestAnd() -> Driver<Bool> {
         return combineLatest { bools -> Bool in
             bools.reduce(true, combine: { (memo, element) in
                 return memo && element.boolValue
@@ -18,7 +19,7 @@ extension CollectionType where Generator.Element: ObservableType, Generator.Elem
         }
     }
 
-    func combineLatestOr() -> Observable<Bool> {
+    func combineLatestOr() -> Driver<Bool> {
         return combineLatest { bools in
             bools.reduce(false, combine: { (memo, element) in
                 return memo || element.boolValue
