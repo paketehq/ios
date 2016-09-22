@@ -16,7 +16,7 @@ extension UIImage {
         UIRectFill(rect)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        if let cgImage = image.CGImage {
+        if let image = image, let cgImage = image.CGImage {
             self.init(CGImage: cgImage)
         } else {
             fatalError("Can't create image")

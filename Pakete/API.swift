@@ -42,8 +42,8 @@ struct Pakete {
                 }
             }()
 
-            if let URL = NSURL(string: Router.baseURLString) {
-                let URLRequest = NSMutableURLRequest(URL: URL.URLByAppendingPathComponent(self.path))
+            if let URL = NSURL(string: Router.baseURLString), let urlPath = URL.URLByAppendingPathComponent(self.path) {
+                let URLRequest = NSMutableURLRequest(URL: urlPath)
                 URLRequest.HTTPMethod = method.rawValue
                 URLRequest.setValue("compress, gzip", forHTTPHeaderField: "Accept-Encoding")
                 URLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
