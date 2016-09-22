@@ -94,6 +94,7 @@ class PackageTableViewCell: UITableViewCell {
         super.prepareForReuse()
         self.activityIndicatorView.stopAnimating()
         self.accessoryType = .DisclosureIndicator
+        self.rx_disposeBag = DisposeBag()
     }
 
     required init?(coder aDecoder: NSCoder) {
