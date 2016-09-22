@@ -18,7 +18,18 @@ class PackagesViewController: UIViewController {
     private let tableView = UITableView()
     private let viewModel = PackagesViewModel()
     private let refreshControl = UIRefreshControl()
-    private var emptyStateLabel: UILabel?
+    private lazy var emptyStateLabel: UILabel = {
+        let emptyStateLabel = UILabel()
+        emptyStateLabel.translatesAutoresizingMaskIntoConstraints = false
+        emptyStateLabel.text = "You have no packages to track yet.\nTap the \"+\" button to track a package."
+        emptyStateLabel.numberOfLines = 0
+        emptyStateLabel.font = UIFont.systemFontOfSize(14.0)
+        emptyStateLabel.textAlignment = .Center
+        emptyStateLabel.backgroundColor = .clearColor()
+        self.view.addSubview(emptyStateLabel)
+        emptyStateLabel.constrainEdges(toView: self.view)
+        return emptyStateLabel
+    }()
     private var adBannerView: GADBannerView?
 
     override func viewDidLoad() {
@@ -37,8 +48,6 @@ class PackagesViewController: UIViewController {
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 54.0
         self.tableView.tableFooterView = UIView()
-        self.tableView.dataSource = self
-        self.tableView.delegate = self
         self.view.addSubview(self.tableView)
         self.tableView.constrainEdges(toView: self.view)
         // refresh control
@@ -48,14 +57,14 @@ class PackagesViewController: UIViewController {
         // ad banner
         self.setupBottomAdBannerView()
 
-        // bindings
-        self.viewModel.packages.asObservable()
-            .subscribeNext { [unowned self] (packages) -> Void in
-                self.tableView.reloadData()
-                if packages.isEmpty { self.showEmptyStateLabel() } else { self.hideEmptyStateLabel() }
-            }
+        // setup bindings
+        self.configureTableViewDataSource()
+        self.configureNavigateOnRowTap()
+        self.configureDeleteRow()
+        self.configureEmptyState()
+        self.tableView.rx_setDelegate(self)
             .addDisposableTo(self.rx_disposeBag)
-
+        
         self.viewModel.showPackage.asObservable()
             .subscribeNext { [unowned self] (package) -> Void in
                 self.showPackageDetails(ObservablePackage(package))
@@ -108,6 +117,60 @@ extension PackagesViewController {
         self.tableView.scrollIndicatorInsets.bottom = 50.0
     }
 
+    private func configureTableViewDataSource() {
+        self.viewModel.packages
+            .asDriver()
+            .map { packages in
+                packages.map(PackageViewModel.init)
+            }
+            .drive(self.tableView.rx_itemsWithCellIdentifier(PackageTableViewCell.reuseIdentifier, cellType: PackageTableViewCell.self)) { index, viewModel, cell in
+                cell.configure(withViewModel: viewModel)
+            }
+            .addDisposableTo(self.rx_disposeBag)
+    }
+
+    private func configureNavigateOnRowTap() {
+        self.tableView.rx_modelSelected(PackageViewModel.self)
+            .asDriver()
+            .driveNext { [unowned self] (viewModel) in
+                self.showPackageDetails(viewModel.package)
+            }
+            .addDisposableTo(self.rx_disposeBag)
+
+        self.tableView.rx_itemSelected
+            .asDriver()
+            .driveNext { [unowned self] (indexPath) in
+                self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+            }
+            .addDisposableTo(self.rx_disposeBag)
+    }
+
+    private func configureDeleteRow() {
+        self.tableView.rx_itemDeleted
+            .asDriver()
+            .driveNext { [unowned self] (indexPath) in
+                // show action sheet
+                let actionSheetController = UIAlertController(title: "Archive Package", message: "Are you sure you want to archive this package?", preferredStyle: .ActionSheet)
+                actionSheetController.addAction(UIAlertAction(title: "Yes", style: .Destructive, handler: { [unowned self] (alertAction) -> Void in
+                    self.viewModel.archivePackageIndexPath(indexPath)
+                    // track mixpanel
+                    Mixpanel.sharedInstance().track("Archived Package")
+                }))
+                actionSheetController.addAction(UIAlertAction(title: "No", style: .Cancel, handler: nil))
+                self.presentViewController(actionSheetController, animated: true, completion: nil)
+                actionSheetController.view.tintColor = ColorPalette.Matisse
+            }
+            .addDisposableTo(self.rx_disposeBag)
+    }
+
+    private func configureEmptyState() {
+        self.viewModel.packages
+            .asDriver()
+            .map { $0.isEmpty == false }
+            .drive(self.emptyStateLabel.rx_hidden)
+            .addDisposableTo(self.rx_disposeBag)
+    }
+
     func applicationWillEnterForeground() {
         // force refresh
         self.viewModel.refreshPackages()
@@ -143,65 +206,9 @@ extension PackagesViewController {
         self.navigationController?.pushViewController(packageViewController, animated: true)
     }
 
-    func showEmptyStateLabel() {
-        if self.emptyStateLabel == nil {
-            self.emptyStateLabel = UILabel()
-            if let emptyStateLabel = self.emptyStateLabel {
-                emptyStateLabel.translatesAutoresizingMaskIntoConstraints = false
-                emptyStateLabel.text = "You have no packages to track yet.\nTap the \"+\" button to track a package."
-                emptyStateLabel.numberOfLines = 0
-                emptyStateLabel.font = UIFont.systemFontOfSize(14.0)
-                emptyStateLabel.textAlignment = .Center
-                emptyStateLabel.backgroundColor = .clearColor()
-                self.view.addSubview(emptyStateLabel)
-                emptyStateLabel.constrainEdges(toView: self.view)
-            }
-        } else {
-            self.emptyStateLabel?.hidden = false
-        }
-    }
-
-    func hideEmptyStateLabel() {
-        self.emptyStateLabel?.hidden = true
-    }
-}
-
-extension PackagesViewController: UITableViewDataSource {
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.viewModel.packages.value.count
-    }
-
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCellWithIdentifier(PackageTableViewCell.reuseIdentifier, forIndexPath: indexPath) as? PackageTableViewCell {
-            let viewModel = PackageViewModel(package: self.viewModel.packages.value[indexPath.row])
-            cell.configure(withViewModel: viewModel)
-            return cell
-        }
-        return UITableViewCell()
-    }
-
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if editingStyle == .Delete {
-            // show action sheet
-            let actionSheetController = UIAlertController(title: "Archive Package", message: "Are you sure you want to archive this package?", preferredStyle: .ActionSheet)
-            actionSheetController.addAction(UIAlertAction(title: "Yes", style: .Destructive, handler: { (alertAction) -> Void in
-                self.viewModel.archivePackageIndexPath(indexPath)
-                // track mixpanel
-                Mixpanel.sharedInstance().track("Archived Package")
-            }))
-            actionSheetController.addAction(UIAlertAction(title: "No", style: .Cancel, handler: nil))
-            self.presentViewController(actionSheetController, animated: true, completion: nil)
-            actionSheetController.view.tintColor = ColorPalette.Matisse
-        }
-    }
 }
 
 extension PackagesViewController: UITableViewDelegate {
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        self.showPackageDetails(self.viewModel.packages.value[indexPath.row])
-    }
-
     func tableView(tableView: UITableView, titleForDeleteConfirmationButtonForRowAtIndexPath indexPath: NSIndexPath) -> String? {
         return "Archive"
     }
