@@ -14,74 +14,69 @@ struct Pakete {
     enum Router: URLRequestConvertible {
         static let baseURLString = "https://pakete-api-staging.herokuapp.com/v1"
 
-        case TrackPackage(String, String)
-        case Couriers
+        case trackPackage(courier: Courier, trackingNumber: String)
+        case couriers
 
-        var method: Alamofire.Method {
-            return .GET
+        var method: HTTPMethod {
+            return .get
         }
 
         var path: String {
             switch self {
-            case .TrackPackage:
+            case .trackPackage:
                 return "/track"
-            case .Couriers:
+            case .couriers:
                 return "/couriers"
             }
         }
 
         // MARK: URLRequestConvertible
-        var URLRequest: NSMutableURLRequest {
-            let parameters: [String: AnyObject] = {
+        func asURLRequest() throws -> URLRequest {
+            let result: (path: String, parameters: Parameters) = {
                 switch self {
-                case .TrackPackage(let courier, let trackingNumber):
-                    return ["courier": courier, "tracking_number": trackingNumber]
-
-                default:
-                    return [:]
+                case .trackPackage(let courier, let trackingNumber):
+                    return ("/track", ["courier": courier.code, "tracking_number": trackingNumber])
+                case .couriers:
+                    return ("/couriers", [:])
                 }
             }()
 
-            if let URL = NSURL(string: Router.baseURLString), let urlPath = URL.URLByAppendingPathComponent(self.path) {
-                let URLRequest = NSMutableURLRequest(URL: urlPath)
-                URLRequest.HTTPMethod = method.rawValue
-                URLRequest.setValue("compress, gzip", forHTTPHeaderField: "Accept-Encoding")
-                URLRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                URLRequest.setValue(Token().tokenString(), forHTTPHeaderField: "pakete-api-key")
-                let encoding = Alamofire.ParameterEncoding.URL
+            let url = try Router.baseURLString.asURL()
+            var urlRequest = URLRequest(url: url.appendingPathComponent(result.path))
+            urlRequest.httpMethod = method.rawValue
+            urlRequest.setValue("compress, gzip", forHTTPHeaderField: "Accept-Encoding")
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            urlRequest.setValue(Token().tokenString(), forHTTPHeaderField: "pakete-api-key")
 
-                return encoding.encode(URLRequest, parameters: parameters).0
-            } else {
-                fatalError("baseURLString is nil")
-            }
+            return try URLEncoding.default.encode(urlRequest, with: result.parameters)
         }
     }
 }
 
-extension Request {
-    public func responseSwiftyJSON(completionHandler: (request: NSURLRequest, response: NSHTTPURLResponse?, json: SwiftyJSON.JSON, error: NSError?) -> Void) -> Self {
+extension DataRequest {
+    public func responseSwiftyJSON(_ completionHandler: @escaping (_ request: URLRequest, _ response: HTTPURLResponse?, _ json: SwiftyJSON.JSON, _ error: NSError?) -> Void) -> Self {
 
-        return response(queue: nil, responseSerializer: Request.JSONResponseSerializer(options: .AllowFragments), completionHandler: { (response) -> Void in
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+        return response(queue: nil, responseSerializer: DataRequest.jsonResponseSerializer(options: .allowFragments), completionHandler: { (response) -> Void in
+            DispatchQueue.global(qos: .default).async(execute: {
                 var responseJSON = JSON.null
                 var responseError: NSError?
 
                 if let originalRequest = response.request {
                     switch response.result {
-                    case .Success(let value):
+                    case .success(let value):
                         if let httpURLResponse = response.response {
                             responseJSON = SwiftyJSON.JSON(value)
                             // if not 200 then it's a problem
                             if httpURLResponse.statusCode != 200 {
-                                responseError = NSError(domain: originalRequest.URLString, code: httpURLResponse.statusCode, userInfo: [NSLocalizedFailureReasonErrorKey: responseJSON["message"].stringValue])
+                                responseError = NSError(domain: originalRequest.url?.absoluteString ?? "", code: httpURLResponse.statusCode, userInfo: [NSLocalizedFailureReasonErrorKey: responseJSON["message"].stringValue])
                             }
                         }
-                    case .Failure(let error):
-                        responseError = error
+                    case .failure(let error):
+                        responseError = error as NSError
                     }
 
-                    dispatch_async(dispatch_get_main_queue(), {
-                        completionHandler(request: originalRequest, response: response.response, json: responseJSON, error: responseError)
+                    DispatchQueue.main.async(execute: {
+                        completionHandler(originalRequest, response.response, responseJSON, responseError)
                     })
                 } else {
                     fatalError("original request is nil")
