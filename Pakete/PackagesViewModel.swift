@@ -52,7 +52,7 @@ class PackagesViewModel {
                     observer.onCompleted()
                 }
             }
-            
+
             return Disposables.create {
                 request.cancel()
             }
@@ -99,7 +99,7 @@ class PackagesViewModel {
                 }
             }
 
-            return AnonymousDisposable {
+            return Disposables.create {
                 request.cancel()
             }
         })
