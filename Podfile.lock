@@ -1,142 +1,115 @@
 PODS:
-  - Alamofire (3.5.0)
+  - Alamofire (4.0.1)
   - Appirater (2.0.5)
-  - BigBrother (0.4.0)
   - Bolts (1.8.4):
     - Bolts/AppLinks (= 1.8.4)
     - Bolts/Tasks (= 1.8.4)
   - Bolts/AppLinks (1.8.4):
     - Bolts/Tasks
   - Bolts/Tasks (1.8.4)
-  - Countly (16.06.3)
+  - Countly (16.06.4)
   - Crashlytics (3.8.2):
     - Fabric (~> 1.6.3)
-  - CryptoSwift (0.5.2)
-  - Fabric (1.6.8)
-  - FBSDKCoreKit (4.15.1):
+  - CryptoSwift (0.6.0)
+  - Fabric (1.6.9)
+  - FBSDKCoreKit (4.16.0):
     - Bolts (~> 1.7)
-  - FBSDKShareKit (4.15.1):
+  - FBSDKShareKit (4.16.0):
     - FBSDKCoreKit
   - Keys (1.0.0)
-  - Mixpanel (3.0.3):
-    - Mixpanel/Mixpanel (= 3.0.3)
-  - Mixpanel/Mixpanel (3.0.3)
-  - Mockingjay (1.2.2):
-    - Mockingjay/Core (= 1.2.2)
-    - Mockingjay/XCTest (= 1.2.2)
-  - Mockingjay/Core (1.2.2):
-    - URITemplate (~> 1.3)
-  - Mockingjay/XCTest (1.2.2):
+  - Mixpanel (3.0.4):
+    - Mixpanel/Mixpanel (= 3.0.4)
+  - Mixpanel/Mixpanel (3.0.4)
+  - Mockingjay (1.2.1):
+    - Mockingjay/Core (= 1.2.1)
+    - Mockingjay/XCTest (= 1.2.1)
+  - Mockingjay/Core (1.2.1):
+    - URITemplate (~> 2.0)
+  - Mockingjay/XCTest (1.2.1):
     - Mockingjay/Core
-  - NSObject+Rx (1.2.1):
-    - RxSwift (~> 2.1)
-  - Realm (1.1.0):
-    - Realm/Headers (= 1.1.0)
-  - Realm/Headers (1.1.0)
-  - RealmSwift (1.1.0):
-    - Realm (= 1.1.0)
-  - RxCocoa (2.6.0):
-    - RxSwift (~> 2.5)
-  - RxSwift (2.6.0)
-  - Siren (0.9.5)
-  - Smooch (5.0.0)
+  - NSObject+Rx (2.0.0):
+    - RxSwift
+  - Realm (2.0.0):
+    - Realm/Headers (= 2.0.0)
+  - Realm/Headers (2.0.0)
+  - RealmSwift (2.0.0):
+    - Realm (= 2.0.0)
+  - RxCocoa (3.0.0-beta.1):
+    - RxSwift (~> 3.0.0-beta.1)
+  - RxSwift (3.0.0-beta.1)
+  - Siren (1.0.2)
+  - Smooch (5.0.1)
   - SVProgressHUD (2.0.3)
-  - SwiftyJSON (2.4.0)
-  - SwiftyStoreKit (0.3.0)
+  - SwiftyJSON (3.1.0)
+  - SwiftyStoreKit (0.5.1)
   - TwitterCore (2.4.0):
     - Fabric
   - TwitterKit (2.4.0):
     - TwitterCore (= 2.4.0)
-  - URITemplate (1.3.1)
+  - URITemplate (2.0.0)
 
 DEPENDENCIES:
   - Alamofire
   - Appirater
-  - BigBrother
   - Countly
   - Crashlytics
-  - CryptoSwift (from `https://github.com/krzyzanowskim/CryptoSwift`, branch `swift2`)
+  - CryptoSwift
   - Fabric
   - FBSDKCoreKit
   - FBSDKShareKit
   - Keys (from `Pods/CocoaPodsKeys`)
   - Mixpanel
-  - Mockingjay
+  - Mockingjay (from `https://github.com/kylef/Mockingjay.git`, branch `kylef/swift-3.0`)
   - NSObject+Rx
   - RealmSwift
-  - RxCocoa
-  - RxSwift (from `https://github.com/ReactiveX/RxSwift.git`, branch `rxswift-2.0`)
-  - Siren (from `https://github.com/ArtSabintsev/Siren.git`, branch `swift2.3`)
+  - RxCocoa (~> 3.0.0-beta.1)
+  - RxSwift (~> 3.0.0-beta.1)
+  - Siren
   - Smooch
   - SVProgressHUD
-  - SwiftyJSON (from `https://github.com/SwiftyJSON/SwiftyJSON.git`, branch `swift2`)
-  - SwiftyStoreKit (from `https://github.com/bizz84/SwiftyStoreKit.git`, branch `swift-2.2`)
+  - SwiftyJSON
+  - SwiftyStoreKit
   - TwitterKit
 
 EXTERNAL SOURCES:
-  CryptoSwift:
-    :branch: swift2
-    :git: https://github.com/krzyzanowskim/CryptoSwift
   Keys:
     :path: Pods/CocoaPodsKeys
-  RxSwift:
-    :branch: rxswift-2.0
-    :git: https://github.com/ReactiveX/RxSwift.git
-  Siren:
-    :branch: swift2.3
-    :git: https://github.com/ArtSabintsev/Siren.git
-  SwiftyJSON:
-    :branch: swift2
-    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
-  SwiftyStoreKit:
-    :branch: swift-2.2
-    :git: https://github.com/bizz84/SwiftyStoreKit.git
+  Mockingjay:
+    :branch: kylef/swift-3.0
+    :git: https://github.com/kylef/Mockingjay.git
 
 CHECKOUT OPTIONS:
-  CryptoSwift:
-    :commit: f70ef81477628c9d3e1f72f93dd8c7e7ce6980bd
-    :git: https://github.com/krzyzanowskim/CryptoSwift
-  RxSwift:
-    :commit: ed5d40e6b12a017a43b14e5a0c194ad642c4ecd4
-    :git: https://github.com/ReactiveX/RxSwift.git
-  Siren:
-    :commit: 5dcb270c1b7552a1b76215e073bf6fbc062e5d7e
-    :git: https://github.com/ArtSabintsev/Siren.git
-  SwiftyJSON:
-    :commit: 90d78bcee56b271d9e78a94cf5d1a177f3200ead
-    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
-  SwiftyStoreKit:
-    :commit: e479b888a82f58b456df6df13e7ec260fbc3a726
-    :git: https://github.com/bizz84/SwiftyStoreKit.git
+  Mockingjay:
+    :commit: bb7751c929a8a8810ddd416191c58c3b8c1f7591
+    :git: https://github.com/kylef/Mockingjay.git
 
 SPEC CHECKSUMS:
-  Alamofire: b70a7352335f8ea5babd0a923eb7e8eacc67b877
+  Alamofire: 7682d43245de14874acd142ec137b144aa1dd335
   Appirater: e7c0a47fb67ee5041ce8479e6ba960927fb40264
-  BigBrother: 50274213cffbf9582c38d673ee1787f24510c55c
   Bolts: 8a7995239dbe724f9cba2248b766d48b7ebdd322
-  Countly: 978b9e40c69a7d7687906faa950da78695518989
+  Countly: b04e9acd56ce7af17fcbcb5c73fab4ccb474da0b
   Crashlytics: 27acca95a01b042a8294291dd6dff27f8f6af6d7
-  CryptoSwift: c1ef79f901b86099a6fe8b3c7524cf9f3f3c8c40
-  Fabric: 5755268d0171435ab167e3d0878a28a777deaf10
-  FBSDKCoreKit: fc7fa53d16b095ee3fd53f0cd59f1df8bcbb634d
-  FBSDKShareKit: 11cbb5a4d7b5fda8143cc95b76188147e6725736
+  CryptoSwift: 4a599b7241b8d3b857d6e2c28867d0bd5d1aae24
+  Fabric: bc5bec42cef4bcf1ee3ce0e218fc518e4b44dfbb
+  FBSDKCoreKit: 7a6baaed4a2b2a244ba253346713bdbc74df135b
+  FBSDKShareKit: e81505de17fc0624cbaa87b83cccc9f2a786e6cb
   Keys: 9c35bf00f612ee1d48556f4a4b9b4551e224e90f
-  Mixpanel: 45867daeaa3c60f88072a3cb1b44e0b6c5cec009
-  Mockingjay: 5de65f14108473afc6727e05df9a3ecc9cef8562
-  NSObject+Rx: 5d032a7f161602dec6b82dcf12731e91ce15b8da
-  Realm: ceecf1a4540c4ce9efe196fe73fa9855bce05bd8
-  RealmSwift: 838058b2db95b12cb86bd0cf209df642c33fb60a
-  RxCocoa: 89ab00d5753502520227940e3a0e0a0413683c6b
-  RxSwift: 77f3a0b15324baa7a1c9bfa9f199648a82424e26
-  Siren: a536a4fed41def10e540a9804b2a63a4b3634f6b
-  Smooch: 88d317c4972654e854eba3383d43e6b77d0cb988
+  Mixpanel: 4a2330c26556109d2f42b01e36a05eb9e2caf25e
+  Mockingjay: 8642850d8713bb81a6018f394c39f5887f91e389
+  NSObject+Rx: 2a9cd801d9c847e6d2486cbad8d7701b67834e70
+  Realm: 6dda421ae4b3e9a09742fc2cf4b876d459cbedcd
+  RealmSwift: 7d015f34a2781a50889be9b5a15c36c08597ea0e
+  RxCocoa: 8cecf331302b8ae5381bbab1bccba4ede2eae6a8
+  RxSwift: '0823e8d7969c23bfa9ddfb2afa4881e424a1a710'
+  Siren: c21bad8c931d32f9cefd6511a42913b0195329fc
+  Smooch: a00b498a63db9922124ef59325cdd7c28cc7f3eb
   SVProgressHUD: b0830714205bea1317ea1a2ebc71e5633af334d4
-  SwiftyJSON: 96918c1bf505efa50c4f72957018dd3452090c9c
-  SwiftyStoreKit: 6df86a58380d591d06f204eaee92bfaf39704627
+  SwiftyJSON: 29b9f2a64f118c07e691667c2ba1efe536acfe0b
+  SwiftyStoreKit: 53c63f91545a3778dc108f860a7414905ce40a63
   TwitterCore: a139904c80805ad3dde9eef1100704f96f646d1d
   TwitterKit: 1cf9742edf9d182c1518cfdd6aaac0dfe313b38b
-  URITemplate: 398a48d6559e23b77bd41176b675b017ad1fc959
+  URITemplate: a5acb3f76c6a2338116fde88b658d83f91bbac45
 
-PODFILE CHECKSUM: a6b93480cfa31247d7d78b0993d191ed0c8cd161
+PODFILE CHECKSUM: 643c17eed3d03695d8e801eaa07165f630756f7b
 
 COCOAPODS: 1.0.1

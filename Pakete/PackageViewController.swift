@@ -16,12 +16,12 @@ import Keys
 
 class PackageViewController: UIViewController {
 
-    private let tableView = UITableView(frame: CGRect.zero, style: .Grouped)
-    private let packageViewModel: PackageViewModel
-    private let packagesViewModel: PackagesViewModel
-    private var noInformationAvailableYetLabel: UILabel?
-    private var nativeExpressAdView: GADNativeExpressAdView!
-    private var nativeExpressAdLoaded = false
+    fileprivate let tableView = UITableView(frame: CGRect.zero, style: .grouped)
+    fileprivate let packageViewModel: PackageViewModel
+    fileprivate let packagesViewModel: PackagesViewModel
+    fileprivate var noInformationAvailableYetLabel: UILabel?
+    fileprivate var nativeExpressAdView: GADNativeExpressAdView!
+    fileprivate var nativeExpressAdLoaded = false
 
     init(packageViewModel: PackageViewModel, packagesViewModel: PackagesViewModel) {
         self.packageViewModel = packageViewModel
@@ -38,7 +38,7 @@ class PackageViewController: UIViewController {
         // Do any additional setup after loading the view.
         self.title = self.packageViewModel.name()
         // add more bar button item
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "barButtonItemMore"), style: .Plain, target: self, action: #selector(didTapMoreButton))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "barButtonItemMore"), style: .plain, target: self, action: #selector(didTapMoreButton))
 
         // setup native express ad view
         if IAPHelper.showAds() {
@@ -47,16 +47,16 @@ class PackageViewController: UIViewController {
             self.nativeExpressAdView.adUnitID = PaketeKeys().adMobNativeAdUnitIDKey()
             self.nativeExpressAdView.rootViewController = self
             self.nativeExpressAdView.delegate = self
-            self.nativeExpressAdView.autoloadEnabled = true
+            self.nativeExpressAdView.isAutoloadEnabled = true
         }
 
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         self.tableView.backgroundColor = ColorPalette.BlackHaze
         self.tableView.dataSource = self
-        self.tableView.registerClass(PackageTrackHistoryTableViewCell.self, forCellReuseIdentifier: PackageTrackHistoryTableViewCell.reuseIdentifier)
+        self.tableView.register(PackageTrackHistoryTableViewCell.self, forCellReuseIdentifier: PackageTrackHistoryTableViewCell.reuseIdentifier)
         self.tableView.rowHeight = UITableViewAutomaticDimension
         self.tableView.estimatedRowHeight = 44.0
-        self.tableView.separatorStyle = .None
+        self.tableView.separatorStyle = .none
         self.tableView.tableFooterView = UIView()
         self.view.addSubview(self.tableView)
         self.tableView.constrainEdges(toView: self.view)
@@ -65,10 +65,10 @@ class PackageViewController: UIViewController {
 
         // bindings
         self.packageViewModel.package.asObservable()
-            .subscribeNext { [unowned self] (package) -> Void in
+            .subscribe(onNext: { [unowned self] (package) in
                 if package.archived {
                     // if archived then pop navigation controller
-                    self.navigationController?.popViewControllerAnimated(true)
+                    _ = self.navigationController?.popViewController(animated: true)
                 } else {
                     self.title = self.packageViewModel.name()
                     self.tableView.reloadData()
@@ -78,17 +78,17 @@ class PackageViewController: UIViewController {
                         self.hideNoInformationAvailableYetLabel()
                     }
                 }
-            }
+            })
             .addDisposableTo(self.rx_disposeBag)
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // track mixpanel
         Mixpanel.sharedInstance().track("Package View")
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
     }
 
@@ -101,43 +101,43 @@ class PackageViewController: UIViewController {
 
 // MARK: - Methods
 extension PackageViewController {
-    private func setupTableHeaderView() {
+    fileprivate func setupTableHeaderView() {
         let tableHeaderView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 0.0))
-        tableHeaderView.backgroundColor = .whiteColor()
+        tableHeaderView.backgroundColor = .white
 
         // tracking number label
         let trackingNumberLabel = UILabel()
         trackingNumberLabel.translatesAutoresizingMaskIntoConstraints = false
         trackingNumberLabel.text = self.packageViewModel.trackingNumber()
-        trackingNumberLabel.font = UIFont.systemFontOfSize(16.0)
+        trackingNumberLabel.font = UIFont.systemFont(ofSize: 16.0)
         trackingNumberLabel.adjustFontToRealIPhoneSize = true
         tableHeaderView.addSubview(trackingNumberLabel)
-        trackingNumberLabel.constrainEqual(.Top, to: tableHeaderView, .Top, constant: 10.0)
-        trackingNumberLabel.constrainEqual(.Leading, to: tableHeaderView, .Leading, constant: 15.0)
+        trackingNumberLabel.constrainEqual(.top, to: tableHeaderView, .top, constant: 10.0)
+        trackingNumberLabel.constrainEqual(.leading, to: tableHeaderView, .leading, constant: 15.0)
 
         // courier label
         let courierLabel = UILabel()
         courierLabel.translatesAutoresizingMaskIntoConstraints = false
         courierLabel.text = self.packageViewModel.courierName()
-        courierLabel.textColor = .lightGrayColor()
-        courierLabel.font = UIFont.systemFontOfSize(14.0)
+        courierLabel.textColor = .lightGray
+        courierLabel.font = UIFont.systemFont(ofSize: 14.0)
         courierLabel.adjustFontToRealIPhoneSize = true
         tableHeaderView.addSubview(courierLabel)
-        courierLabel.constrainEqual(.Top, to: trackingNumberLabel, .Bottom)
-        courierLabel.constrainEqual(.Leading, to: tableHeaderView, .Leading, constant: 15.0)
+        courierLabel.constrainEqual(.top, to: trackingNumberLabel, .bottom)
+        courierLabel.constrainEqual(.leading, to: tableHeaderView, .leading, constant: 15.0)
 
         // adjust height
-        let trackingNumberSize = trackingNumberLabel.sizeThatFits(CGSize(width: tableHeaderView.frame.width - 30.0, height: CGFloat.max))
-        let courierSize = courierLabel.sizeThatFits(CGSize(width: tableHeaderView.frame.width - 30.0, height: CGFloat.max))
+        let trackingNumberSize = trackingNumberLabel.sizeThatFits(CGSize(width: tableHeaderView.frame.width - 30.0, height: CGFloat.greatestFiniteMagnitude))
+        let courierSize = courierLabel.sizeThatFits(CGSize(width: tableHeaderView.frame.width - 30.0, height: CGFloat.greatestFiniteMagnitude))
         tableHeaderView.frame.size.height = trackingNumberSize.height + courierSize.height + 20.0
 
         // native ad view
         if self.nativeExpressAdLoaded {
             tableHeaderView.addSubview(self.nativeExpressAdView)
-            self.nativeExpressAdView.constrainEqual(.Leading, to: tableHeaderView)
-            self.nativeExpressAdView.constrainEqual(.Trailing, to: tableHeaderView)
-            self.nativeExpressAdView.constrainEqual(.Bottom, to: tableHeaderView)
-            self.nativeExpressAdView.constrainEqual(.Height, to: nil, .NotAnAttribute, constant: 80.0)
+            self.nativeExpressAdView.constrainEqual(.leading, to: tableHeaderView)
+            self.nativeExpressAdView.constrainEqual(.trailing, to: tableHeaderView)
+            self.nativeExpressAdView.constrainEqual(.bottom, to: tableHeaderView)
+            self.nativeExpressAdView.constrainEqual(.height, to: nil, .notAnAttribute, constant: 80.0)
             // adjust the tableheaderview height
             tableHeaderView.frame.size.height += self.nativeExpressAdView.frame.height
         }
@@ -146,78 +146,78 @@ extension PackageViewController {
     }
 
     func didTapMoreButton() {
-        let actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        let actionSheetController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         if let latestTrackHistoryViewModel = self.packageViewModel.latestTrackHistory() {
-            actionSheetController.addAction(UIAlertAction(title: "Share", style: .Default, handler: { (alertAction) in
+            actionSheetController.addAction(UIAlertAction(title: "Share", style: .default, handler: { (alertAction) in
                 let shareString = "\(self.packageViewModel.courierName()) \(self.packageViewModel.trackingNumber()) Status is \(latestTrackHistoryViewModel.status()) at \(latestTrackHistoryViewModel.lastUpdateDateString())"
                 let activityViewController = UIActivityViewController(activityItems: [shareString], applicationActivities: nil)
-                self.presentViewController(activityViewController, animated: true, completion: nil)
+                self.present(activityViewController, animated: true, completion: nil)
                 activityViewController.view.tintColor = ColorPalette.Matisse
             }))
         }
-        actionSheetController.addAction(UIAlertAction(title: "Edit", style: .Default, handler: { (alertAction) in
+        actionSheetController.addAction(UIAlertAction(title: "Edit", style: .default, handler: { (alertAction) in
             self.didTapEditButton()
         }))
-        actionSheetController.addAction(UIAlertAction(title: "Archive", style: .Destructive, handler: { (alertAction) in
+        actionSheetController.addAction(UIAlertAction(title: "Archive", style: .destructive, handler: { (alertAction) in
             self.didTapArchiveButton()
         }))
-        actionSheetController.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-        self.presentViewController(actionSheetController, animated: true, completion: nil)
+        actionSheetController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        self.present(actionSheetController, animated: true, completion: nil)
         actionSheetController.view.tintColor = ColorPalette.Matisse
     }
 
     func didTapArchiveButton() {
         // show action sheet
-        let actionSheetController = UIAlertController(title: "Archive Package", message: "Are you sure you want to archive this package?", preferredStyle: .ActionSheet)
-        actionSheetController.addAction(UIAlertAction(title: "Yes", style: .Destructive, handler: { (alertAction) -> Void in
+        let actionSheetController = UIAlertController(title: "Archive Package", message: "Are you sure you want to archive this package?", preferredStyle: .actionSheet)
+        actionSheetController.addAction(UIAlertAction(title: "Yes", style: .destructive, handler: { (alertAction) -> Void in
             // track mixpanel
             Mixpanel.sharedInstance().track("Archived Package")
             self.packagesViewModel.archivePackage(self.packageViewModel.package)
-            self.navigationController?.popViewControllerAnimated(true)
+            _ = self.navigationController?.popViewController(animated: true)
         }))
-        actionSheetController.addAction(UIAlertAction(title: "No", style: .Cancel, handler: nil))
-        self.presentViewController(actionSheetController, animated: true, completion: nil)
+        actionSheetController.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+        self.present(actionSheetController, animated: true, completion: nil)
         actionSheetController.view.tintColor = ColorPalette.Matisse
     }
 
     func didTapEditButton() {
         let editPackageViewController = AddPackageViewController(viewModel: packagesViewModel, package: self.packageViewModel.package)
         let editPackageNavigationController = UINavigationController(rootViewController: editPackageViewController)
-        self.presentViewController(editPackageNavigationController, animated: true, completion: nil)
+        self.present(editPackageNavigationController, animated: true, completion: nil)
     }
 
     func showNoInformationAvailableYetLabel() {
         if self.noInformationAvailableYetLabel == nil {
             let noInformationAvailableYetLabel = UILabel()
             noInformationAvailableYetLabel.text = "No information available yet.\nPlease try again later."
-            noInformationAvailableYetLabel.textAlignment = .Center
+            noInformationAvailableYetLabel.textAlignment = .center
             noInformationAvailableYetLabel.numberOfLines = 2
             noInformationAvailableYetLabel.translatesAutoresizingMaskIntoConstraints = false
-            noInformationAvailableYetLabel.font = UIFont.systemFontOfSize(14.0)
+            noInformationAvailableYetLabel.font = UIFont.systemFont(ofSize: 14.0)
             noInformationAvailableYetLabel.adjustFontToRealIPhoneSize = true
             self.view.addSubview(noInformationAvailableYetLabel)
             noInformationAvailableYetLabel.center(inView: self.view)
             self.noInformationAvailableYetLabel = noInformationAvailableYetLabel
         }
 
-        self.noInformationAvailableYetLabel?.hidden = false
+        self.noInformationAvailableYetLabel?.isHidden = false
     }
 
     func hideNoInformationAvailableYetLabel() {
-        self.noInformationAvailableYetLabel?.hidden = true
-        self.tableView.hidden = false
+        self.noInformationAvailableYetLabel?.isHidden = true
+        self.tableView.isHidden = false
     }
 }
 
 
 // MARK: - UITableViewDataSource
 extension PackageViewController: UITableViewDataSource {
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.packageViewModel.numberOfTrackHistory()
     }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCellWithIdentifier(PackageTrackHistoryTableViewCell.reuseIdentifier, forIndexPath: indexPath) as? PackageTrackHistoryTableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if let cell = tableView.dequeueReusableCell(withIdentifier: PackageTrackHistoryTableViewCell.reuseIdentifier, for: indexPath) as? PackageTrackHistoryTableViewCell {
             cell.configure(withViewModel: self.packageViewModel.trackHistoryViewModelAtIndexPath(indexPath))
 
             return cell
@@ -228,7 +228,7 @@ extension PackageViewController: UITableViewDataSource {
 
 // MARK: - GADNativeExpressAdViewDelegate
 extension PackageViewController: GADNativeExpressAdViewDelegate {
-    func nativeExpressAdViewDidReceiveAd(nativeExpressAdView: GADNativeExpressAdView!) {
+    func nativeExpressAdViewDidReceiveAd(_ nativeExpressAdView: GADNativeExpressAdView!) {
         self.nativeExpressAdLoaded = true
         // recreate table header view
         self.setupTableHeaderView()

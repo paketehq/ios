@@ -11,7 +11,7 @@ import RealmSwift
 import SwiftyJSON
 
 class PackageTrackHistory: Object {
-    dynamic var date = NSDate(timeIntervalSince1970: 1)
+    dynamic var date = Date(timeIntervalSince1970: 1)
     dynamic var status = ""
 
     convenience init(json: JSON) {
@@ -27,7 +27,7 @@ class Package: Object {
     dynamic var name = ""
     dynamic var trackingNumber = ""
     dynamic var courier: Courier!
-    dynamic var createdAt = NSDate()
+    dynamic var createdAt = Date()
     dynamic var completed = false
     dynamic var archived = false
     let trackHistory = List<PackageTrackHistory>()

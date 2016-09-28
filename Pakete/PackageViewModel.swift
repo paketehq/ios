@@ -22,7 +22,7 @@ struct PackageViewModel: PackageViewModelType {
     }
 
     func name() -> String {
-        return self.package.value.name.capitalizedString
+        return self.package.value.name.capitalized
     }
 
     func status() -> String {
@@ -31,7 +31,7 @@ struct PackageViewModel: PackageViewModelType {
     }
 
     func trackingNumber() -> String {
-        return self.package.value.trackingNumber.uppercaseString
+        return self.package.value.trackingNumber.uppercased()
     }
 
     func courierName() -> String {
@@ -50,7 +50,7 @@ struct PackageViewModel: PackageViewModelType {
         return self.package.value.updating
     }
 
-    func trackHistoryViewModelAtIndexPath(indexPath: NSIndexPath) -> PackageTrackHistoryViewModel {
+    func trackHistoryViewModelAtIndexPath(_ indexPath: IndexPath) -> PackageTrackHistoryViewModel {
         let packageTrackHistory = self.package.value.trackHistory[indexPath.row]
         return PackageTrackHistoryViewModel(packageTrackHistory: packageTrackHistory)
     }
@@ -65,7 +65,7 @@ struct PackageViewModel: PackageViewModelType {
 
 struct PackageTrackHistoryViewModel: PackageViewModelType {
 
-    private let packageTrackHistory: PackageTrackHistory
+    fileprivate let packageTrackHistory: PackageTrackHistory
 
     init(packageTrackHistory: PackageTrackHistory) {
         self.packageTrackHistory = packageTrackHistory
@@ -76,6 +76,6 @@ struct PackageTrackHistoryViewModel: PackageViewModelType {
     }
 
     func lastUpdateDateString() -> String {
-        return stringFromDate(self.packageTrackHistory.date, dateStyle: .MediumStyle, timeStyle: .ShortStyle)
+        return stringFromDate(self.packageTrackHistory.date, dateStyle: .medium, timeStyle: .short)
     }
 }

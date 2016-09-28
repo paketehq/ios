@@ -17,10 +17,10 @@ class PackageTableViewCell: UITableViewCell {
     let statusLabel = UILabel()
     let statusImageView = UIImageView()
 
-    private var activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
-    private var didSetupConstraints = false
-    private var viewModel: PackageViewModel!
-    private let updating: Variable<Bool> = Variable(false)
+    fileprivate var activityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+    fileprivate var didSetupConstraints = false
+    fileprivate var viewModel: PackageViewModel!
+    fileprivate let updating: Variable<Bool> = Variable(false)
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -30,59 +30,59 @@ class PackageTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        self.accessoryType = .DisclosureIndicator
-        self.layer.rasterizationScale = UIScreen.mainScreen().scale
+        self.accessoryType = .disclosureIndicator
+        self.layer.rasterizationScale = UIScreen.main.scale
         self.layer.shouldRasterize = true
 
         self.statusImageView.translatesAutoresizingMaskIntoConstraints = false
         self.statusImageView.layer.cornerRadius = 18.0
-        self.statusImageView.contentMode = .Center
+        self.statusImageView.contentMode = .center
         self.contentView.addSubview(self.statusImageView)
 
         self.activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         self.contentView.addSubview(self.activityIndicatorView)
 
         self.nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.nameLabel.font = UIFont.systemFontOfSize(16.0)
+        self.nameLabel.font = UIFont.systemFont(ofSize: 16.0)
         self.nameLabel.adjustFontToRealIPhoneSize = true
         self.nameLabel.numberOfLines = 0
         self.contentView.addSubview(self.nameLabel)
 
         self.statusLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.statusLabel.font = UIFont.systemFontOfSize(14.0)
-        self.statusLabel.textColor = .grayColor()
+        self.statusLabel.font = UIFont.systemFont(ofSize: 14.0)
+        self.statusLabel.textColor = .gray
         self.statusLabel.numberOfLines = 0
         self.statusLabel.adjustFontToRealIPhoneSize = true
         self.contentView.addSubview(self.statusLabel)
 
         self.updating.asObservable()
-            .bindTo(self.activityIndicatorView.rx_animating)
+            .bindTo(self.activityIndicatorView.rx.animating)
             .addDisposableTo(rx_disposeBag)
 
         self.updating.asObservable()
-            .bindTo(self.statusImageView.rx_hidden)
+            .bindTo(self.statusImageView.rx.hidden)
             .addDisposableTo(rx_disposeBag)
     }
 
     override func updateConstraints() {
         if !self.didSetupConstraints {
-            NSLayoutConstraint.activateConstraints([
-                NSLayoutConstraint(item: self.statusImageView, attribute: .CenterY, relatedBy: .Equal, toItem: self.contentView, attribute: .CenterY, multiplier: 1.0, constant: 0.0),
-                NSLayoutConstraint(item: self.statusImageView, attribute: .Left, relatedBy: .Equal, toItem: self.contentView, attribute: .Left, multiplier: 1.0, constant: 15.0),
-                NSLayoutConstraint(item: self.statusImageView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 36.0),
-                NSLayoutConstraint(item: self.statusImageView, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 36.0),
+            NSLayoutConstraint.activate([
+                NSLayoutConstraint(item: self.statusImageView, attribute: .centerY, relatedBy: .equal, toItem: self.contentView, attribute: .centerY, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: self.statusImageView, attribute: .left, relatedBy: .equal, toItem: self.contentView, attribute: .left, multiplier: 1.0, constant: 15.0),
+                NSLayoutConstraint(item: self.statusImageView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 36.0),
+                NSLayoutConstraint(item: self.statusImageView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 36.0),
 
-                NSLayoutConstraint(item: self.activityIndicatorView, attribute: .CenterY, relatedBy: .Equal, toItem: self.statusImageView, attribute: .CenterY, multiplier: 1.0, constant: 0.0),
-                NSLayoutConstraint(item: self.activityIndicatorView, attribute: .CenterX, relatedBy: .Equal, toItem: self.statusImageView, attribute: .CenterX, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: self.activityIndicatorView, attribute: .centerY, relatedBy: .equal, toItem: self.statusImageView, attribute: .centerY, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: self.activityIndicatorView, attribute: .centerX, relatedBy: .equal, toItem: self.statusImageView, attribute: .centerX, multiplier: 1.0, constant: 0.0),
 
-                NSLayoutConstraint(item: self.nameLabel, attribute: .Top, relatedBy: .Equal, toItem: self.contentView, attribute: .Top, multiplier: 1.0, constant: 10.0),
-                NSLayoutConstraint(item: self.nameLabel, attribute: .Leading, relatedBy: .Equal, toItem: self.statusImageView, attribute: .Trailing, multiplier: 1.0, constant: 15.0),
-                NSLayoutConstraint(item: self.nameLabel, attribute: .Trailing, relatedBy: .Equal, toItem: self.contentView, attribute: .Trailing, multiplier: 1.0, constant: -10.0),
+                NSLayoutConstraint(item: self.nameLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: 10.0),
+                NSLayoutConstraint(item: self.nameLabel, attribute: .leading, relatedBy: .equal, toItem: self.statusImageView, attribute: .trailing, multiplier: 1.0, constant: 15.0),
+                NSLayoutConstraint(item: self.nameLabel, attribute: .trailing, relatedBy: .equal, toItem: self.contentView, attribute: .trailing, multiplier: 1.0, constant: -10.0),
 
-                NSLayoutConstraint(item: self.statusLabel, attribute: .Top, relatedBy: .Equal, toItem: self.nameLabel, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
-                NSLayoutConstraint(item: self.statusLabel, attribute: .Leading, relatedBy: .Equal, toItem: self.statusImageView, attribute: .Trailing, multiplier: 1.0, constant: 15.0),
-                NSLayoutConstraint(item: self.statusLabel, attribute: .Trailing, relatedBy: .Equal, toItem: self.contentView, attribute: .Trailing, multiplier: 1.0, constant: 0.0),
-                NSLayoutConstraint(item: self.statusLabel, attribute: .Bottom, relatedBy: .Equal, toItem: self.contentView, attribute: .Bottom, multiplier: 1.0, constant: -10.0)
+                NSLayoutConstraint(item: self.statusLabel, attribute: .top, relatedBy: .equal, toItem: self.nameLabel, attribute: .bottom, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: self.statusLabel, attribute: .leading, relatedBy: .equal, toItem: self.statusImageView, attribute: .trailing, multiplier: 1.0, constant: 15.0),
+                NSLayoutConstraint(item: self.statusLabel, attribute: .trailing, relatedBy: .equal, toItem: self.contentView, attribute: .trailing, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: self.statusLabel, attribute: .bottom, relatedBy: .equal, toItem: self.contentView, attribute: .bottom, multiplier: 1.0, constant: -10.0)
             ])
             self.didSetupConstraints = true
         }
@@ -93,7 +93,7 @@ class PackageTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         self.activityIndicatorView.stopAnimating()
-        self.accessoryType = .DisclosureIndicator
+        self.accessoryType = .disclosureIndicator
         self.rx_disposeBag = DisposeBag()
     }
 
@@ -101,7 +101,7 @@ class PackageTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
@@ -119,7 +119,7 @@ class PackageTableViewCell: UITableViewCell {
 }
 
 extension PackageTableViewCell {
-    private func reloadData() {
+    fileprivate func reloadData() {
         self.nameLabel.text = self.viewModel.name()
         self.statusLabel.text = self.viewModel.status()
         self.setupPackageStatusImageView()
@@ -128,7 +128,7 @@ extension PackageTableViewCell {
         self.updateConstraintsIfNeeded()
     }
 
-    private func setupPackageStatusImageView() {
+    fileprivate func setupPackageStatusImageView() {
         if self.viewModel.completed() {
             self.updating.value = false
             self.statusImageView.image = UIImage(named: "deliveredIcon")

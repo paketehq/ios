@@ -24,42 +24,42 @@ class PKIAPHelper {
         guard self.showAds() == false else { return }
 
         SwiftyStoreKit.verifyReceipt { (result) in
-            if case .Success(_) = result {
-                NSNotificationCenter.defaultCenter().postNotificationName(IAPDidPurchaseRemoveAdsNotification, object: nil)
-                NSUserDefaults.standardUserDefaults().setBool(true, forKey: IAPRemoveAdsKey)
+            if case .success(_) = result {
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: IAPDidPurchaseRemoveAdsNotification), object: nil)
+                UserDefaults.standard.set(true, forKey: IAPRemoveAdsKey)
             } else {
-                NSUserDefaults.standardUserDefaults().setBool(false, forKey: IAPRemoveAdsKey)
+                UserDefaults.standard.set(false, forKey: IAPRemoveAdsKey)
             }
-            NSUserDefaults.standardUserDefaults().synchronize()
+            UserDefaults.standard.synchronize()
         }
     }
 
-    func purchaseRemoveAds(completion: (success: Bool) -> ()) {
+    func purchaseRemoveAds(_ completion: @escaping (_ success: Bool) -> ()) {
         SwiftyStoreKit.purchaseProduct(Constants.IAP.RemoveAdsIAPId) { result in
             switch result {
-            case .Success(_):
-                NSNotificationCenter.defaultCenter().postNotificationName(IAPDidPurchaseRemoveAdsNotification, object: nil)
-                completion(success: true)
-            case .Error(_):
-                completion(success: false)
+            case .success(_):
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: IAPDidPurchaseRemoveAdsNotification), object: nil)
+                completion(true)
+            case .error(_):
+                completion(false)
             }
         }
     }
 
-    func restorePurchases(completion: (results: SwiftyStoreKit.RestoreResults) -> ()) {
+    func restorePurchases(_ completion: @escaping (_ results: SwiftyStoreKit.RestoreResults) -> ()) {
         SwiftyStoreKit.restorePurchases() { results in
             if results.restoreFailedProducts.isEmpty == false {
-                NSUserDefaults.standardUserDefaults().setBool(false, forKey: IAPRemoveAdsKey)
+                UserDefaults.standard.set(false, forKey: IAPRemoveAdsKey)
             } else if results.restoredProductIds.isEmpty == false {
-                NSNotificationCenter.defaultCenter().postNotificationName(IAPDidPurchaseRemoveAdsNotification, object: nil)
-                NSUserDefaults.standardUserDefaults().setBool(true, forKey: IAPRemoveAdsKey)
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: IAPDidPurchaseRemoveAdsNotification), object: nil)
+                UserDefaults.standard.set(true, forKey: IAPRemoveAdsKey)
             }
-            NSUserDefaults.standardUserDefaults().synchronize()
-            completion(results: results)
+            UserDefaults.standard.synchronize()
+            completion(results)
         }
     }
 
     func showAds() -> Bool {
-        return !NSUserDefaults.standardUserDefaults().boolForKey(IAPRemoveAdsKey)
+        return !UserDefaults.standard.bool(forKey: IAPRemoveAdsKey)
     }
 }
