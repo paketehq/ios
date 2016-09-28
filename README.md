@@ -40,9 +40,9 @@ $ open "Pakete.xcworkspace"
 
 # Requirements
 
-* Xcode 7.x
-* iOS 8
-* Swift 2.x
+* Xcode 8.x
+* iOS 9
+* Swift 3.x
 
 ## Communication
 
