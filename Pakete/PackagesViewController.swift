@@ -120,9 +120,7 @@ extension PackagesViewController {
     fileprivate func configureTableViewDataSource() {
         self.viewModel.packages
             .asDriver()
-            .map { packages in
-                packages.map(PackageViewModel.init)
-            }
+            .map { $0.map(PackageViewModel.init) }
             .drive(self.tableView.rx.items(cellIdentifier: PackageTableViewCell.reuseIdentifier, cellType: PackageTableViewCell.self)) { index, viewModel, cell in
                 cell.configure(withViewModel: viewModel)
             }
