@@ -13,8 +13,8 @@ import Mixpanel
 
 class CouriersViewController: UIViewController {
 
-    private let tableView = UITableView(frame: CGRect.zero, style: .Grouped)
-    private let viewModel: PackagesViewModel
+    fileprivate let tableView = UITableView(frame: CGRect.zero, style: .grouped)
+    fileprivate let viewModel: PackagesViewModel
 
     init(viewModel: PackagesViewModel) {
         self.viewModel = viewModel
@@ -30,35 +30,33 @@ class CouriersViewController: UIViewController {
         // Do any additional setup after loading the view.
         self.title = "Couriers"
         // add Cancel bar button
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(didTapCancelButton))
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(didTapCancelButton))
         // remove back button title
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
 
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
-        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "CourierCell")
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CourierCell")
         self.tableView.rowHeight = 44.0
         self.tableView.tableFooterView = UIView()
         self.view.addSubview(self.tableView)
         self.tableView.constrainEdges(toView: self.view)
 
-        self.viewModel.couriers.asObservable()
-            .bindTo(self.tableView.rx_itemsWithCellIdentifier("CourierCell", cellType: UITableViewCell.self)) { (_, courier, cell) in
-                cell.textLabel?.font = UIFont.systemFontOfSize(16.0)
+        self.viewModel.couriers
+            .asDriver()
+            .drive(self.tableView.rx.items(cellIdentifier: "CourierCell", cellType: UITableViewCell.self)) { (_, courier, cell) in
+                cell.textLabel?.font = UIFont.systemFont(ofSize: 16.0)
                 cell.textLabel?.text = courier.name
             }
             .addDisposableTo(self.rx_disposeBag)
 
-        self.tableView.rx_itemSelected
-            .subscribeNext { [unowned self] (indexPath) -> Void in
-                self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
-            }
-            .addDisposableTo(self.rx_disposeBag)
-
-        self.tableView.rx_modelSelected(Courier)
-            .subscribeNext { [unowned self] courier in
+        self.tableView.rx.itemSelected
+            .asDriver()
+            .drive(onNext: { [unowned self] (indexPath) in
+                self.tableView.deselectRow(at: indexPath, animated: true)
+                let courier = self.viewModel.couriers.value[indexPath.row]
                 let addPackageViewController = AddPackageViewController(viewModel: self.viewModel, courier: courier)
                 self.navigationController?.pushViewController(addPackageViewController, animated: true)
-            }
+            })
             .addDisposableTo(self.rx_disposeBag)
 
         // track mixpanel
@@ -74,6 +72,6 @@ class CouriersViewController: UIViewController {
 
 extension CouriersViewController {
     func didTapCancelButton() {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
 }

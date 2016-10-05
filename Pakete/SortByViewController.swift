@@ -13,9 +13,9 @@ import Mixpanel
 
 class SortByViewController: UIViewController {
 
-    private let tableView = UITableView(frame: CGRect.zero, style: .Grouped)
-    private let viewModel: PackagesViewModel
-    private var selectedIndexPath: NSIndexPath?
+    fileprivate let tableView = UITableView(frame: CGRect.zero, style: .grouped)
+    fileprivate let viewModel: PackagesViewModel
+    fileprivate var selectedIndexPath: IndexPath?
 
     init(viewModel: PackagesViewModel) {
         self.viewModel = viewModel
@@ -32,35 +32,36 @@ class SortByViewController: UIViewController {
         self.title = "Sort By"
 
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
-        self.tableView.registerClass(UITableViewCell.self, forCellReuseIdentifier: "SortByCell")
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "SortByCell")
         self.tableView.rowHeight = 44.0
         self.tableView.tableFooterView = UIView()
         self.view.addSubview(self.tableView)
         self.tableView.constrainEdges(toView: self.view)
 
         let sortByTypes = Variable(PackagesSortByType.arrayValues)
-        sortByTypes.asObservable()
-            .bindTo(self.tableView.rx_itemsWithCellIdentifier("SortByCell", cellType: UITableViewCell.self)) { [unowned self] (index, sortByType, cell) in
-                cell.textLabel?.font = UIFont.systemFontOfSize(15.0)
+        sortByTypes.asDriver()
+            .drive(self.tableView.rx.items(cellIdentifier: "SortByCell", cellType: UITableViewCell.self)) { [unowned self] (index, sortByType, cell) in
+                cell.textLabel?.font = UIFont.systemFont(ofSize: 15.0)
                 cell.textLabel?.text = sortByType.description
-                cell.tintColor = .grayColor()
+                cell.tintColor = .gray
                 if sortByType == self.viewModel.packagesSortBy() {
-                    self.selectedIndexPath = NSIndexPath(forRow: index, inSection: 0)
-                    cell.accessoryType = .Checkmark
+                    self.selectedIndexPath = IndexPath(row: index, section: 0)
+                    cell.accessoryType = .checkmark
                 } else {
-                    cell.accessoryType = .None
+                    cell.accessoryType = .none
                 }
             }
             .addDisposableTo(self.rx_disposeBag)
 
-        self.tableView.rx_itemSelected
-            .subscribeNext { [unowned self] (indexPath) -> Void in
-                self.tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        self.tableView.rx.itemSelected
+            .asDriver()
+            .drive(onNext: { [unowned self] (indexPath) in
+                self.tableView.deselectRow(at: indexPath, animated: true)
                 let packageSortByType = sortByTypes.value[indexPath.row]
                 self.viewModel.sortBy(packageSortByType)
                 self.tableView.reloadData()
-                self.navigationController?.popViewControllerAnimated(true)
-            }
+                _ = self.navigationController?.popViewController(animated: true)
+            })
             .addDisposableTo(self.rx_disposeBag)
 
         // track mixpanel

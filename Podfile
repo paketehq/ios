@@ -1,4 +1,4 @@
-platform :ios, '8.0'
+platform :ios, '9.0'
 use_frameworks!
 
 plugin 'cocoapods-keys', {
@@ -18,20 +18,19 @@ plugin 'cocoapods-keys', {
 target 'Pakete' do
  pod 'Alamofire'
  pod 'RealmSwift'
- pod 'SwiftyJSON', :git => 'https://github.com/SwiftyJSON/SwiftyJSON.git', :branch => 'swift2'
- pod 'RxSwift', :git => 'https://github.com/ReactiveX/RxSwift.git', :branch => 'rxswift-2.0'
- pod 'RxCocoa'
+ pod 'SwiftyJSON'
+ pod 'RxSwift', '~> 3.0.0-beta.1'
+ pod 'RxCocoa', '~> 3.0.0-beta.1'
  pod 'NSObject+Rx'
  pod 'SVProgressHUD'
- pod 'BigBrother'
  pod 'Smooch'
- pod 'CryptoSwift', :git => 'https://github.com/krzyzanowskim/CryptoSwift', :branch => 'swift2'
+ pod 'CryptoSwift'
  pod 'Mixpanel'
  pod 'Fabric'
  pod 'Crashlytics'
  pod 'TwitterKit'
- pod 'SwiftyStoreKit', :git => 'https://github.com/bizz84/SwiftyStoreKit.git', :branch => 'swift-2.2'
- pod 'Siren', :git => 'https://github.com/ArtSabintsev/Siren.git', :branch => 'swift2.3'
+ pod 'SwiftyStoreKit'
+ pod 'Siren'
  pod 'Appirater'
  pod 'FBSDKCoreKit'
  pod 'FBSDKShareKit'
@@ -39,7 +38,7 @@ target 'Pakete' do
 
  target 'PaketeTests' do
   inherit! :search_paths
-  pod 'Mockingjay'
+  pod 'Mockingjay', :git => 'https://github.com/kylef/Mockingjay.git', :branch => 'kylef/swift-3.0'
  end
 end
 
@@ -49,7 +48,7 @@ post_install do |installer|
         if config.name == 'Debug' and target.name == 'RxSwift'
            config.build_settings['OTHER_SWIFT_FLAGS'] ||= ['-D', 'TRACE_RESOURCES']
         end
-        config.build_settings['SWIFT_VERSION'] = '2.3'
+        config.build_settings['SWIFT_VERSION'] = '3.0'
      end
    end
 end

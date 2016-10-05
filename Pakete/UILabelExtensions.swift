@@ -21,7 +21,7 @@ extension UILabel {
                     sizeScale = 1.2
                 }
 
-                self.font = currentFont.fontWithSize(currentFont.pointSize * sizeScale)
+                self.font = currentFont?.withSize((currentFont?.pointSize)! * sizeScale)
             }
         }
 
@@ -33,15 +33,15 @@ extension UILabel {
 
 // TO DO: Transfer somewhere
 struct ScreenSize {
-    static let ScreenWidth = UIScreen.mainScreen().bounds.size.width
-    static let ScreenHeight = UIScreen.mainScreen().bounds.size.height
+    static let ScreenWidth = UIScreen.main.bounds.size.width
+    static let ScreenHeight = UIScreen.main.bounds.size.height
     static let ScreenMaxLength = max(ScreenSize.ScreenWidth, ScreenSize.ScreenHeight)
     static let ScreenMinLength = min(ScreenSize.ScreenHeight, ScreenSize.ScreenHeight)
 }
 
 struct DeviceType {
-    static let iPhone4 =  UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.ScreenMaxLength < 568.0
-    static let iPhone5 = UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.ScreenMaxLength == 568.0
-    static let iPhone6 = UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.ScreenMaxLength == 667.0
-    static let iPhone6Plus = UIDevice.currentDevice().userInterfaceIdiom == .Phone && ScreenSize.ScreenMaxLength == 736.0
+    static let iPhone4 =  UIDevice.current.userInterfaceIdiom == .phone && ScreenSize.ScreenMaxLength < 568.0
+    static let iPhone5 = UIDevice.current.userInterfaceIdiom == .phone && ScreenSize.ScreenMaxLength == 568.0
+    static let iPhone6 = UIDevice.current.userInterfaceIdiom == .phone && ScreenSize.ScreenMaxLength == 667.0
+    static let iPhone6Plus = UIDevice.current.userInterfaceIdiom == .phone && ScreenSize.ScreenMaxLength == 736.0
 }

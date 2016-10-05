@@ -23,7 +23,6 @@
 		790E791C1C9522080055403B /* HelperFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E791B1C9522080055403B /* HelperFunctions.swift */; };
 		790E791E1C96701E0055403B /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 790E791D1C96701E0055403B /* TextFieldTableViewCell.swift */; };
 		792253E31CAD429F00B4BCC1 /* UIImageExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792253E21CAD429F00B4BCC1 /* UIImageExtensions.swift */; };
-		792253E51CAD55EF00B4BCC1 /* Observable+Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792253E41CAD55EF00B4BCC1 /* Observable+Operators.swift */; };
 		792253E71CAD5FEE00B4BCC1 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 792253E61CAD5FEE00B4BCC1 /* ColorPalette.swift */; };
 		795B3F551C9A473100CC5C3A /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 795B3F541C9A473100CC5C3A /* SettingsViewController.swift */; };
 		7966B3B21CBB9ADF00677AEE /* UILabelExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7966B3B11CBB9ADF00677AEE /* UILabelExtensions.swift */; };
@@ -89,7 +88,6 @@
 		790E791B1C9522080055403B /* HelperFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HelperFunctions.swift; sourceTree = "<group>"; };
 		790E791D1C96701E0055403B /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
 		792253E21CAD429F00B4BCC1 /* UIImageExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtensions.swift; sourceTree = "<group>"; };
-		792253E41CAD55EF00B4BCC1 /* Observable+Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Observable+Operators.swift"; sourceTree = "<group>"; };
 		792253E61CAD5FEE00B4BCC1 /* ColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		795B3F541C9A473100CC5C3A /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		796318A01CBB805A00F36367 /* Pakete-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Pakete-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -281,20 +279,11 @@
 		790E791A1C9521F50055403B /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				790E791F1C96768F0055403B /* RxSwift Extensions */,
 				790E791B1C9522080055403B /* HelperFunctions.swift */,
 				792253E61CAD5FEE00B4BCC1 /* ColorPalette.swift */,
 				796F24181CE2EAE500AE1617 /* IAPHelper.swift */,
 			);
 			name = Helpers;
-			sourceTree = "<group>";
-		};
-		790E791F1C96768F0055403B /* RxSwift Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				792253E41CAD55EF00B4BCC1 /* Observable+Operators.swift */,
-			);
-			name = "RxSwift Extensions";
 			sourceTree = "<group>";
 		};
 		795B3F531C9A472400CC5C3A /* Settings */ = {
@@ -706,7 +695,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				792253E51CAD55EF00B4BCC1 /* Observable+Operators.swift in Sources */,
 				7966B3B21CBB9ADF00677AEE /* UILabelExtensions.swift in Sources */,
 				790E79021C93F2850055403B /* PackageTableViewCell.swift in Sources */,
 				790E791C1C9522080055403B /* HelperFunctions.swift in Sources */,
@@ -791,11 +779,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -831,10 +820,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -855,6 +845,7 @@
 					"$(PROJECT_DIR)/Pakete/Vendor",
 				);
 				INFOPLIST_FILE = Pakete/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" -Xfrontend -debug-time-function-bodies -DDEBUG \"-D\" \"TRACE_RESOURCES\"";
 				PRODUCT_BUNDLE_IDENTIFIER = ph.pakete;
@@ -862,7 +853,7 @@
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Pakete/Pakete-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -883,13 +874,14 @@
 					"$(PROJECT_DIR)/Pakete/Vendor",
 				);
 				INFOPLIST_FILE = Pakete/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\" -Xfrontend -debug-time-function-bodies -DRELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = ph.pakete;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "Pakete/Pakete-Bridging-Header.h";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
@@ -904,7 +896,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ph.pakete.PaketeTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pakete.app/Pakete";
 			};
 			name = Debug;
@@ -919,7 +911,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = ph.pakete.PaketeTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 2.3;
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pakete.app/Pakete";
 			};
 			name = Release;

@@ -60,7 +60,7 @@ class PackagesTests: XCTestCase {
 }
 
 extension PackagesTests {
-    func stubResponseForEndpoint(endpoint: Pakete.Router, stubFileName: String) {
+    func stubResponseForEndpoint(_ endpoint: Pakete.Router, stubFileName: String) {
         let stubbedResponse = self.stubbedResponseFor(stubFileName)
 
         var httpMethod: Mockingjay.HTTPMethod!
@@ -78,11 +78,11 @@ extension PackagesTests {
         self.stub(http(httpMethod, uri: endpoint.URLRequest.URLString), builder: jsonData(stubbedResponse))
     }
 
-    private func stubbedResponseFor(filename: String) -> NSData! {
+    fileprivate func stubbedResponseFor(_ filename: String) -> Data! {
         @objc class TestClass: NSObject { }
 
-        let bundle = NSBundle(forClass: TestClass.self)
-        let path = bundle.pathForResource(filename, ofType: "json")
-        return NSData(contentsOfFile: path!)
+        let bundle = Bundle(for: TestClass.self)
+        let path = bundle.path(forResource: filename, ofType: "json")
+        return (try? Data(contentsOf: URL(fileURLWithPath: path!)))
     }
 }

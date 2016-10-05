@@ -15,31 +15,31 @@ import TwitterKit
 import FBSDKShareKit
 
 enum PackagesSortByType: Int {
-    case LastUpdated
-    case DateAdded
-    case Name
+    case lastUpdated
+    case dateAdded
+    case name
 
     var description: String {
         switch self {
-        case LastUpdated:
+        case .lastUpdated:
             return "Last Updated"
-        case DateAdded:
+        case .dateAdded:
             return "Date Added"
-        case Name:
+        case .name:
             return "Name"
         }
     }
 
     static var arrayValues: [PackagesSortByType] {
-        return [.LastUpdated, .DateAdded, .Name]
+        return [.lastUpdated, .dateAdded, .name]
     }
 }
 
 class SettingsViewController: UIViewController {
 
-    private let tableView = UITableView(frame: CGRect.zero, style: .Grouped)
-    private let viewModel: PackagesViewModel
-    private let groupByDeliveredSwitch = UISwitch()
+    fileprivate let tableView = UITableView(frame: CGRect.zero, style: .grouped)
+    fileprivate let viewModel: PackagesViewModel
+    fileprivate let groupByDeliveredSwitch = UISwitch()
 
     init(viewModel: PackagesViewModel) {
         self.viewModel = viewModel
@@ -55,13 +55,13 @@ class SettingsViewController: UIViewController {
         // Do any additional setup after loading the view.
         self.title = "Settings"
         // remove back button title
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         // add done bar button item
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(didTapDoneButton))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didTapDoneButton))
         // group by delivered switch
         self.groupByDeliveredSwitch.onTintColor = ColorPalette.Matisse
-        self.groupByDeliveredSwitch.on = self.viewModel.packagesGroupByDelivered()
-        self.groupByDeliveredSwitch.addTarget(self, action: #selector(groupByDeliveredSwitchValueDidChange), forControlEvents: .ValueChanged)
+        self.groupByDeliveredSwitch.isOn = self.viewModel.packagesGroupByDelivered()
+        self.groupByDeliveredSwitch.addTarget(self, action: #selector(groupByDeliveredSwitchValueDidChange), for: .valueChanged)
 
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         self.tableView.rowHeight = UITableViewAutomaticDimension
@@ -77,13 +77,13 @@ class SettingsViewController: UIViewController {
         let tableFooterView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 17.0))
         let versionLabel = UILabel()
         versionLabel.translatesAutoresizingMaskIntoConstraints = false
-        if let infoDictionary = NSBundle.mainBundle().infoDictionary,
-            version = infoDictionary["CFBundleShortVersionString"],
-            buildNumber = infoDictionary["CFBundleVersion"] {
+        if let infoDictionary = Bundle.main.infoDictionary,
+            let version = infoDictionary["CFBundleShortVersionString"],
+            let buildNumber = infoDictionary["CFBundleVersion"] {
             versionLabel.text = "\(version) (\(buildNumber))"
         }
-        versionLabel.font = UIFont.systemFontOfSize(14.0)
-        versionLabel.textColor = .grayColor()
+        versionLabel.font = UIFont.systemFont(ofSize: 14.0)
+        versionLabel.textColor = .gray
         tableFooterView.addSubview(versionLabel)
         versionLabel.center(inView: tableFooterView)
         self.tableView.tableFooterView = tableFooterView
@@ -92,7 +92,7 @@ class SettingsViewController: UIViewController {
         Mixpanel.sharedInstance().track("Settings View")
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
     }
@@ -106,82 +106,82 @@ class SettingsViewController: UIViewController {
 
 extension SettingsViewController {
     func didTapDoneButton() {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
 
     func didTapRemoveAdsButton() {
         // remove ads
-        let alertController = UIAlertController(title: "Hate Ads?", message: "Remove Ads for $0.99 only", preferredStyle: .Alert)
-        alertController.addAction(UIAlertAction(title: "Pay to Remove Ads", style: UIAlertActionStyle.Destructive, handler: { (alertAction) -> Void in
+        let alertController = UIAlertController(title: "Hate Ads?", message: "Remove Ads for $0.99 only", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Pay to Remove Ads", style: UIAlertActionStyle.destructive, handler: { (alertAction) -> Void in
             self.removeAds()
         }))
-        alertController.addAction(UIAlertAction(title: "Restore Purchases", style: UIAlertActionStyle.Default, handler: { (alertAction) -> Void in
+        alertController.addAction(UIAlertAction(title: "Restore Purchases", style: UIAlertActionStyle.default, handler: { (alertAction) -> Void in
             self.restorePurchases()
         }))
-        alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: nil))
-        self.presentViewController(alertController, animated: true, completion: nil)
+        alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+        self.present(alertController, animated: true, completion: nil)
         alertController.view.tintColor = ColorPalette.Matisse
     }
 
     func groupByDeliveredSwitchValueDidChange() {
-        self.viewModel.groupByDelivered(self.groupByDeliveredSwitch.on)
+        self.viewModel.groupByDelivered(self.groupByDeliveredSwitch.isOn)
     }
 
-    private func removeAds() {
-        SVProgressHUD.showWithStatus("Purchasing Remove Ads...")
+    fileprivate func removeAds() {
+        SVProgressHUD.show(withStatus: "Purchasing Remove Ads...")
         IAPHelper.purchaseRemoveAds { (success) in
             if success {
                 SVProgressHUD.dismiss()
                 // remove remove ads table header view
                 self.tableView.tableHeaderView = nil
             } else {
-                SVProgressHUD.showErrorWithStatus("Purchase Failed. Please try again.")
+                SVProgressHUD.showError(withStatus: "Purchase Failed. Please try again.")
             }
         }
     }
 
-    private func restorePurchases() {
+    fileprivate func restorePurchases() {
         SVProgressHUD.show()
         IAPHelper.restorePurchases { [unowned self] (results) in
             if results.restoreFailedProducts.isEmpty == false {
-                SVProgressHUD.showErrorWithStatus("Restore Failed. Please try again.")
+                SVProgressHUD.showError(withStatus: "Restore Failed. Please try again.")
             } else if results.restoredProductIds.isEmpty == false {
                 // remove remove ads table header view
                 self.tableView.tableHeaderView = nil
-                SVProgressHUD.showSuccessWithStatus("Restored Purchases!")
+                SVProgressHUD.showSuccess(withStatus: "Restored Purchases!")
             } else {
-                SVProgressHUD.showInfoWithStatus("Nothing to Restore.")
+                SVProgressHUD.showInfo(withStatus: "Nothing to Restore.")
             }
         }
     }
 
-    private func setupTableHeaderView() {
+    fileprivate func setupTableHeaderView() {
         if IAPHelper.showAds() == false { return }
 
         let tableHeaderView = UIView()
         let headerText = UILabel()
-        headerText.font = UIFont.systemFontOfSize(14.0)
+        headerText.font = UIFont.systemFont(ofSize: 14.0)
         headerText.numberOfLines = 0
-        headerText.textAlignment = .Center
-        headerText.textColor = .grayColor()
+        headerText.textAlignment = .center
+        headerText.textColor = .gray
         headerText.text = "We may be an ad-supported app, but we understand some would prefer Pakete without ads. Get an ad-free experience and help bring new features to the app for only $0.99. A single purchase works across all of your iOS devices forever. We appreciate your support!"
-        headerText.frame.size = headerText.sizeThatFits(CGSize(width: self.view.frame.width - 30.0, height: CGFloat.max))
+        headerText.frame.size = headerText.sizeThatFits(CGSize(width: self.view.frame.width - 30.0, height: CGFloat.greatestFiniteMagnitude))
         headerText.frame.origin.y = 15.0
         headerText.frame.origin.x = 15.0
         tableHeaderView.addSubview(headerText)
         // add remove ads button
         let removeAdsButton = UIButton()
-        removeAdsButton.backgroundColor = .whiteColor()
-        removeAdsButton.setTitle("Remove Ads", forState: .Normal)
-        removeAdsButton.setTitleColor(.redColor(), forState: .Normal)
-        removeAdsButton.titleLabel?.textAlignment = .Center
-        removeAdsButton.titleLabel?.font = UIFont.systemFontOfSize(15.0)
+        removeAdsButton.backgroundColor = .white
+        removeAdsButton.setTitle("Remove Ads", for: .normal)
+        removeAdsButton.setTitleColor(.red, for: .normal)
+        removeAdsButton.titleLabel?.textAlignment = .center
+        removeAdsButton.titleLabel?.font = UIFont.systemFont(ofSize: 15.0)
         removeAdsButton.frame.size.width = self.view.frame.size.width + 1.0
-        removeAdsButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+        removeAdsButton.layer.borderColor = UIColor.lightGray.cgColor
         removeAdsButton.layer.borderWidth = 0.5
         removeAdsButton.frame.size.height = 44.0
         removeAdsButton.frame.origin.y = headerText.frame.maxY + 10.0
-        removeAdsButton.addTarget(self, action: #selector(didTapRemoveAdsButton), forControlEvents: .TouchUpInside)
+        removeAdsButton.addTarget(self, action: #selector(didTapRemoveAdsButton), for: .touchUpInside)
         tableHeaderView.addSubview(removeAdsButton)
 
         tableHeaderView.frame.size.width = self.view.frame.width
@@ -189,26 +189,26 @@ extension SettingsViewController {
         self.tableView.tableHeaderView = tableHeaderView
     }
 
-    private func didTapTweetAboutPakete() {
+    fileprivate func didTapTweetAboutPakete() {
         let composer = TWTRComposer()
         composer.setText(Constants.App.ShareMessage + " " + Constants.App.URL)
         // Called from a UIViewController
-        composer.showFromViewController(self) { _ in }
+        composer.show(from: self) { _ in }
     }
 
-    private func didTapTellYourFriendsAboutPakete() {
+    fileprivate func didTapTellYourFriendsAboutPakete() {
         let content = FBSDKShareLinkContent()
-        content.contentURL = NSURL(string: Constants.App.URL)
-        FBSDKShareDialog.showFromViewController(self, withContent: content, delegate: nil)
+        content.contentURL = URL(string: Constants.App.URL)
+        FBSDKShareDialog.show(from: self, with: content, delegate: nil)
     }
 }
 
 extension SettingsViewController: UITableViewDataSource {
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0: // Sort by, Group by delivered
             return 2
@@ -221,19 +221,19 @@ extension SettingsViewController: UITableViewDataSource {
         }
     }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell: UITableViewCell!
-        cell = tableView.dequeueReusableCellWithIdentifier("Cell")
+        cell = tableView.dequeueReusableCell(withIdentifier: "Cell")
         if cell == nil {
-            cell = UITableViewCell(style: .Value1, reuseIdentifier: "Cell")
+            cell = UITableViewCell(style: .value1, reuseIdentifier: "Cell")
         }
-        cell.textLabel?.font = UIFont.systemFontOfSize(15.0)
-        cell.detailTextLabel?.font = UIFont.systemFontOfSize(15.0)
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 15.0)
+        cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 15.0)
 
-        switch indexPath.section {
+        switch (indexPath as NSIndexPath).section {
         case 0:
-            cell.accessoryType = .DisclosureIndicator
-            switch indexPath.row {
+            cell.accessoryType = .disclosureIndicator
+            switch (indexPath as NSIndexPath).row {
             case 0:
                 // Sort by
                 cell.imageView?.image = UIImage(named: "sortBy")
@@ -247,7 +247,7 @@ extension SettingsViewController: UITableViewDataSource {
             default: ()
             }
         case 1:
-            switch indexPath.row {
+            switch (indexPath as NSIndexPath).row {
             case 0:
                 // Rate Pakete
                 cell.imageView?.image = UIImage(named: "ratePaketeIcon")
@@ -259,7 +259,7 @@ extension SettingsViewController: UITableViewDataSource {
             default: ()
             }
         case 2:
-            switch indexPath.row {
+            switch (indexPath as NSIndexPath).row {
             case 0:
                 // Tweet about Pakete
                 cell.imageView?.image = UIImage(named: "twitterIcon")
@@ -278,7 +278,7 @@ extension SettingsViewController: UITableViewDataSource {
 }
 
 extension SettingsViewController: UITableViewDelegate {
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    private func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case 0:
             return "Packages"
@@ -290,23 +290,23 @@ extension SettingsViewController: UITableViewDelegate {
         }
     }
 
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-        switch indexPath.section {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        switch (indexPath as NSIndexPath).section {
         case 0:
-            switch indexPath.row {
+            switch (indexPath as NSIndexPath).row {
             case 0:
                 // Sort by
                 let sortByViewController = SortByViewController(viewModel: self.viewModel)
                 self.navigationController?.pushViewController(sortByViewController, animated: true)
             case 1:
                 // Group by delivered
-                self.groupByDeliveredSwitch.on = !self.groupByDeliveredSwitch.on
+                self.groupByDeliveredSwitch.isOn = !self.groupByDeliveredSwitch.isOn
                 self.groupByDeliveredSwitchValueDidChange()
             default: ()
             }
         case 1:
-            switch indexPath.row {
+            switch (indexPath as NSIndexPath).row {
             case 0:
                 // Rate Pakete
                 Appirater.forceShowPrompt(false)
@@ -316,7 +316,7 @@ extension SettingsViewController: UITableViewDelegate {
             default: ()
             }
         case 2:
-            switch indexPath.row {
+            switch (indexPath as NSIndexPath).row {
             case 0:
                 // Tweet about Pakete
                 self.didTapTweetAboutPakete()
@@ -330,24 +330,24 @@ extension SettingsViewController: UITableViewDelegate {
 
     }
 
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView()
         let headerLabel = UILabel()
         headerLabel.translatesAutoresizingMaskIntoConstraints = false
-        headerLabel.font = UIFont.systemFontOfSize(14)
+        headerLabel.font = UIFont.systemFont(ofSize: 14)
         headerLabel.numberOfLines = 0
         headerLabel.text = self.tableView(tableView, titleForHeaderInSection: section)
-        headerLabel.textColor = .grayColor()
+        headerLabel.textColor = .gray
         headerView.addSubview(headerLabel)
-        headerLabel.constrainEqual(.Top, to: headerView)
-        headerLabel.constrainEqual(.Leading, to: headerView, .Leading, constant: 15.0)
-        headerLabel.constrainEqual(.Trailing, to: headerView, .Trailing, constant: -15.0)
+        headerLabel.constrainEqual(.top, to: headerView)
+        headerLabel.constrainEqual(.leading, to: headerView, .leading, constant: 15.0)
+        headerLabel.constrainEqual(.trailing, to: headerView, .trailing, constant: -15.0)
 
         return headerView
     }
 
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         guard let title = self.tableView(tableView, titleForHeaderInSection: section) else { return 0.0 }
-        return title.heightWithConstrainedWidth(self.view.frame.width - 30.0, font: UIFont.systemFontOfSize(13.0)) + 10.0
+        return title.heightWithConstrainedWidth(self.view.frame.width - 30.0, font: UIFont.systemFont(ofSize: 13.0)) + 10.0
     }
 }

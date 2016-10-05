@@ -11,66 +11,62 @@ import UIKit
 
 private let dateHelper = PKDateHelper()
 class PKDateHelper {
-    let dateFormatter = NSDateFormatter()
+    let dateFormatter = DateFormatter()
 
     init () {
-        self.dateFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX")
-        self.dateFormatter.timeZone = NSTimeZone.localTimeZone()
+        self.dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        self.dateFormatter.timeZone = TimeZone.autoupdatingCurrent
     }
 }
 
-func dateFromISOString(dateString: String) -> NSDate? {
+func dateFromISOString(_ dateString: String) -> Date? {
     dateHelper.dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-    return dateHelper.dateFormatter.dateFromString(dateString)
+    return dateHelper.dateFormatter.date(from: dateString)
 }
 
-func stringFromDate(date: NSDate, dateStyle: NSDateFormatterStyle, timeStyle: NSDateFormatterStyle) -> String {
+func stringFromDate(_ date: Date, dateStyle: DateFormatter.Style, timeStyle: DateFormatter.Style) -> String {
     dateHelper.dateFormatter.dateStyle = dateStyle
     dateHelper.dateFormatter.timeStyle = timeStyle
-    return dateHelper.dateFormatter.stringFromDate(date)
+    return dateHelper.dateFormatter.string(from: date)
 }
 
-func isNotEmptyString(string: String) -> Bool {
+func isNotEmptyString(_ string: String) -> Bool {
     return string.isEmpty == false
 }
 
-func delay(delay: Double, closure:()->()) {
-    dispatch_after(
-        dispatch_time(
-            DISPATCH_TIME_NOW,
-            Int64(delay * Double(NSEC_PER_SEC))
-        ),
-    dispatch_get_main_queue(), closure)
+func delay(_ delay: Double, closure:@escaping ()->()) {
+    DispatchQueue.main.asyncAfter(
+        deadline: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
 }
 
 extension UIView {
-    public func constrainEqual(attribute: NSLayoutAttribute, to: AnyObject?, multiplier: CGFloat = 1, constant: CGFloat = 0) {
+    public func constrainEqual(_ attribute: NSLayoutAttribute, to: AnyObject?, multiplier: CGFloat = 1, constant: CGFloat = 0) {
         constrainEqual(attribute, to: to, attribute, multiplier: multiplier, constant: constant)
     }
 
-    public func constrainEqual(attribute: NSLayoutAttribute, to: AnyObject?, _ toAttribute: NSLayoutAttribute, multiplier: CGFloat = 1, constant: CGFloat = 0) {
-        NSLayoutConstraint.activateConstraints([
-            NSLayoutConstraint(item: self, attribute: attribute, relatedBy: .Equal, toItem: to, attribute: toAttribute, multiplier: multiplier, constant: constant)
+    public func constrainEqual(_ attribute: NSLayoutAttribute, to: AnyObject?, _ toAttribute: NSLayoutAttribute, multiplier: CGFloat = 1, constant: CGFloat = 0) {
+        NSLayoutConstraint.activate([
+            NSLayoutConstraint(item: self, attribute: attribute, relatedBy: .equal, toItem: to, attribute: toAttribute, multiplier: multiplier, constant: constant)
             ]
         )
     }
 
-    public func constrainEdgestoMarginOf(view: UIView) {
-        constrainEqual(.Top, to: view, .TopMargin)
-        constrainEqual(.Leading, to: view, .LeadingMargin)
-        constrainEqual(.Trailing, to: view, .TrailingMargin)
-        constrainEqual(.Bottom, to: view, .BottomMargin)
+    public func constrainEdgestoMarginOf(_ view: UIView) {
+        constrainEqual(.top, to: view, .topMargin)
+        constrainEqual(.leading, to: view, .leadingMargin)
+        constrainEqual(.trailing, to: view, .trailingMargin)
+        constrainEqual(.bottom, to: view, .bottomMargin)
     }
 
     public func constrainEdges(toView view: UIView) {
-        constrainEqual(.Top, to: view, .Top)
-        constrainEqual(.Leading, to: view, .Leading)
-        constrainEqual(.Trailing, to: view, .Trailing)
-        constrainEqual(.Bottom, to: view, .Bottom)
+        constrainEqual(.top, to: view, .top)
+        constrainEqual(.leading, to: view, .leading)
+        constrainEqual(.trailing, to: view, .trailing)
+        constrainEqual(.bottom, to: view, .bottom)
     }
 
     public func center(inView view: UIView) {
-        constrainEqual(.CenterX, to: view)
-        constrainEqual(.CenterY, to: view)
+        constrainEqual(.centerX, to: view)
+        constrainEqual(.centerY, to: view)
     }
 }

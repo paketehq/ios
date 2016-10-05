@@ -17,24 +17,24 @@ import Mixpanel
 
 class AddPackageViewController: UIViewController {
 
-    private let tableView = UITableView(frame: CGRect.zero, style: .Grouped)
+    fileprivate let tableView = UITableView(frame: CGRect.zero, style: .grouped)
     // static cells
-    private let trackingNumberCell = TextFieldTableViewCell()
-    private var extraFieldCell: TextFieldTableViewCell?
-    private let nameCell = TextFieldTableViewCell()
-    private let addButton = UIButton()
-    private let archiveButton = UIButton()
+    fileprivate let trackingNumberCell = TextFieldTableViewCell()
+    fileprivate var extraFieldCell: TextFieldTableViewCell?
+    fileprivate let nameCell = TextFieldTableViewCell()
+    fileprivate let addButton = UIButton()
+    fileprivate let archiveButton = UIButton()
 
-    private var trackingNumber = Variable<String>("")
-    private var name = Variable<String>("")
-    private var extraField = Variable<String>("")
+    fileprivate var trackingNumber = Variable<String>("")
+    fileprivate var name = Variable<String>("")
+    fileprivate var extraField = Variable<String>("")
 
-    private let courier: Courier
-    private let viewModel: PackagesViewModel
-    private var package: ObservablePackage?
+    fileprivate let courier: Courier
+    fileprivate let viewModel: PackagesViewModel
+    fileprivate var package: ObservablePackage?
 
-    private var editPackage = false
-    private var interstitialAd: GADInterstitial!
+    fileprivate var editPackage = false
+    fileprivate var interstitialAd: GADInterstitial!
 
     init(viewModel: PackagesViewModel, courier: Courier) {
         self.viewModel = viewModel
@@ -61,7 +61,7 @@ class AddPackageViewController: UIViewController {
 
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
         self.tableView.dataSource = self
-        self.tableView.registerClass(TextFieldTableViewCell.self,
+        self.tableView.register(TextFieldTableViewCell.self,
                                      forCellReuseIdentifier: TextFieldTableViewCell.reuseIdentifier)
         self.tableView.rowHeight = 44.0
         self.tableView.tableFooterView = UIView()
@@ -74,27 +74,27 @@ class AddPackageViewController: UIViewController {
 
         // setup static cells
         self.trackingNumberCell.textField.placeholder = "Tracking Number"
-        self.trackingNumberCell.textField.keyboardType = .NamePhonePad
+        self.trackingNumberCell.textField.keyboardType = .namePhonePad
         self.nameCell.textField.placeholder = "Description"
-        self.nameCell.textField.returnKeyType = .Done
+        self.nameCell.textField.returnKeyType = .done
 
         // if JRS we have extra field!
         // TODO: shouldn't be harcoded :(
         if self.courier.code == "jrs" {
             self.extraFieldCell = TextFieldTableViewCell()
             self.extraFieldCell?.textField.placeholder = "BC"
-            self.extraFieldCell?.textField.keyboardType = .NumberPad
+            self.extraFieldCell?.textField.keyboardType = .numberPad
         }
 
         // add cancel button if edit package
         if self.editPackage, let package = self.package {
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(didTapCancelButton))
+            self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(didTapCancelButton))
             // populate textfields
             self.nameCell.textField.text = package.value.name
             // if JRS split the tracking number to get BC
             if self.courier.code == "jrs" {
                 // split tracking number to get BC
-                let trackingNumbers = self.package?.value.trackingNumber.componentsSeparatedByString("-")
+                let trackingNumbers = self.package?.value.trackingNumber.characters.split { $0 == "-" }.map(String.init)
                 self.trackingNumberCell.textField.text = trackingNumbers?.first
                 self.extraFieldCell?.textField.text = trackingNumbers?.last
             } else {
@@ -102,43 +102,52 @@ class AddPackageViewController: UIViewController {
             }
 
             // disable tracking number cell
-            self.trackingNumberCell.textField.enabled = false
-            self.trackingNumberCell.textField.textColor = .lightGrayColor()
-            self.extraFieldCell?.textField.enabled = false
-            self.extraFieldCell?.textField.textColor = .lightGrayColor()
+            self.trackingNumberCell.textField.isEnabled = false
+            self.trackingNumberCell.textField.textColor = .lightGray
+            self.extraFieldCell?.textField.isEnabled = false
+            self.extraFieldCell?.textField.textColor = .lightGray
         }
 
         // bindings
-        self.trackingNumberCell.textField.rx_text
-            .bindTo(self.trackingNumber)
+        self.trackingNumberCell.textField.rx.text
+            .asDriver()
+            .drive(self.trackingNumber)
             .addDisposableTo(self.rx_disposeBag)
 
-        self.nameCell.textField.rx_text
-            .bindTo(self.name)
+        self.nameCell.textField.rx.text
+            .asDriver()
+            .drive(self.name)
             .addDisposableTo(self.rx_disposeBag)
 
-        self.extraFieldCell?.textField.rx_text
-            .bindTo(self.extraField)
+        self.extraFieldCell?.textField.rx.text
+            .asDriver()
+            .drive(self.extraField)
             .addDisposableTo(self.rx_disposeBag)
 
-        let trackingNumberIsValid = self.trackingNumber.asObservable()
+        let trackingNumberIsValid = self.trackingNumber.asDriver()
             .map(isNotEmptyString)
 
-        let nameIsValid = self.name.asObservable()
+        let nameIsValid = self.name.asDriver()
             .map(isNotEmptyString)
 
         var formValidations = [trackingNumberIsValid, nameIsValid]
         if self.extraFieldCell != nil {
-            let extraFieldIsValid = self.extraField.asObservable().map(isNotEmptyString)
+            let extraFieldIsValid = self.extraField.asDriver().map(isNotEmptyString)
             formValidations.append(extraFieldIsValid)
         }
 
         // observe if form is valid
-        let formIsValid = formValidations.combineLatestAnd()
-        formIsValid.bindTo(self.addButton.rx_enabled)
+        let formIsValid = formValidations
+            .map { $0.asObservable() }
+            .combineLatest { (items) -> Bool in
+                return !items.contains(false)
+            }
+            .asDriver(onErrorJustReturn: false)
+
+        formIsValid.drive(self.addButton.rx.enabled)
             .addDisposableTo(rx_disposeBag)
         formIsValid.map({ $0 ? 1.0 : 0.5 })
-            .bindTo(self.addButton.rx_alpha)
+            .drive(self.addButton.rx.alpha)
             .addDisposableTo(self.rx_disposeBag)
 
         if editPackage {
@@ -151,7 +160,7 @@ class AddPackageViewController: UIViewController {
         Mixpanel.sharedInstance().track("Add Package View")
     }
 
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.view.endEditing(true) // hide keyboard
     }
@@ -172,39 +181,39 @@ extension AddPackageViewController {
         let request = GADRequest()
         // Requests test ads on test devices.
         request.testDevices = [kGADSimulatorID]
-        self.interstitialAd.loadRequest(request)
+        self.interstitialAd.load(request)
     }
 
     func setupFooterView() {
         let tableFooterView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.width, height: 44.0))
         // add Add button
         self.addButton.translatesAutoresizingMaskIntoConstraints = false
-        self.addButton.setTitle((editPackage ? "Update Package" : "Add Package"), forState: .Normal)
+        self.addButton.setTitle((editPackage ? "Update Package" : "Add Package"), for: UIControlState())
         self.addButton.backgroundColor = ColorPalette.Matisse
-        self.addButton.setTitleColor(.whiteColor(), forState: .Normal)
+        self.addButton.setTitleColor(.white, for: .normal)
         if editPackage {
-            self.addButton.addTarget(self, action: #selector(didTapUpdateButton), forControlEvents: .TouchUpInside)
+            self.addButton.addTarget(self, action: #selector(didTapUpdateButton), for: .touchUpInside)
         } else {
-            self.addButton.addTarget(self, action: #selector(didTapAddButton), forControlEvents: .TouchUpInside)
+            self.addButton.addTarget(self, action: #selector(didTapAddButton), for: .touchUpInside)
         }
         tableFooterView.addSubview(self.addButton)
-        self.addButton.constrainEqual(.Top, to: tableFooterView)
-        self.addButton.constrainEqual(.Leading, to: tableFooterView)
-        self.addButton.constrainEqual(.Trailing, to: tableFooterView)
-        self.addButton.constrainEqual(.Height, to: nil, .NotAnAttribute, constant: 44.0)
+        self.addButton.constrainEqual(.top, to: tableFooterView)
+        self.addButton.constrainEqual(.leading, to: tableFooterView)
+        self.addButton.constrainEqual(.trailing, to: tableFooterView)
+        self.addButton.constrainEqual(.height, to: nil, .notAnAttribute, constant: 44.0)
 
         if editPackage {
             // add archive package button
             self.archiveButton.translatesAutoresizingMaskIntoConstraints = false
-            self.archiveButton.setTitle("Archive Package", forState: .Normal)
-            self.archiveButton.backgroundColor = .redColor()
-            self.archiveButton.setTitleColor(.whiteColor(), forState: .Normal)
-            self.archiveButton.addTarget(self, action: #selector(didTapArchiveButton), forControlEvents: .TouchUpInside)
+            self.archiveButton.setTitle("Archive Package", for: UIControlState())
+            self.archiveButton.backgroundColor = .red
+            self.archiveButton.setTitleColor(.white, for: .normal)
+            self.archiveButton.addTarget(self, action: #selector(didTapArchiveButton), for: .touchUpInside)
             tableFooterView.addSubview(self.archiveButton)
-            self.archiveButton.constrainEqual(.Top, to: self.addButton, .Bottom, constant: 10.0)
-            self.archiveButton.constrainEqual(.Leading, to: tableFooterView)
-            self.archiveButton.constrainEqual(.Trailing, to: tableFooterView)
-            self.archiveButton.constrainEqual(.Height, to: nil, .NotAnAttribute, constant: 44.0)
+            self.archiveButton.constrainEqual(.top, to: self.addButton, .bottom, constant: 10.0)
+            self.archiveButton.constrainEqual(.leading, to: tableFooterView)
+            self.archiveButton.constrainEqual(.trailing, to: tableFooterView)
+            self.archiveButton.constrainEqual(.height, to: nil, .notAnAttribute, constant: 44.0)
             // adjust height
             tableFooterView.frame.size.height = 98.0
         }
@@ -213,7 +222,7 @@ extension AddPackageViewController {
     }
 
     func didTapCancelButton() {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
 
     func didTapAddButton() {
@@ -222,20 +231,20 @@ extension AddPackageViewController {
             // package already exists!
             // check if already archived
             if existingPackage.archived {
-                let alertController = UIAlertController(title: "Hey!", message: "This package has already been archived! Would you like to unarchive this package?", preferredStyle: .Alert)
-                alertController.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (alertAction) -> Void in
+                let alertController = UIAlertController(title: "Hey!", message: "This package has already been archived! Would you like to unarchive this package?", preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (alertAction) -> Void in
                     // unarchive package
                     self.viewModel.unarchivePackage(existingPackage)
                     // dismiss
-                    self.dismissViewControllerAnimated(true, completion: nil)
+                    self.dismiss(animated: true, completion: nil)
                 }))
-                alertController.addAction(UIAlertAction(title: "No", style: .Cancel, handler: nil))
-                self.presentViewController(alertController, animated: true, completion: nil)
+                alertController.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+                self.present(alertController, animated: true, completion: nil)
                 alertController.view.tintColor = ColorPalette.Matisse
             } else {
-                let alertController = UIAlertController(title: "Hey!", message: "This package already exists!", preferredStyle: .Alert)
-                alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                self.presentViewController(alertController, animated: true, completion: nil)
+                let alertController = UIAlertController(title: "Hey!", message: "This package already exists!", preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alertController, animated: true, completion: nil)
                 alertController.view.tintColor = ColorPalette.Matisse
             }
 
@@ -245,7 +254,7 @@ extension AddPackageViewController {
         // hide keyboard
         self.view.endEditing(true)
         SVProgressHUD.show()
-        SVProgressHUD.setDefaultMaskType(.Black)
+        SVProgressHUD.setDefaultMaskType(.black)
 
         let package = Package(name: self.name.value, trackingNumber: trackingNumber, courier: self.courier)
         self.viewModel.trackPackage(ObservablePackage(package))
@@ -255,27 +264,27 @@ extension AddPackageViewController {
                 Mixpanel.sharedInstance().track("Added Package", properties: ["Courier": self.courier.name])
                 // show interstitial ad
                 if self.interstitialAd.isReady && IAPHelper.showAds() {
-                    self.interstitialAd.presentFromRootViewController(self)
+                    self.interstitialAd.present(fromRootViewController: self)
                 } else {
-                    self.dismissViewControllerAnimated(true, completion: nil)
+                    self.dismiss(animated: true, completion: nil)
                 }
                 // add to package list
                 self.viewModel.addPackage(observablePackage)
                 // show package
                 self.viewModel.showPackage.onNext(observablePackage.value)
             }
-            .subscribeError { [unowned self] (error) in
+            .subscribe(onError: { [unowned self] (error) in
                 SVProgressHUD.dismiss()
                 // focus back to tracking number textfield
                 self.trackingNumberCell.textField.becomeFirstResponder()
 
                 // show error
                 let error = error as NSError
-                let alertController = UIAlertController(title: "Sorry!", message: error.localizedFailureReason, preferredStyle: .Alert)
-                alertController.addAction(UIAlertAction(title: "OK", style: .Default, handler: nil))
-                self.presentViewController(alertController, animated: true, completion: nil)
+                let alertController = UIAlertController(title: "Sorry!", message: error.localizedFailureReason, preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alertController, animated: true, completion: nil)
                 alertController.view.tintColor = ColorPalette.Matisse
-            }
+            })
             .addDisposableTo(rx_disposeBag)
     }
 
@@ -283,34 +292,34 @@ extension AddPackageViewController {
         if let package = self.package {
             self.viewModel.updatePackageName(self.name.value, package: package)
         }
-        self.dismissViewControllerAnimated(true, completion: nil)
+        self.dismiss(animated: true, completion: nil)
     }
 
     func didTapArchiveButton() {
         // show action sheet
-        let actionSheetController = UIAlertController(title: "Archive Package", message: "Are you sure you want to archive this package?", preferredStyle: .ActionSheet)
-        actionSheetController.addAction(UIAlertAction(title: "Yes", style: .Destructive, handler: { (alertAction) -> Void in
+        let actionSheetController = UIAlertController(title: "Archive Package", message: "Are you sure you want to archive this package?", preferredStyle: .actionSheet)
+        actionSheetController.addAction(UIAlertAction(title: "Yes", style: .destructive, handler: { (alertAction) -> Void in
             if let package = self.package {
                 // track mixpanel
                 Mixpanel.sharedInstance().track("Archived Package")
                 self.viewModel.archivePackage(package)
-                self.dismissViewControllerAnimated(true, completion: nil)
+                self.dismiss(animated: true, completion: nil)
             }
         }))
-        actionSheetController.addAction(UIAlertAction(title: "No", style: .Cancel, handler: nil))
-        self.presentViewController(actionSheetController, animated: true, completion: nil)
+        actionSheetController.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+        self.present(actionSheetController, animated: true, completion: nil)
         actionSheetController.view.tintColor = ColorPalette.Matisse
     }
 }
 
 // MARK: - UITableViewDataSource
 extension AddPackageViewController: UITableViewDataSource {
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.extraFieldCell == nil ? 2 : 3
     }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        switch indexPath.row {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch (indexPath as NSIndexPath).row {
         case 0: return self.trackingNumberCell
         case 1: return self.extraFieldCell ?? self.nameCell
         case 2: return self.nameCell
@@ -322,11 +331,11 @@ extension AddPackageViewController: UITableViewDataSource {
 
 // MARK: - GADInterstitialDelegate
 extension AddPackageViewController: GADInterstitialDelegate {
-    func interstitialWillDismissScreen(adInterstitial: GADInterstitial!) {
-        self.dismissViewControllerAnimated(false, completion: nil)
+    func interstitialWillDismissScreen(_ adInterstitial: GADInterstitial!) {
+        self.dismiss(animated: false, completion: nil)
     }
 
-    func interstitialWillLeaveApplication(adInterstitial: GADInterstitial!) {
-        self.dismissViewControllerAnimated(false, completion: nil)
+    func interstitialWillLeaveApplication(_ adInterstitial: GADInterstitial!) {
+        self.dismiss(animated: false, completion: nil)
     }
 }

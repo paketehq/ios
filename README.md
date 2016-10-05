@@ -1,7 +1,7 @@
 Pakete
 ============
 [![BuddyBuild](https://dashboard.buddybuild.com/api/statusImage?appID=5714a66524b97e01000a92f0&branch=master&build=latest)](https://dashboard.buddybuild.com/apps/5714a66524b97e01000a92f0/build/latest)
-![Language](https://img.shields.io/badge/language-Swift%202-orange.svg)
+![Language](https://img.shields.io/badge/language-Swift%203-orange.svg)
 ![License](https://img.shields.io/github/license/paketehq/ios.svg?style=flat)
 
 Pakete is a PH package tracker app for iOS.
@@ -40,9 +40,9 @@ $ open "Pakete.xcworkspace"
 
 # Requirements
 
-* Xcode 7.x
-* iOS 8
-* Swift 2.x
+* Xcode 8.x
+* iOS 9
+* Swift 3.x
 
 ## Communication
 

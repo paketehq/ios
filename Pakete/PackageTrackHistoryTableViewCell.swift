@@ -15,10 +15,10 @@ class PackageTrackHistoryTableViewCell: UITableViewCell {
     let dateLabel = UILabel()
     let statusLabel = UILabel()
 
-    private var didSetupConstraints = false
-    private let lineView = UIView()
-    private let circleView = UIView()
-    private let lineSeparatorView = UIView()
+    fileprivate var didSetupConstraints = false
+    fileprivate let lineView = UIView()
+    fileprivate let circleView = UIView()
+    fileprivate let lineSeparatorView = UIView()
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -27,9 +27,9 @@ class PackageTrackHistoryTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.selectionStyle = .None
+        self.selectionStyle = .none
         self.backgroundColor = ColorPalette.BlackHaze
-        self.layer.rasterizationScale = UIScreen.mainScreen().scale
+        self.layer.rasterizationScale = UIScreen.main.scale
         self.layer.shouldRasterize = true
 
         self.lineView.translatesAutoresizingMaskIntoConstraints = false
@@ -42,13 +42,13 @@ class PackageTrackHistoryTableViewCell: UITableViewCell {
         self.contentView.addSubview(self.circleView)
 
         self.dateLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.dateLabel.font = UIFont.systemFontOfSize(12.0)
-        self.dateLabel.textColor = .grayColor()
+        self.dateLabel.font = UIFont.systemFont(ofSize: 12.0)
+        self.dateLabel.textColor = .gray
         self.dateLabel.adjustFontToRealIPhoneSize = true
         self.contentView.addSubview(self.dateLabel)
 
         self.statusLabel.translatesAutoresizingMaskIntoConstraints = false
-        self.statusLabel.font = UIFont.systemFontOfSize(14.0)
+        self.statusLabel.font = UIFont.systemFont(ofSize: 14.0)
         self.statusLabel.numberOfLines = 0
         self.statusLabel.adjustFontToRealIPhoneSize = true
         self.contentView.addSubview(self.statusLabel)
@@ -60,30 +60,30 @@ class PackageTrackHistoryTableViewCell: UITableViewCell {
 
     override func updateConstraints() {
         if !self.didSetupConstraints {
-            NSLayoutConstraint.activateConstraints([
-                NSLayoutConstraint(item: self.lineView, attribute: .Top, relatedBy: .Equal, toItem: self.contentView, attribute: .Top, multiplier: 1.0, constant: 0.0),
-                NSLayoutConstraint(item: self.lineView, attribute: .Bottom, relatedBy: .Equal, toItem: self.contentView, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
-                NSLayoutConstraint(item: self.lineView, attribute: .Leading, relatedBy: .Equal, toItem: self.contentView, attribute: .Leading, multiplier: 1.0, constant: 15.0),
-                NSLayoutConstraint(item: self.lineView, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 1.0),
+            NSLayoutConstraint.activate([
+                NSLayoutConstraint(item: self.lineView, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: self.lineView, attribute: .bottom, relatedBy: .equal, toItem: self.contentView, attribute: .bottom, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: self.lineView, attribute: .leading, relatedBy: .equal, toItem: self.contentView, attribute: .leading, multiplier: 1.0, constant: 15.0),
+                NSLayoutConstraint(item: self.lineView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 1.0),
 
-                NSLayoutConstraint(item: self.circleView, attribute: .CenterY, relatedBy: .Equal, toItem: self.dateLabel, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
-                NSLayoutConstraint(item: self.circleView, attribute: .CenterX, relatedBy: .Equal, toItem: self.lineView, attribute: .CenterX, multiplier: 1.0, constant: 0.0),
-                NSLayoutConstraint(item: self.circleView, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 10.0),
-                NSLayoutConstraint(item: self.circleView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 10.0),
+                NSLayoutConstraint(item: self.circleView, attribute: .centerY, relatedBy: .equal, toItem: self.dateLabel, attribute: .bottom, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: self.circleView, attribute: .centerX, relatedBy: .equal, toItem: self.lineView, attribute: .centerX, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: self.circleView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 10.0),
+                NSLayoutConstraint(item: self.circleView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 10.0),
 
-                NSLayoutConstraint(item: self.dateLabel, attribute: .Top, relatedBy: .Equal, toItem: self.contentView, attribute: .Top, multiplier: 1.0, constant: 10.0),
-                NSLayoutConstraint(item: self.dateLabel, attribute: .Leading, relatedBy: .Equal, toItem: self.lineView, attribute: .Leading, multiplier: 1.0, constant: 15.0),
-                NSLayoutConstraint(item: self.dateLabel, attribute: .Trailing, relatedBy: .Equal, toItem: self.contentView, attribute: .Trailing, multiplier: 1.0, constant: -15.0),
+                NSLayoutConstraint(item: self.dateLabel, attribute: .top, relatedBy: .equal, toItem: self.contentView, attribute: .top, multiplier: 1.0, constant: 10.0),
+                NSLayoutConstraint(item: self.dateLabel, attribute: .leading, relatedBy: .equal, toItem: self.lineView, attribute: .leading, multiplier: 1.0, constant: 15.0),
+                NSLayoutConstraint(item: self.dateLabel, attribute: .trailing, relatedBy: .equal, toItem: self.contentView, attribute: .trailing, multiplier: 1.0, constant: -15.0),
 
-                NSLayoutConstraint(item: self.statusLabel, attribute: .Top, relatedBy: .Equal, toItem: self.dateLabel, attribute: .Bottom, multiplier: 1.0, constant: 0.0),
-                NSLayoutConstraint(item: self.statusLabel, attribute: .Leading, relatedBy: .Equal, toItem: self.lineView, attribute: .Leading, multiplier: 1.0, constant: 15.0),
-                NSLayoutConstraint(item: self.statusLabel, attribute: .Trailing, relatedBy: .Equal, toItem: self.contentView, attribute: .Trailing, multiplier: 1.0, constant: -15.0),
-                NSLayoutConstraint(item: self.statusLabel, attribute: .Bottom, relatedBy: .Equal, toItem: self.contentView, attribute: .Bottom, multiplier: 1.0, constant: -10.0),
+                NSLayoutConstraint(item: self.statusLabel, attribute: .top, relatedBy: .equal, toItem: self.dateLabel, attribute: .bottom, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: self.statusLabel, attribute: .leading, relatedBy: .equal, toItem: self.lineView, attribute: .leading, multiplier: 1.0, constant: 15.0),
+                NSLayoutConstraint(item: self.statusLabel, attribute: .trailing, relatedBy: .equal, toItem: self.contentView, attribute: .trailing, multiplier: 1.0, constant: -15.0),
+                NSLayoutConstraint(item: self.statusLabel, attribute: .bottom, relatedBy: .equal, toItem: self.contentView, attribute: .bottom, multiplier: 1.0, constant: -10.0),
 
-                NSLayoutConstraint(item: self.lineSeparatorView, attribute: .Top, relatedBy: .Equal, toItem: self.statusLabel, attribute: .Bottom, multiplier: 1.0, constant: 10.0),
-                NSLayoutConstraint(item: self.lineSeparatorView, attribute: .Leading, relatedBy: .Equal, toItem: self.statusLabel, attribute: .Leading, multiplier: 1.0, constant: 0.0),
-                NSLayoutConstraint(item: self.lineSeparatorView, attribute: .Trailing, relatedBy: .Equal, toItem: self.contentView, attribute: .Trailing, multiplier: 1.0, constant: 0.0),
-                NSLayoutConstraint(item: self.lineSeparatorView, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 0.5)
+                NSLayoutConstraint(item: self.lineSeparatorView, attribute: .top, relatedBy: .equal, toItem: self.statusLabel, attribute: .bottom, multiplier: 1.0, constant: 10.0),
+                NSLayoutConstraint(item: self.lineSeparatorView, attribute: .leading, relatedBy: .equal, toItem: self.statusLabel, attribute: .leading, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: self.lineSeparatorView, attribute: .trailing, relatedBy: .equal, toItem: self.contentView, attribute: .trailing, multiplier: 1.0, constant: 0.0),
+                NSLayoutConstraint(item: self.lineSeparatorView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 0.5)
                 ])
             self.didSetupConstraints = true
         }
@@ -95,7 +95,7 @@ class PackageTrackHistoryTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func setSelected(selected: Bool, animated: Bool) {
+    override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
