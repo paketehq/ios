@@ -55,7 +55,7 @@ class SortByViewController: UIViewController {
 
         self.tableView.rx.itemSelected
             .asDriver()
-            .drive(onNext: { (indexPath) in
+            .drive(onNext: { [unowned self] (indexPath) in
                 self.tableView.deselectRow(at: indexPath, animated: true)
                 let packageSortByType = sortByTypes.value[indexPath.row]
                 self.viewModel.sortBy(packageSortByType)
