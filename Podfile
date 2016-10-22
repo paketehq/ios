@@ -38,7 +38,7 @@ target 'Pakete' do
 
  target 'PaketeTests' do
   inherit! :search_paths
-  pod 'Mockingjay', :git => 'https://github.com/kylef/Mockingjay.git', :branch => 'kylef/swift-3.0'
+  pod 'Mockingjay'
  end
 end
 

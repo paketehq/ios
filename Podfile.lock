@@ -20,12 +20,12 @@ PODS:
   - Mixpanel (3.0.4):
     - Mixpanel/Mixpanel (= 3.0.4)
   - Mixpanel/Mixpanel (3.0.4)
-  - Mockingjay (1.2.1):
-    - Mockingjay/Core (= 1.2.1)
-    - Mockingjay/XCTest (= 1.2.1)
-  - Mockingjay/Core (1.2.1):
-    - URITemplate (~> 2.0)
-  - Mockingjay/XCTest (1.2.1):
+  - Mockingjay (1.3.1):
+    - Mockingjay/Core (= 1.3.1)
+    - Mockingjay/XCTest (= 1.3.1)
+  - Mockingjay/Core (1.3.1):
+    - URITemplate (~> 1.3)
+  - Mockingjay/XCTest (1.3.1):
     - Mockingjay/Core
   - NSObject+Rx (2.0.0):
     - RxSwift
@@ -46,7 +46,7 @@ PODS:
     - Fabric
   - TwitterKit (2.4.0):
     - TwitterCore (= 2.4.0)
-  - URITemplate (2.0.0)
+  - URITemplate (1.4.0)
 
 DEPENDENCIES:
   - Alamofire
@@ -59,7 +59,7 @@ DEPENDENCIES:
   - FBSDKShareKit
   - Keys (from `Pods/CocoaPodsKeys`)
   - Mixpanel
-  - Mockingjay (from `https://github.com/kylef/Mockingjay.git`, branch `kylef/swift-3.0`)
+  - Mockingjay
   - NSObject+Rx
   - RealmSwift
   - RxCocoa (~> 3.0.0-beta.1)
@@ -74,14 +74,6 @@ DEPENDENCIES:
 EXTERNAL SOURCES:
   Keys:
     :path: Pods/CocoaPodsKeys
-  Mockingjay:
-    :branch: kylef/swift-3.0
-    :git: https://github.com/kylef/Mockingjay.git
-
-CHECKOUT OPTIONS:
-  Mockingjay:
-    :commit: bb7751c929a8a8810ddd416191c58c3b8c1f7591
-    :git: https://github.com/kylef/Mockingjay.git
 
 SPEC CHECKSUMS:
   Alamofire: 7682d43245de14874acd142ec137b144aa1dd335
@@ -95,7 +87,7 @@ SPEC CHECKSUMS:
   FBSDKShareKit: e81505de17fc0624cbaa87b83cccc9f2a786e6cb
   Keys: 9c35bf00f612ee1d48556f4a4b9b4551e224e90f
   Mixpanel: 4a2330c26556109d2f42b01e36a05eb9e2caf25e
-  Mockingjay: 8642850d8713bb81a6018f394c39f5887f91e389
+  Mockingjay: e6ffe6106591d2555025842b1b655decc124f0ca
   NSObject+Rx: 2a9cd801d9c847e6d2486cbad8d7701b67834e70
   Realm: 6dda421ae4b3e9a09742fc2cf4b876d459cbedcd
   RealmSwift: 7d015f34a2781a50889be9b5a15c36c08597ea0e
@@ -108,8 +100,8 @@ SPEC CHECKSUMS:
   SwiftyStoreKit: 53c63f91545a3778dc108f860a7414905ce40a63
   TwitterCore: a139904c80805ad3dde9eef1100704f96f646d1d
   TwitterKit: 1cf9742edf9d182c1518cfdd6aaac0dfe313b38b
-  URITemplate: a5acb3f76c6a2338116fde88b658d83f91bbac45
+  URITemplate: e2a2a0f9d398834fde67214b491c2c925c9baa06
 
-PODFILE CHECKSUM: 643c17eed3d03695d8e801eaa07165f630756f7b
+PODFILE CHECKSUM: c14ad9a2afd17cc75444595f3083ca054d3310a4
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.1.1
