@@ -1,3 +1,14 @@
+## [0.9.6](https://github.com/paketehq/ios/releases/tag/0.9.6)
+
+#### Fixed
+- Bug not showing Activity Indicator after refreshing packages the second time
+
+#### Updated
+- Minimum iOS version to 9.0
+- Swift 3 support
+
+---
+
 ## [0.9.5](https://github.com/paketehq/ios/releases/tag/0.9.5)
 
 #### Updated
