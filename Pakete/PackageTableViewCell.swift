@@ -54,14 +54,6 @@ class PackageTableViewCell: UITableViewCell {
         self.statusLabel.numberOfLines = 0
         self.statusLabel.adjustFontToRealIPhoneSize = true
         self.contentView.addSubview(self.statusLabel)
-
-        self.updating.asObservable()
-            .bindTo(self.activityIndicatorView.rx.animating)
-            .addDisposableTo(rx_disposeBag)
-
-        self.updating.asObservable()
-            .bindTo(self.statusImageView.rx.hidden)
-            .addDisposableTo(rx_disposeBag)
     }
 
     override func updateConstraints() {
@@ -113,6 +105,14 @@ class PackageTableViewCell: UITableViewCell {
             .subscribe({ [unowned self] _ in
                 self.reloadData()
             })
+            .addDisposableTo(rx_disposeBag)
+
+        self.updating.asObservable()
+            .bindTo(self.activityIndicatorView.rx.animating)
+            .addDisposableTo(rx_disposeBag)
+
+        self.updating.asObservable()
+            .bindTo(self.statusImageView.rx.hidden)
             .addDisposableTo(rx_disposeBag)
     }
 
